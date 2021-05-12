@@ -6,6 +6,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const { Pool } = require("pg");
 
+const service = require("./ecommerceService");
+
 const pool = new Pool({
   user: "cecilia",
   host: "localhost",
@@ -23,43 +25,12 @@ app.post("/availability", async function (req, res) {
     return res.status(400).send("The price should be a positive integer.");
   }
 
-  const client = await pool.connect();
-  const supplierCheck = await client.query(
-    "SELECT * FROM suppliers WHERE id=$1",
-    [newSupplierId]
+  const response = await service.createAvailability(
+    newProdId,
+    newSupplierId,
+    newPrice
   );
-  const productCheck = await client.query(
-    "SELECT * FROM products WHERE id=$1",
-    [newProdId]
-  );
-  const existingAvailability = await client.query(
-    "SELECT * FROM product_availability WHERE prod_id=$1 AND supp_id = $2",
-    [newProdId, newSupplierId]
-  );
-
-  if (supplierCheck.rows.length === 0) {
-    res.status(400).send("A supplier with the submitted id does not exist!");
-  } else if (productCheck.rows.length === 0) {
-    res.status(400).send("A product with the submitted id does not exist!");
-  } else if (existingAvailability.rows.length > 0) {
-    res
-      .status(400)
-      .send(
-        "An availability with the submitted product and supply id already exists!"
-      );
-  } else {
-    const query =
-      "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3)";
-
-    client
-      .query(query, [newProdId, newSupplierId, newPrice])
-      .then(() => {
-        res.send("Availability created!");
-      })
-      .catch((e) => console.error(e));
-  }
-
-  client.release();
+  res.status(response.status).send(response.message);
 });
 
 app.get("/customers", async function (req, res) {
@@ -228,12 +199,11 @@ app.get("/products", async function (req, res) {
   const productNameQuery = req.query.name;
   let productQuery = `SELECT product_name, unit_price, supplier_name from products 
 	INNER JOIN product_availability ON product_availability.prod_id = products.id
-	INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;`;
+	INNER JOIN suppliers ON suppliers.id = product_availability.supp_id`;
   if (productNameQuery) {
-    productQuery = `SELECT product_name, unit_price, supplier_name from products 
-	INNER JOIN product_availability ON product_availability.prod_id = products.id
-	INNER JOIN suppliers ON suppliers.id = product_availability.supp_id
-	WHERE lower(product_name) LIKE '%${productNameQuery}%';`;
+    productQuery += `WHERE lower(product_name) LIKE '%${productNameQuery}%';`;
+  } else {
+    productQuery += ";";
   }
   const client = await pool.connect();
   client

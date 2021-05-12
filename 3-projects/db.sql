@@ -1,0 +1,1 @@
+DELETE FROM product_availability WHERE prod_id=2 AND supp_id=4;
