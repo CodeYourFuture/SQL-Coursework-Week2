@@ -108,3 +108,14 @@ GROUP BY a.name,
     b.order_date,
     b.order_reference
 ORDER BY total_cost DESC;
+-- (STRETCH GOAL) Add a new GET endpoint `/products` 
+-- to return all the product names along with their 
+-- prices and supplier names.
+\echo Server Project
+SELECT a.product_name,
+    c.unit_price,
+    supplier_name
+FROM products AS a
+    INNER JOIN order_items AS b ON a.id = b.product_id
+    INNER JOIN product_availability AS c ON b.product_id = c.prod_id
+    INNER JOIN suppliers AS d ON b.supplier_id = d.id
