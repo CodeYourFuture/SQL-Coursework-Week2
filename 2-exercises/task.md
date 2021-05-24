@@ -42,8 +42,27 @@ select name, address from customers where country = 'United States';
  -->
 
 2. Retrieve all the customers in ascending name sequence
+
+```
+   SELECT * FROM customers ORDER BY name ASC;
+```
+
 3. Retrieve all the products whose name contains the word `socks`
+
+```
+SELECT * FROM products WHERE product_name ILIKE '%socks%';
+```
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+```
+SELECT  p.id, p.product_name, pa.unit_price, s.id AS supplier_id
+ FROM products AS p
+ INNER JOIN  product_availability As pa ON p.id = pa.prod_id
+ INNER JOIN  suppliers As s ON pa.supp_id = s.id;
+
+```
+
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
