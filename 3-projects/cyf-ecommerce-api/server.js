@@ -1,12 +1,18 @@
 const express = require("express");
 const { Pool } = require("pg");
+require("dotenv").config();
 const app = express();
+const host = process.env.host;
+const user = process.env.user;
+const password = process.env.password;
+const database = process.env.database;
+
 const dbConfig = {
-  host: "localhost",
+  host,
   port: 5432,
-  user: "cyf",
-  password: "CYFStudent123",
-  database: "cyf_ecommerce",
+  user,
+  password,
+  database,
 };
 const pool = new Pool(dbConfig);
 
