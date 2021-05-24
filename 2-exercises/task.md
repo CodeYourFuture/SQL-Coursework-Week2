@@ -108,9 +108,41 @@ where name='Hope Crosby';
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
 ```sql
-
+select product_name,unit_price, quantity from orders
+inner join order_items on orders.id=order_items.order_id
+inner join product_availability on product_availability.prod_id = order_items.product_id and product_availability.supp_id = order_items.supplier_id
+inner join products on products.id = product_availability.prod_id
+where order_reference ='ORD006'
 ```
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
+```sql
+select name,order_reference,order_date,product_name,supplier_name,quantity from orders
+inner join order_items on orders.id=order_items.order_id
+inner join products on products.id=order_items.product_id
+inner join suppliers on suppliers.id=order_items.supplier_id
+inner join customers on customers.id= orders.customer_id;
+```
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+
+```sql
+select name,suppliers.country from orders
+inner join order_items on orders.id=order_items.order_id
+inner join customers on customers.id=orders.customer_id
+inner join suppliers on suppliers.id=order_items.supplier_id
+where suppliers.country='China';
+```
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
+
+```sql
+select name,order_reference, order_date, order_date, sum(quantity*unit_price) as order_total_amount from orders
+inner join order_items on orders.id=order_items.order_id
+inner join product_availability on product_availability.prod_id=order_items.product_id and product_availability.supp_id=order_items.supplier_id
+inner join customers on customers.id=orders.customer_id
+group by name,order_id,order_reference,order_date
+order by order_total_amount desc
+;
+```
