@@ -37,9 +37,9 @@ Once you understand the database that you are going to work with, solve the foll
 
 1. Retrieve all the customers' names and addresses who live in the United States
 
-<!--
+```
 select name, address from customers where country = 'United States';
- -->
+```
 
 2. Retrieve all the customers in ascending name sequence
 
@@ -64,8 +64,36 @@ SELECT  p.id, p.product_name, pa.unit_price, s.id AS supplier_id
 ```
 
 5. Retrieve the 5 most expensive products
+
+```
+SELECT  p.id, p.product_name
+ FROM products AS p
+ INNER JOIN  product_availability As pa ON p.id = pa.prod_id
+ORDER by pa.unit_price desc
+limit 5;
+
+```
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+```
+SELECT product_name, unit_price, supplier_name
+ FROM products AS p
+  INNER JOIN  product_availability As pa ON p.id = pa.prod_id
+ INNER JOIN  suppliers As s ON pa.supp_id = s.id;
+```
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+```
+SELECT product_name, supplier_name
+ FROM product_availability As pa
+ INNER JOIN  products As p ON pa.prod_id = p.id
+ INNER JOIN  suppliers As s ON pa.supp_id = s.id
+
+  WHERE s.country ='United Kingdom';
+```
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
