@@ -6,13 +6,13 @@ const host = process.env.host;
 const user = process.env.user;
 const password = process.env.password;
 const database = process.env.database;
-
+console.log(process.env);
 const dbConfig = {
-  host,
+  HOST,
   port: 5432,
-  user,
-  password,
-  database,
+  USER,
+  PASSWORD,
+  DATABASE,
 };
 const pool = new Pool(dbConfig);
 
