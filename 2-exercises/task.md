@@ -8,7 +8,9 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
-
+1. SELECT name, address, country FROM customers WHERE country LIKE '%United States%';
+2. SELECT * FROM customers ORDER BY name;
+3. SELECT * FROM products WHERE product_name LIKE '%socks%';
 
 ```
 
