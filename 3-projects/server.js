@@ -13,9 +13,9 @@ const dbConfig = {
 
 const pool = new Pool(dbConfig);
 
-const customersQuery = 'SELECT * from customers';
-const suppliersQuery = 'SELECT * from suppliers';
-const productsQuery = 'SELECT product_name, unit_price, supplier_name from products INNER JOIN product_availability on products.id = product_availability.prod_id INNER JOIN suppliers on product_availability.supp_id = suppliers.id;'
+const customersQuery = 'SELECT * FROM customers';
+const suppliersQuery = 'SELECT * FROM suppliers';
+const productsQuery = 'SELECT product_name, unit_price, supplier_name FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id;'
 
 app.get('/customers', async (req, res) => {
   try {
