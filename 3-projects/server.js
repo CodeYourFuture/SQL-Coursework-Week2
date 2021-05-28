@@ -30,7 +30,7 @@ const getAllProduct = `SELECT product_name, unit_price, supplier_name from produ
 	INNER JOIN suppliers ON suppliers.id = product_availability.supp_id`;
 
 app.get("/cyf-ecommerce-api", (req, res) => {
-  res.send("<center><h1>Welcome to CYF E - Commerce API</h1></center>");
+  res.send("<center><h1>Welcome to CYF E - Commerce API</h1><p>/customers - to see all customers<br/>/suppliers - to see all suppliers<br/>/products - to see all products</p></center>");
 });
 
 // GET request endpoint for all customers
