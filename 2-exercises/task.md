@@ -41,13 +41,34 @@ Once you understand the database that you are going to work with, solve the foll
         <!-- SELECT * FROM customers ORDER BY name; -->
 
 3. Retrieve all the products whose name contains the word `socks`
+        <!-- SELECT * FROM products WHERE product_name LIKE '%socks%'; -->
 
+4. Retrieve all the products which cost more than 100 showing 
 
-4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+    <!-- SELECT p.id, p.product_name, pa.unit_price, pa.supp_id from products as p inner join product_availability as pa on p.id = pa.prod_id where pa.unit_price > 100; -->
+
 5. Retrieve the 5 most expensive products
+
+    <!-- SELECT * from product_availability order by unit_price desc limit 5; -->
+
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+    <!-- select p.product_name, pa.unit_price, s.supplier_name from products as p inner join product_availability as pa on p.id = pa.prod_id inner join suppliers as s on s.id = pa.supp_id;  -->
+
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+    <!-- select p.product_name, s.supplier_name from 
+    products as p 
+    inner join product_availability as pa on p.id = pa.prod_id
+    inner join suppliers as s on s.id = pa.supp_id
+    WHERE s.country = "United Kingdom"; -->
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+
+    
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
