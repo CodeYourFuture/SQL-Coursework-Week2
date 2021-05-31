@@ -19,7 +19,7 @@ To submit this homework write the correct commands for each question here:
 3.  SELECT * FROM products 
     WHERE product_name ~ 'socks';
 
-4.  SELECT product_name, product_id, unit_price,     supplier_id 
+4.  SELECT product_name, product_id, unit_price, supplier_id 
     FROM products 
     INNER JOIN product_availability 
     ON product_availability.prod_id = products.id 
@@ -64,7 +64,7 @@ To submit this homework write the correct commands for each question here:
     ON orders.id = order_items.order_id 
     WHERE customers.name = 'Hope Crosby';
 
-10. SELECT product_name, unit_price 
+10. SELECT product_name, unit_price, quantity 
     FROM products 
     INNER JOIN product_availability 
     ON products.id = product_availability.prod_id 
