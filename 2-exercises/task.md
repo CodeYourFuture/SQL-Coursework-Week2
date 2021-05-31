@@ -46,9 +46,10 @@ Once you understand the database that you are going to work with, solve the foll
    ORDER BY name ASC;
 
 3. Retrieve all the products whose name contains the word `socks`
-   SELECT \*
-   FROM product_name
-   LIKE %socks%;
+   SELECT *
+   FROM products
+   WHERE product_name
+   LIKE '%socks%';
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 SELECT product_name, product_id, unit_price, supplier_id 
@@ -116,21 +117,24 @@ INNER JOIN suppliers ON product_availability.supp_id= suppliers.id
     ON product_availability.supp_id = suppliers.id;
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
-   SELECT name from customers
-	INNER JOIN orders 
-	ON customers.id = orders.customer_id
-	INNER JOIN order_items
-	ON orders.id= order_items.order_id
-	INNER JOIN product_availability
-	ON order_items.product_id=product_availability.prod_id
-	INNER JOIN suppliers
-	ON product_availability.supp_id=suppliers.id
-    WHERE suppliers.country ='China';
+      SELECT name from customers
+	   INNER JOIN orders 
+	   ON customers.id = orders.customer_id
+	   INNER JOIN order_items
+	   ON orders.id= order_items.order_id
+	   INNER JOIN product_availability
+	   ON order_items.product_id=product_availability.prod_id
+	   INNER JOIN suppliers
+	   ON product_availability.supp_id=suppliers.id
+      WHERE suppliers.country ='China';
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
-    SELECT name, order_date, order_reference,sum (quantity*unit_price)
-    AS order_total_amount from orders
-    INNER JOIN order_items ON orders.id=order_items.order.id
-    INNER JOIN product_availability ON product_availability.prod.id=order_items.product_id AND product_availability.supp_id=order_items.supplier_id
-    INNER JOIN customers ON customers_id=orders.customer_id
-    GROUP BY name,order_id,order_reference,order_date ORDER BY order_total_amount Desc;
+      SELECT name, order_date, order_reference, quantity*unit_price 
+	   AS total_cost
+	   FROM orders
+	   INNER JOIN order_items
+	   ON orders.id= order_items.order_id
+	   INNER JOIN product_availability 
+	   ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id
+	   INNER JOIN customers
+      ON customer_id=orders.customer_id; 
