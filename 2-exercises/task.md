@@ -8,7 +8,70 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+SELECT name, address, country 
+FROM customers 
+WHERE country 
+LIKE '%United States%';
 
+SELECT * FROM customers ORDER BY name;
+
+SELECT * FROM products WHERE product_name LIKE '%socks%';
+
+SELECT p.id, p.product_name, pa.unit_price, pa.supp_id 
+FROM products AS p 
+INNER JOIN product_availability AS pa ON p.id = pa.prod_id 
+WHERE pa.unit_price > 100;
+
+SELECT * FROM product_availability ORDER BY unit_price DESC LIMIT 5;
+
+SELECT p.product_name, pa.unit_price, s.supplier_name 
+FROM products AS p
+INNER JOIN product_availability AS pa ON p.id = prod_id
+INNER JOIN suppliers AS s ON s.id = pa.supp_id;
+
+SELECT p.product_name, s.supplier_name
+FROM products AS p
+INNER JOIN product_availability AS pa ON p.id = prod_id
+INNER JOIN suppliers AS s ON s.id = pa.supp_id
+WHERE country = 'United Kingdom';
+
+SELECT order_id, order_reference, order_date, SUM(quantity*unit_price) AS total_cost FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id
+WHERE customer_id = 1
+GROUP BY order_id, order_reference, order_date;
+
+SELECT * FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN customers ON customers.id = orders.customer_id
+WHERE name = 'Hope Crosby';
+
+SELECT product_name, unit_price, quantity FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id
+INNER JOIN products ON products.id = product_availability.prod_id
+WHERE order_reference = 'ORD006';
+
+SELECT name, order_reference, order_date, product_name, supplier_name, quantity from orders
+INNER JOIN customers on customers.id = orders.customer_id
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id
+INNER JOIN products ON products.id = product_availability.prod_id
+INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;
+
+SELECT name from orders
+INNER JOIN customers on customers.id = orders.customer_id
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id
+INNER JOIN suppliers ON suppliers.id = product_availability.supp_id
+WHERE suppliers.country = 'China';
+
+SELECT name, order_reference, order_date, SUM(quantity*unit_price) AS total_cost FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id
+INNER JOIN customers on customers.id = orders.customer_id
+GROUP BY name, order_id, order_reference, order_date
+ORDER BY total_cost DESC;
 
 ```
 
