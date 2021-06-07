@@ -124,5 +124,21 @@ INNER JOIN suppliers
 ON product_availability.supp_id = suppliers.id
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+
+SELECT name, suppliers.country FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN customers ON customers.id = orders.customer_id
+INNER JOIN suppliers ON suppliers.id = order_items.supplier_id WHERE suppliers.country = 'China';
+
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+
+SELECT name, order_reference, order_date,unit_price*quantity AS "Total Amount" 
+FROM customers 
+INNER JOIN orders
+ON customers.id = orders.customer_id
+INNER JOIN order_items 
+ON orders.id = order_items.quantity
+INNER JOIN product_availability
+ON order_items.quantity = product_availability.unit_price ORDER BY unit_price DESC;
 
