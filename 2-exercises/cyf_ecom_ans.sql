@@ -22,11 +22,11 @@ FROM products AS a
     INNER JOIN product_availability AS b ON a.id = b.prod_id
 WHERE unit_price > 100;
 -- 5. Retrieve the 5 most expensive products
-SELECT DISTINCT a.product_name,
-    b.unit_price
+SELECT a.product_name,
+    MAX (b.unit_price)
 FROM products AS a
     INNER JOIN product_availability AS b ON a.id = b.prod_id
-ORDER BY b.unit_price DESC
+GROUP BY a.product_name
 LIMIT 5;
 -- 6. Retrieve all the products with their corresponding suppliers. 
 -- The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
@@ -111,7 +111,7 @@ ORDER BY total_cost DESC;
 -- (STRETCH GOAL) Add a new GET endpoint `/products` 
 -- to return all the product names along with their 
 -- prices and supplier names.
-\echo Server Project
+\ echo Server Project
 SELECT a.product_name,
     c.unit_price,
     supplier_name
