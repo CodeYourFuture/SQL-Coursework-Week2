@@ -25,7 +25,9 @@ const prodAvailQuery = `SELECT DISTINCT unit_price, supp_id
  INNER JOIN order_items
  ON Product_availability.prod_id = order_items.product_id ORDER BY  unit_price, supp_id ASC`;
 
-
+ const isValid = (n) => {
+   return !isNaN(n) && n >= 0;
+ };
 
 // app.get("/suppliers", (req, res) =>
 //   pool
@@ -143,19 +145,62 @@ app.get("/products", (req, res) => {
       }  
   });
 
-  app.post("/availability", (req, res)=>{
-    const newPrice = req.body.price;
-     
-    if(!Number.isInteger(newPrice) || newPrice <= 0 ){
+
+
+
+// Add a new POST endpoint `/availability` to create a new 
+// product availability (with a price and a supplier id). 
+// Check that the price is a positive integer and that 
+// both the product and supplier ID's exist in the database,
+//  otherwise return an error.
+
+  app.post("/availability", async (req, res)=>{
+    const newPrice = req.body.unit_price;
+    const newSuppId = req.body.supp_id;
+    const newProdId = req.body.prod_id;
+    const idQuery = "select exists(select 1 from product_availability where supp_id=$1 AND prod_id=$2);";
+    const supplyQuery = "select exists(select 1 from suppliers where id=$1);";
+    const prodAvailQuery = "select exists(select 1 from products where id=$1);";
+    const mainQuery = "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3);";
+       
+    if(!isValid(newSuppId) || !isValid(newProdId) || !isValid(newPrice)){
       return res
-        .status(400)
-        .send("The new price should be a positive integer.");
+        .sendStatus(400);
+    } else if (isValid(newSuppId) && isValid(newProdId) && isValid(newPrice)){
+     try { 
+      const result = await pool.query(idQuery, [newSuppId, newProdId]);
+      const exists = result.rows.map(obj => obj.exists);
+      let doesExist = exists.pop();
+
+      const suppliersResult = await pool.query(supplyQuery, [newSuppId]);
+      const supplierExists = suppliersResult.rows.map(obj => obj.exists);
+      console.log(supplierExists);
+      let doesSupplierExist = supplierExists.pop();
+      console.log(doesSupplierExist);
+
+      const productsResult = await pool.query(prodAvailQuery, [newProdId]);
+      const productExists = productsResult;
+
+       if (doesExist) {
+         res.status(400).send("Availability already exists!");
+       } else if (!doesSupplierExist) {
+         res.status(400).send("Supplier does not exist");
+       } else if (!productExists) {
+         res.status(400).send("Product does not exist!");
+       } else {
+         pool
+           .query(mainQuery, [newProdId, newSuppId, newPrice])
+           .then(() => res.status(201).send("Product availability is created!"))
+           .catch((error) => console.error(error));
+       }
+
+     } catch (error) {
+      res.status(500).send(error);
     }
-    pool.query("SELECT product_id, supplier_id FROM order_items WHERE name=$1", [newPrice]);
+    }
+    
+});
 
-
-
-  });
 
 
 
