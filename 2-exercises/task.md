@@ -8,6 +8,7 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+
 1 => SELECT customers.name, customers.address FROM customers WHERE country ~* 'states';
 2 => SELECT * FROM customers ORDER BY name;
 3 => SELECT * FROM products WHERE products.product_name ~* 'socks';
@@ -20,6 +21,7 @@ To submit this homework write the correct commands for each question here:
 10 => SELECT product_name,unit_price,quantity FROM orders INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id INNER JOIN products ON product_availability.prod_id=products.id WHERE order_reference='ORD006';
 11 => SELECT name, order_reference, order_date, product_name, supplier_name, quantity FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN products ON products.id=order_items.product_id INNER JOIN suppliers ON suppliers.id=order_items.supplier_id;
 12 => SELECT name FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN suppliers ON suppliers.id=order_items.supplier_id WHERE suppliers.country ~* 'china';
+13 => SELECT name,order_reference,order_date,SUM(quantity*unit_price) AS "Total" FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id GROUP BY name, order_reference, order_date ORDER BY "Total" desc;
 
 ```
 
