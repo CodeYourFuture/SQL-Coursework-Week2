@@ -8,7 +8,25 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
-
+1-select name,address from customers where country='United States';
+2-select * from customers order by name asc;
+3-select * from products where product_name like '%socks%';
+4-select prod_id, product_name, unit_price, supp_id from products
+inner join product_availability on products.id = product_availability.prod_id
+where unit_price > 100;
+5-select prod_id, product_name, unit_price, supp_id from products
+inner join product_availability on products.id = product_availability.prod_id
+order by unit_price desc limit 5;
+6-select product_name,unit_price,supplier_name from ((product_availability inner join products on products.id = product_availability.prod_id) inner join suppliers on product_availability.supp_id=suppliers.id); 
+7-select product_name,supplier_name from ((product_availability inner join products on products.id = product_availability.prod_id) inner join suppliers on product_availability.supp_id=suppliers.id) where suppliers.country='United Kingdom';
+8-select order_id, order_reference, order_date, sum(quantity*unit_price) as total_cost from orders
+inner join order_items on orders.id = order_items.order_id
+inner join product_availability on product_availability.prod_id = order_items.product_id and product_availability.supp_id = order_items.supplier_id where customer_id = 1 group by order_id, order_reference, order_date;
+9-select * from customers inner join orders on customers.id=orders.customer_id where name='Hope Crosby';
+10-select product_name,unit_price,quantity from orders inner join order_items on orders.id=order_items.order_id inner join product_availability on order_items.product_id=product_availability.prod_id inner join products on product_availability.prod_id=products.id where order_reference='ORD006';
+11-select customers.name, order_reference, order_date, product_name, supplier_name, quantity from customers inner join orders on customers.id=orders.customer_id inner join order_items on orders.id=order_items.order_id inner join products on products.id=order_items.product_id inner join suppliers on suppliers.id=order_items.supplier_id;
+12-select name from customers inner join orders on customers.id=orders.customer_id inner join order_items on orders.id=order_items.order_id inner join suppliers on suppliers.id=order_items.supplier_id where suppliers.country= 'china';
+13-select name,order_reference,order_date,SUM(quantity*unit_price) as Total from customers inner join orders on customers.id=orders.customer_id inner join order_items on orders.id=order_items.order_id inner join product_availability on order_items.product_id=product_availability.prod_id group by name, order_reference, order_date order by Total desc;
 
 ```
 
