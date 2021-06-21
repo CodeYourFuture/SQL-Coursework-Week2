@@ -8,7 +8,18 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
-
+1 => SELECT customers.name, customers.address FROM customers WHERE country ~* 'states';
+2 => SELECT * FROM customers ORDER BY name;
+3 => SELECT * FROM products WHERE products.product_name ~* 'socks';
+4 => SELECT products.id, products.product_name, product_availability.unit_price, product_availability.supp_id FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id WHERE product_availability.unit_price > 100;
+5 => SELECT * FROM product_availability ORDER BY unit_price DESC LIMIT 5;
+6 => SELECT product_name, unit_price, supplier_name FROM suppliers INNER JOIN product_availability ON suppliers.id=product_availability.prod_id INNER JOIN products ON products.id=product_availability.prod_id;
+7 => SELECT product_name, unit_price, supplier_name FROM suppliers INNER JOIN product_availability ON suppliers.id=product_availability.prod_id INNER JOIN products ON products.id=product_availability.prod_id;
+8 => SELECT order_id,orders.order_reference,orders.order_date, sum(order_items.quantity * product_availability.unit_price) FROM orders INNER JOIN order_items ON order_items.order_id=orders.id INNER JOIN product_availability ON product_availability.prod_id=order_items.product_id INNER JOIN customers ON orders.customer_id=customers.id WHERE customers.id=1 GROUP BY order_id, order_reference, order_date;
+9 => SELECT * FROM customers INNER JOIN orders ON customers.id=orders.customer_id WHERE name ~* 'hope crosby';
+10 => SELECT product_name,unit_price,quantity FROM orders INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id INNER JOIN products ON product_availability.prod_id=products.id WHERE order_reference='ORD006';
+11 => SELECT name, order_reference, order_date, product_name, supplier_name, quantity FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN products ON products.id=order_items.product_id INNER JOIN suppliers ON suppliers.id=order_items.supplier_id;
+12 => SELECT name FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN suppliers ON suppliers.id=order_items.supplier_id WHERE suppliers.country ~* 'china';
 
 ```
 
