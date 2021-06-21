@@ -20,21 +20,21 @@ const pool = new Pool({
 
 app.get('/customers', (req, res) => {
 	pool.query('SELECT * FROM customers', (dbError, dbResult) => {
-		console.table(dbResult.rows);
 		res.json(dbResult.rows)
 	})
 })
 
 app.get('/suppliers', (req, res) => {
 	pool.query('SELECT * FROM suppliers', (dbError, dbResult) => {
-		console.table(dbResult.rows);
 		res.json(dbResult.rows);
 	})
 })
 
+const productsQuery = 'SELECT supplier_name, product_name, unit_price FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id'
+
 app.get('/products', (req, res) => {
-	pool.query('SELECT supplier_name, product_name FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id;',
-		(dbError, dbResult) => {
+	pool.query(productsQuery, (dbError, dbResult) => {
+			console.table(dbResult.rows);
 			res.json(dbResult.rows);
 		})
 })
