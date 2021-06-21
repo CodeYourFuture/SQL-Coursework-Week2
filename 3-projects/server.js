@@ -1,18 +1,21 @@
 const express = require('express');
 const app = express();
-const { Pool, DatabaseError } = require('pg');
+const { Pool } = require('pg');
 require('dotenv').config();
 
 const myPass = process.env.PASSWORD;
 const myUser = process.env.USERNAME;
+const myHost = process.env.HOST;
+const myDatabase = process.env.DATABASE;
+const myDB_Port = process.env.DB_PORT;
 const PORT = process.env.PORT || 3000;
 
 const pool = new Pool({
 	user: myUser,
 	password: myPass,
-	host: 'localhost',
-	database: 'cyf_ecommerce',
-	port: 5432
+	host: myHost,
+	database: myDatabase,
+	port: myDB_Port
 })
 
 app.get('/customers', (req, res) => {
@@ -29,7 +32,12 @@ app.get('/suppliers', (req, res) => {
 	})
 })
 
-
+app.get('/products', (req, res) => {
+	pool.query('SELECT supplier_name, product_name FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id;',
+		(dbError, dbResult) => {
+			res.json(dbResult.rows);
+		})
+})
 
 
 
