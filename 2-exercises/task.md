@@ -48,7 +48,50 @@ INNER JOIN suppliers ON product_availability.supp_id = suppliers.id
 WHERE suppliers.country = 'United Kingdom';
 
 Task 8:
+SELECT orders.id, orders.order_reference, orders.order_date, sum(order_items.quantity * product_availability.unit_price) AS total_cost FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+WHERE customer_id = 1
+GROUP BY orders.id, orders.order_date, orders.order_reference;
 
+Task 9:
+SELECT * FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN customers ON customers.id = orders.customer_id
+WHERE customers.name = 'Hope Crosby';
+
+Task 10:
+SELECT products.product_name, product_availability.unit_price, order_items.quantity
+FROM products
+INNER JOIN product_availability ON product_availability.prod_id = products.id
+INNER JOIN order_items ON order_items.product_id = product_availability.prod_id
+INNER JOIN orders ON orders.id = order_items.order_id
+WHERE orders.order_reference = 'ORD006';
+
+Task 11:
+SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity
+FROM customers
+INNER JOIN orders ON orders.customer_id = customers.id
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN products ON products.id = order_items.product_id
+INNER JOIN suppliers ON suppliers.id = order_items.supplier_id;
+
+Task 12:
+SELECT DISTINCT customers.name
+FROM customers
+INNER JOIN orders ON orders.customer_id = customers.id
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN suppliers ON suppliers.id = order_items.supplier_id
+WHERE suppliers.country = 'China';
+
+Task 13:
+SELECT customers.name, orders.order_reference,orders.order_date, sum(order_items.quantity * product_availability.unit_price)
+AS Total_Amount FROM customers
+INNER JOIN orders ON orders.customer_id = customers.id
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id
+GROUP BY 1, 2, 3
+ORDER BY totalAmount DESC;
 
 ```
 
