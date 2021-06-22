@@ -35,13 +35,52 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+
+SELECT name, address FROM customers WHERE country = 'United States'
+
 2. Retrieve all the customers in ascending name sequence
+
+
+SELECT * FROM customers ORDER BY name ASC
+
 3. Retrieve all the products whose name contains the word `socks`
+
+SELECT * FROM products WHERE product_name LIKE '%socks%'
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+SELECT products.id, products.product_name,product_availability.supp_id, product_availability.unit_price 
+FROM products 
+INNER JOIN product_availability
+ON products.id = product_availability.prod_id 
+WHERE unit_price > 100
+
 5. Retrieve the 5 most expensive products
+
+SELECT * FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id 
+ORDER BY unit_price DESC
+LIMIT 5
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name 
+FROM products 
+INNER JOIN product_availability ON products.id =  product_availability.prod_id 
+INNER JOIN suppliers ON suppliers.id = product_availability.supp_id 
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+SELECT products.product_name, suppliers.supplier_name 
+FROM products 
+INNER JOIN product_availability ON products.id =  product_availability.prod_id 
+INNER JOIN suppliers ON suppliers.id = product_availability.supp_id 
+WHERE country ='United Kingdom'
+
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+
+
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
