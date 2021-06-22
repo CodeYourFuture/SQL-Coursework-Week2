@@ -65,7 +65,7 @@ Once you understand the database that you are going to work with, solve the foll
 
     solution:
     <!-- 
-       SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name from products  inner join product_availability on products.id = product_availability.prod_id inner join suppliers  on suppliers.id = product_availability.supp_id;
+       select products.product_name, product_availability.unit_price, suppliers.supplier_name from products  inner join product_availability on products.id = product_availability.prod_id inner join suppliers  on suppliers.id = product_availability.supp_id;
       -->
 
 
