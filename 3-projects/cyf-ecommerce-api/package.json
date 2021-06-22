@@ -1,0 +1,23 @@
+{
+  "name": "cyf-ecommerce-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DibaKarimi/SQL-Coursework-Week2.git"
+  },
+  "author": "Diba",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DibaKarimi/SQL-Coursework-Week2/issues"
+  },
+  "homepage": "https://github.com/DibaKarimi/SQL-Coursework-Week2#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0"
+  }
+}
