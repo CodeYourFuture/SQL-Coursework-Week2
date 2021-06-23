@@ -16,21 +16,24 @@ Please complete the details below this message
 
 # Your Details
 
-- Your Name:
-- Your City:
-- Your Slack Name:
+- Your Name: Kara Howard
+- Your City: London
+- Your Slack Name: Kara Howard
 
 # Homework Details
 
-- Module:
-- Week:
+- Module: SQL
+- Week: 2
 
 # Notes
 
 - What did you find easy?
+SELECT FROM WHERE LIKE GROUP BY ORDER BY
 
 - What did you find hard?
+Understanding how to do joins
 
 - What do you still not understand?
+The best way to join tables and different types of joins
 
 - Any other notes?
