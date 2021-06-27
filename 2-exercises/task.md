@@ -72,8 +72,43 @@ Once you understand the database that you are going to work with, solve the foll
    INNER JOIN suppliers ON product_availability.supp_id=suppliers.id
    WHERE suppliers.country= 'United Kingdom';
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
+   SELECT orders.id, orders.order_reference, orders.order_date, SUM(order_items.quantity \* product_availability.unit_price) AS total_cost
+   FROM orders
+   INNER JOIN order_items ON order_items.order_id=orders.id
+   INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id
+   WHERE customer_id=1
+   GROUP BY orders.id
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+   SELECT \*FROM orders
+   INNER JOIN order_items ON order_items.order_id = orders.id
+   INNER JOIN customers ON orders.customer_id = customers.id
+   WHERE customers.name ='Hope Crosby'
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+    SELECT products.product_name,order_items.quantity,product_availability.unit_price
+    FROM products
+    INNER JOIN order_items ON order_items.product_id = products.id
+    INNER JOIN product_availability ON product_availability.prod_id = products.id
+    INNER JOIN orders ON order_items.order_id = orders.id
+    WHERE orders.order_reference ='ORD006'
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+    SELECT customers.name,orders.order_reference,orders.order_date,products.product_name,suppliers.supplier_name,order_items.quantity
+    FROM orders
+    INNER JOIN customers ON orders.customer_id= customers.id
+    INNER JOIN order_items ON orders.id= order_items.order_id
+    INNER JOIN suppliers ON order_items.supplier_id= suppliers.id
+    INNER JOIN products ON products.id= order_items.product_id
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+    SELECT customers.name
+    FROM orders
+    INNER JOIN customers ON orders.customer_id= customers.id
+    INNER JOIN order_items ON orders.id= order_items.order_id
+    INNER JOIN suppliers ON order_items.supplier_id= suppliers.id
+    WHERE suppliers.country='China'
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
+    SELECT customers.name,orders.order_reference,orders.order_date, SUM(order_items.quantity \* product_availability.unit_price) AS order_total
+    FROM orders
+    INNER JOIN customers ON orders.customer_id= customers.id
+    INNER JOIN order_items ON orders.id= order_items.order_id
+    INNER JOIN product_availability ON order_items.product_id= product_availability.prod_id
+    GROUP BY customers.name,orders.order_reference,orders.order_date
+    ORDER BY order_total DESC
