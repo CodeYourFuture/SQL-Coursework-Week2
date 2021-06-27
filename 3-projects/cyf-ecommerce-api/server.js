@@ -7,7 +7,7 @@ const pool = new Pool({
     user: "coder",
     host: "localhost",
     database: "cyf_ecommerce",
-    password: "codeyourfuture",
+    password: "",
     port: 5432
 })
 
