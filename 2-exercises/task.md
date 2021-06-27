@@ -9,6 +9,32 @@ Below you will find a set of tasks for you to complete to set up a database for 
 To submit this homework write the correct commands for each question here:
 ```sql
 
+1. SELECT name, country FROM customers WHERE country = 'United States';
+
+2. SELECT * FROM customers ORDER BY name ASC;
+
+3. SELECT * FROM products WHERE product_name LIKE '%socks%';
+
+4.SELECT prod_id, product_name, unit_price, supp_id FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id WHERE unit_price > 100;
+
+5. SELECT prod_id, product_name, unit_price, supp_id FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id ORDER BY unit_price DESC LIMIT 5;
+
+6. SELECT p.product_name, pa.unit_price, s.supplier_name FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN suppliers s ON s.id = pa.supp_id;
+
+7.SELECT p.product_name, s.supplier_name FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN suppliers s ON s.id = pa.supp_id WHERE s.country ILIKE 'united kingdom';
+
+8. SELECT o.id , o.order_reference, o.order_date, SUM(pa.unit_price * oi.quantity) AS Total  FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN product_availability pa ON pa.prod_id = oi.product_id AND pa.supp_id = oi.supplier_id WHERE o.customer_id = 1 GROUP BY o.id;
+
+9.SELECT o.id , o.order_reference, o.order_date, SUM(pa.unit_price * oi.quantity) AS Total  FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN product_availability pa ON pa.prod_id = oi.product_id AND pa.supp_id = oi.supplier_id INNER JOIN customers ON customers.id = o.customer_id WHERE customers.name = 'Hope Crosby'  GROUP BY o.id;
+
+10.SELECT p.product_name, pa.unit_price, oi.quantity FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN order_items oi ON pa.prod_id = oi.product_id AND pa.supp_id = oi.supplier_id INNER JOIN orders o ON o.id = oi.order_id WHERE o.order_reference = 'ORD006';
+
+11. SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity FROM customers INNER JOIN orders ON customers.id = orders.customer_id INNER JOIN order_items ON order_items.order_id = orders.id INNER JOIN suppliers ON suppliers.id = order_items.supplier_id INNER JOIN products ON products.id = order_items.product_id;
+
+12. SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, suppliers.country, order_items.quantity FROM customers INNER JOIN orders ON customers.id = orders.customer_id INNER JOIN order_items ON order_items.order_id = orders.id INNER JOIN suppliers ON suppliers.id = order_items.supplier_id INNER JOIN products ON products.id = order_items.product_id WHERE suppliers.country = 'China';
+
+13. SELECT customers.name, orders.order_reference, orders.order_date, SUM(product_availability.unit_price * order_items.quantity) AS total FROM customers INNER JOIN orders ON customers.id = orders.customer_id INNER JOIN order_items ON order_items.order_id = orders.id INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id AND product_availability.supp_id = order_items.supplier_id GROUP BY customers.name, orders.order_reference, orders.order_date ORDER BY total DESC;
+
 
 ```
 
