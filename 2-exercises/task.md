@@ -42,6 +42,19 @@ INNER JOIN customers
 ON customers.id = orders.customer_id 
 WHERE customer_id = 1 
 GROUP BY  order_id, order_reference, order_date;
+9. SELECT * FROM customers 
+INNER JOIN orders 
+ON customers.id=orders.customer_id 
+WHERE customers.name = 'Hope Crosby';
+10. SELECT product_name, product_availability.unit_price, order_items.quantity 
+FROM orders 
+INNER JOIN order_items 
+ON orders.id=order_items.order_id 
+INNER JOIN product_availability 
+ON order_items.product_id = product_availability.prod_id 
+INNER JOIN products 
+ON product_availability.prod_id=products.id 
+WHERE order_reference='ORD006';
 ```
 
 When you have finished all of the questions - open a pull request with your answers to the `Databases-Homework` repository.
