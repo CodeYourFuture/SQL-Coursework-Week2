@@ -1,16 +1,43 @@
 const express = require("express");
-//const cors = require("cors");
 const db = require("./db");
 const app = express();
+
 require("dotenv").config();
 
-//app.use(cors());
-//app.use()
-
 app.get("/", function (req, res) {
-  db.query("SELECT * FROM customers;", (db_err, db_res) => {
+  res.json({
+    endpoints: ["/customers", "/suppliers", "/products"],
+  });
+});
+
+app.get("/customers", function (req, res) {
+  db.query("SELECT * FROM customers", (db_err, db_res) => {
     if (db_err) {
-      res.send(JSON.stringify(db_err));
+      res.status(502).send(db_err);
+    } else {
+      res.json(db_res.rows);
+    }
+  });
+});
+
+app.get("/suppliers", function (req, res) {
+  db.query("SELECT * FROM suppliers", (db_err, db_res) => {
+    if (db_err) {
+      res.status(502).send(db_err);
+    } else {
+      res.json(db_res.rows);
+    }
+  });
+});
+
+app.get("/products", function (req, res) {
+  const sqlCommand = `SELECT p.product_name, pa.unit_price, s.supplier_name
+                 FROM products p
+                 INNER JOIN product_availability pa ON p.id = pa.prod_id
+                 INNER JOIN suppliers s ON pa.supp_id = s.id`;
+  db.query(sqlCommand, (db_err, db_res) => {
+    if (db_err) {
+      res.status(502).send(db_err);
     } else {
       res.json(db_res.rows);
     }
