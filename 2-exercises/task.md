@@ -12,6 +12,10 @@ To submit this homework write the correct commands for each question here:
 from customers 
 where country = 'United States'
 
+2. select *
+from customers
+order by name;
+
 
 
 ```
