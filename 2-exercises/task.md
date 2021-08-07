@@ -8,7 +8,86 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+1.
+select  name , address 
+from customers 
+where country = 'United States';
 
+2.
+select *
+from customers
+order by name asc;
+
+3.
+select *
+from products
+where lower(product_name) like '%socks%';
+
+select *
+from products
+where product_name ilike '%socks%';
+
+select *
+from products
+where product_name ~* 'socks'; 
+
+4.
+select prod_id , product_name , unit_price , supp_id 
+from product_availability 
+inner join products 
+on product_availability.prod_id = products.id
+inner join suppliers 
+on product_availability.supp_id = suppliers.id 
+where product_availability.unit_price > 100;
+
+5.
+select product_name
+from product_availability
+inner join products
+on product_availability.prod_id = products.id
+inner join suppliers 
+on product_availability.supp_id = suppliers.id 
+order by unit_price desc
+limit 5;
+
+6.
+select product_name, unit_price, supplier_name
+from product_availability
+inner join products
+on product_availability.prod_id = products.id
+inner join suppliers 
+on product_availability.supp_id = suppliers.id;
+
+7.
+select product_name, supplier_name
+from product_availability 
+inner join products 
+on product_availability.prod_id = products.id
+inner join suppliers
+on product_availability.supp_id = suppliers.id 
+where country = 'United Kingdom';
+
+8.
+select order_id , order_reference, order_date, sum(quantity * unit_price) as total_cost 
+from order_items 
+inner join product_availability
+on order_items.product_id = product_availability.prod_id 
+inner join customers 
+on order_items.product_id = customers.id 
+inner join orders  
+on order_items.order_id = orders.id
+where customers.id = 1
+group by order_id, order_reference, order_date;
+
+9.
+
+10.
+
+11.
+
+12.
+
+13.
 
 ```
 
