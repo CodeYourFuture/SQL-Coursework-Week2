@@ -29,6 +29,13 @@ inner join products
 on products.id = product_availability.prod_id
 where product_availability.unit_price > 100;
 
+5. select *
+from product_availability
+inner join products
+on products.id = product_availability.prod_id
+order by unit_price desc
+limit 5;
+
 
 
 ```
