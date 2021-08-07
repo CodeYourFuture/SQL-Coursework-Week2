@@ -16,6 +16,19 @@ where country = 'United States'
 from customers
 order by name;
 
+3. select *
+from products
+where product_name 
+like '%socks%';
+
+4. select order_items.product_id, product_availability.unit_price, products.product_name, supplier_id
+from order_items
+inner join product_availability
+on order_items.product_id = product_availability.prod_id
+inner join products
+on products.id = product_availability.prod_id
+where product_availability.unit_price > 100;
+
 
 
 ```
