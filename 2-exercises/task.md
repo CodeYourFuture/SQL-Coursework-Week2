@@ -54,22 +54,44 @@ where product_name like '%socks%';
 ```
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 ```sql
-
+select product_id, product_name, unit_price, supplier_id
+from order_items
+inner join product_availability 
+on product_id = product_availability.prod_id
+inner join products 
+on prod_id = products.id
+where unit_price > 100;
 
 ```
 5. Retrieve the 5 most expensive products
 ```sql
-
+select *
+from order_items 
+inner join product_availability 
+on product_id = product_availability.prod_id
+order by unit_price desc
+limit 5;
 
 ```
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 ```sql
-
+select product_name, supplier_name, unit_price 
+from product_availability 
+inner join products 
+on prod_id = products.id 
+inner join suppliers 
+on supp_id = suppliers.id;
 
 ```
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 ```sql
-
+select product_name, supplier_name
+from product_availability 
+inner join products 
+on prod_id = products.id 
+inner join suppliers 
+on supp_id = suppliers.id
+where country = 'United Kingdom';
 
 ```
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
