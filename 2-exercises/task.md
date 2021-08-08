@@ -36,17 +36,20 @@ Once you understand the database that you are going to work with, solve the foll
 
 1. Retrieve all the customers' names and addresses who live in the United States
 ```sql
-
+select name, address from customers
+where country ='United States';
 
 ```
 2. Retrieve all the customers in ascending name sequence
 ```sql
-
+select * from customers
+order by name asc --(default return is asc);
 
 ```
 3. Retrieve all the products whose name contains the word `socks`
 ```sql
-
+select * from products 
+where product_name like '%socks%';
 
 ```
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
