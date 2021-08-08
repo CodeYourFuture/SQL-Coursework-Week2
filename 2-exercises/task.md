@@ -96,17 +96,43 @@ where country = 'United Kingdom';
 ```
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 ```sql
-
+select order_id,product_name, order_reference, order_date, (quantity * unit_price) as total_cost
+from order_items 
+inner join orders
+on order_id = orders.id
+inner join product_availability
+on product_id = prod_id
+inner join products 
+on prod_id = products.id
+where customer_id = 1;
 
 ```
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 ```sql
-
+select product_name, order_id
+from order_items 
+inner join product_availability 
+on product_id = prod_id
+inner join products
+on prod_id = products.id 
+inner join orders 
+on order_id = orders.id
+inner join customers 
+on customer_id = customers.id 
+where name = 'Hope Crosby';
 
 ```
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 ```sql
-
+select product_name, unit_price, quantity, 
+from order_items 
+inner join product_availability 
+on product_id = prod_id
+inner join products 
+on prod_id = products.id
+inner join orders 
+on order_id = orders.id 
+where order_reference = 'ORD006';
 
 ```
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
