@@ -137,17 +137,46 @@ where order_reference = 'ORD006';
 ```
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 ```sql
-
+select name, order_reference, order_date, product_name, supplier_name, quantity
+from order_items 
+inner join product_availability 
+on product_id = prod_id
+inner join products 
+on prod_id = products.id
+inner join suppliers
+on supp_id = suppliers.id 
+inner join orders 
+on order_id = orders.id 
+inner join customers 
+on customer_id = customers.id;
 
 ```
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 ```sql
-
+select name
+from order_items
+inner join product_availability 
+on supplier_id = supp_id
+inner join suppliers 
+on supp_id = suppliers.id 
+inner join orders 
+on order_id = orders.id 
+inner join customers 
+on customer_id = customers.id 
+where suppliers.country = 'China';
 
 ```
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 ```sql
-
+select name, order_reference, order_date, (quantity * unit_price) as total_amount
+from order_items 
+inner join product_availability 
+on product_id = prod_id
+inner join orders 
+on order_id = orders.id 
+inner join customers 
+on customer_id = customers.id 
+order by total_amount desc;
 
 ```
 
