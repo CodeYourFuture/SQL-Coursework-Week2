@@ -80,6 +80,13 @@ where customers.id = 1
 group by order_id, order_reference, order_date;
 
 9.
+SELECT *
+FROM order_items 
+INNER JOIN orders 
+ON order_items.id = orders.id 
+INNER JOIN customers
+ON order_items.order_id = customers.id 
+WHERE customers.name = 'Hope Crosby';
 
 10.
 
