@@ -12,7 +12,6 @@ const pool = new Pool({
 
 app.get("/customers", function (req, res) {
   pool.query("SELECT * FROM customers", (error, result) => {
-    console.log("found me");
     res.json(result.rows);
   });
 });
