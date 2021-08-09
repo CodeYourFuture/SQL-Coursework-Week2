@@ -20,7 +20,13 @@ app.get('/', (req, res) => {
 
 app.get('/customers', (req, res) => {
   pool.query('SELECT * FROM customers', (error, result) => {
-    res.json(result)
+    res.json(result.rows)
+  });
+});
+
+app.get('/suppliers', (req, res) => {
+  pool.query('SELECT * FROM suppliers', (error, result) => {
+    res.json(result.rows)
   });
 });
 
