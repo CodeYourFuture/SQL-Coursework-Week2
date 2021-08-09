@@ -9,55 +9,65 @@ Below you will find a set of tasks for you to complete to set up a database for 
 To submit this homework write the correct commands for each question here:
 
 ```sql
-'1:' select "name", address
-from customers
-where country = "United States";
+'1:' SELECT "name", address
+     FROM customers
+     WHERE country = "United States";
 
-'2:' select *
-from customers
-order by name asc;
+'2:' SELECT *
+     FROM customers
+     ORDER by name asc;
 
-'3:' select *
-from products
-where product_name ~ * "socks";
+'3:' SELECT *
+     FROM products
+     WHERE product_name ~ * "socks";
 
-'4:' select prod_id, product_name, unit_price, supp_id
-from product_availability
-inner join products
-on product_availability.prod_id = products.id
-inner join suppliers
-on product_availability.supp_id = suppliers.id
-where product_availability.unit_price > 100;
+'4:' SELECT prod_id, product_name, unit_price, supp_id
+     FROM product_availability
+     INNER JOIN products
+     ON product_availability.prod_id = products.id
+     INNER JOIN suppliers
+     ON product_availability.supp_id = suppliers.id
+     WHERE product_availability.unit_price > 100;
 
-'5:' select product_name, unit_price
-from products
-inner join product_availability
-on products.id = product_availability.prod_id
-order by unit_price desc
-limit 5;
+'5:' SELECT product_name, unit_price
+     FROM products
+     INNER JOIN product_availability
+     ON products.id = product_availability.prod_id
+     ORDER by unit_price desc
+     LIMIT 5;
 
-'6:' select product_name, unit_price, supplier_name
-from product_availability
-inner join suppliers
-on product_availability.supp_id = suppliers.id
-inner join products
-on product_availability.prod_id = products.id;
+'6:' SELECT product_name, unit_price, supplier_name
+     FROM product_availability
+     INNER JOIN suppliers
+     ON product_availability.supp_id = suppliers.id
+     INNER JOIN products
+     ON product_availability.prod_id = products.id;
 
-'7:' select product_name, supplier_name
-from product_availability
-inner join suppliers
-on product_availability.supp_id = suppliers.id
-inner join products
-on product_availability.prod_id = products.id
-where country = 'United Kingdom';
+'7:' SELECT product_name, supplier_name
+     FROM product_availability
+     INNER JOIN suppliers
+     ON product_availability.supp_id = suppliers.id
+     INNER JOIN products
+     ON product_availability.prod_id = products.id
+     WHERE country = 'United Kingdom';
 
-'8:' select order_id, order_date, order_reference, customer_id, unit_price*quantity as "total cost"
-from orders
-inner join order_items
-on orders.id = order_items.order.id
-inner join product_availability
-on orders.id = order_items.order_id
-where customers.name = 'Hope Crosby';
+'8:' SELECT order_id, order_date, order_reference, customer_id, unit_price*quantity AS "total cost"
+     FROM orders
+     INNER JOIN order_items
+     ON orders.id = order_items.order_id
+     INNER JOIN product_availability
+     ON order_items.product_id = product_availability.prod_id
+     WHERE orders.customer_id = 1;
+
+'9:'
+
+'10:'
+
+'11:'
+
+'12:'
+
+'13:'
 
 ```
 
