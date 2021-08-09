@@ -22,6 +22,15 @@ app.get("/suppliers", (req, res) => {
   });
 });
 
+app.get("/products", (req, res) => {
+  pool.query(
+    "SELECT product_name, unit_price, supplier_name FROM products INNER JOIN product_availability ON product_availability.prod_id = products.id INNER JOIN suppliers ON suppliers.id = product_availability.supp_id",
+    (error, result) => {
+      res.json(result.rows);
+    }
+  );
+});
+
 const listener = app.listen(3000 || process.env.PORT, () => {
   console.log("Server is listening on port " + listener.address().port);
 });
