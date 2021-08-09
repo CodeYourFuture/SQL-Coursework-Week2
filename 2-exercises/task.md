@@ -69,7 +69,15 @@ inner join customers
 on customers.id = orders.id
 where customers."name" = 'Hope Crosby';
 
-10. 
+10. select product_name, unit_price, quantity
+from products
+inner join product_availability
+on product_availability.prod_id = products.id
+inner join order_items
+on order_items.product_id = product_availability.prod_id
+inner join orders
+on orders.id = order_items.order_id
+where orders.order_reference = 'ORD006';
 
 
 
