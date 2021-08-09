@@ -21,15 +21,15 @@ app.get("/customers", (req, res) => {
     })
 })
 
-// Option -2
-// app.get("/customers", async(request, response) => {
-//     try {
-//        const allCustomers = await pool.query("SELECT * FROM customers");
-//        response.json(allCustomers.rows);
-//     } catch (error) {
-//        console.error(error.message);
-//     }
-// });
+Option -2
+app.get("/customers", async(request, response) => {
+    try {
+       const allCustomers = await pool.query("SELECT * FROM customers");
+       response.json(allCustomers.rows);
+    } catch (error) {
+       console.error(error.message);
+    }
+});
 
 
 // Add a new GET endpoint `/suppliers` to return all the suppliers from the database
