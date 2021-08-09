@@ -164,5 +164,12 @@ WHERE sup.country = 'China';
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
 ```sql
+SELECT c.name, o.order_reference, o.order_date, SUM(o_i.quantity * p_a.unit_price) AS order_total_amount
+FROM customers AS c
+INNER JOIN orders AS o ON c.id = o.customer_id
+INNER JOIN order_items AS o_i ON o.id = o_i.order_id
+INNER JOIN product_availability AS p_a ON p_a.prod_id = o_i.product_id AND p_a.supp_id = o_i.supplier_id
+GROUP BY c.name, o.order_reference, o.order_date
+ORDER BY order_total_amount DESC;
 
 ```
