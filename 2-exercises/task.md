@@ -59,15 +59,56 @@ To submit this homework write the correct commands for each question here:
      ON order_items.product_id = product_availability.prod_id
      WHERE orders.customer_id = 1;
 
-'9:'
+'9:' SELECT orders.*, order_items.*
+     FROM  customers
+     INNER JOIN orders
+     ON customers.id = orders.customer_id
+     INNER JOIN order_items
+     ON orders.id = order_items.order_id
+     WHERE customers.name = 'Hope Crosby';
 
-'10:'
+'10:' SELECT
+      FROM products
+      INNER JOIN product_availability
+      ON products.id = product_availability.prod_id
+      INNER JOIN order_items
+      ON product_availability.prod_id = order_items.product_id
+      INNER JOIN orders
+      ON order_items.order_id = orders.id
+      WHERE orders.order_reference = 'ORD006';
 
-'11:'
+'11:' SELECT name, order_reference, order_date, product_name, supplier_name, quantity
+      FROM customers
+      INNER JOIN order_items
+      ON orders.id = order_items.order_id
+      INNER JOIN product_availability
+      ON order_items.product_id = product_availability.prod_id
+      INNER JOIN products
+      ON product_availability.prod_id = products.id
+      INNER JOIN suppliers
+      ON product_availability.supp_id = suppliers.id ;
 
-'12:'
+'12:' SELECT name
+      FROM customers
+      INNER JOIN orders
+      ON customers.id = orders.customer_id
+      INNER JOIN order_items
+      ON orders.id = order_items.order_id
+      INNER JOIN product_availability
+      ON order_items.product_id = product_availability.prod_id
+      INNER JOIN suppliers
+     ON product_availability.supp_id = suppliers.id
+      WHERE suppliers.country = 'China';
 
-'13:'
+'13:' SELECT name, order_reference, order_date, unit_price*quantity AS "total amount"
+      FROM customers
+      INNER JOIN orders
+      ON customers.id = orders.customer_id
+      INNER JOIN order_items
+      ON orders.id = order_items.order_id
+      INNER JOIN product_availability
+      ON order_items.product_id = product_availability.prod_id
+      ORDER BY "total amount" DESC;
 
 ```
 
