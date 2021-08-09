@@ -35,16 +35,65 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+```sql
+SELECT name, address
+FROM customers
+WHERE country = 'United States'; 
+```
+
 2. Retrieve all the customers in ascending name sequence
+```sql
+
+```
 3. Retrieve all the products whose name contains the word `socks`
+```sql
+
+```
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+```sql
+
+```
+
 5. Retrieve the 5 most expensive products
+```sql
+
+```
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+```sql
+
+```
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+```sql
+
+```
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+```sql
+
+```
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+```sql
+
+```
+
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+```sql
+
+```
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+```sql
+
+```
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+```sql
+
+```
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
