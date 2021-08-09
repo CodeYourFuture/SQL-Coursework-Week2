@@ -43,7 +43,9 @@ WHERE country = 'United States';
 
 2. Retrieve all the customers in ascending name sequence
 ```sql
-
+SELECT *
+FROM customers
+ORDER BY name ASC;
 ```
 3. Retrieve all the products whose name contains the word `socks`
 ```sql
