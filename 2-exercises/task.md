@@ -106,6 +106,16 @@ inner join suppliers
 on suppliers.id = product_availability.supp_id
 where suppliers.country = 'China';
 
+13. select "name", order_reference, order_date, (quantity * unit_price) as order_total_amount
+from orders
+inner join customers
+on customers.id = orders.id
+inner join order_items
+on order_items.order_id = orders.id
+inner join product_availability
+on product_availability.prod_id = order_items.product_id
+order by order_total_amount desc;
+
 
 
 ```
