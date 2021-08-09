@@ -139,6 +139,12 @@ WHERE o.order_reference = 'ORD006';
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
 ```sql
+SELECT c.name, o.order_reference, o.order_date, p.product_name, sup.supplier_name, o_i.quantity
+FROM customers AS c
+INNER JOIN orders AS o ON c.id = o.customer_id
+INNER JOIN order_items AS o_i ON o.id = o_i.order_id
+INNER JOIN products AS p ON p.id = o_i.product_id
+INNER JOIN suppliers AS sup ON sup.id = o_i.supplier_id;
 
 ```
 
