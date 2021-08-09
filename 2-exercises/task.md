@@ -104,6 +104,13 @@ WHERE sup.country = 'United Kingdom';
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 
 ```sql
+SELECT o.id, o.order_reference, o.order_date, SUM(o_i.quantity * p_a.unit_price)AS total_cost
+FROM orders AS o
+INNER JOIN order_items AS o_i ON o.id = o_i.order_id
+INNER JOIN product_availability AS p_a ON o_i.product_id = p_a.prod_id
+WHERE o.customer_id = 1
+GROUP BY o.id
+ORDER BY o.id;
 
 ```
 
