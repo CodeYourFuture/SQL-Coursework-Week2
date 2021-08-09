@@ -79,12 +79,12 @@ inner join orders
 on orders.id = order_items.order_id
 where orders.order_reference = 'ORD006';
 
-11. select "name", order_reference, order_date, product_name, supplier_name, quantity 
+11. select "name", order_reference, order_date, product_name, supplier_name, quantity
 from  products
 inner join product_availability
 on product_availability.prod_id = products.id
 inner join suppliers
-on suppliers.id = product_availability.supp_id 
+on suppliers.id = product_availability.supp_id
 inner join order_items
 on order_items.product_id = product_availability.prod_id
 inner join orders
@@ -92,6 +92,19 @@ on orders.id = order_items.order_id
 inner join customers
 on customers.id = orders.id;
 
+12. select "name"
+from customers
+inner join orders
+on orders.id = customers.id
+inner join order_items
+on order_items.order_id = orders.id
+inner join product_availability
+on product_availability.prod_id = order_items.product_id
+inner join products
+on products.id = product_availability.prod_id
+inner join suppliers
+on suppliers.id = product_availability.supp_id
+where suppliers.country = 'China';
 
 
 
