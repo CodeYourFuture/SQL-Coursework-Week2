@@ -56,7 +56,11 @@ WHERE lower(product_name) ~* 'socks';
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 ```sql
-
+SELECT p.id, p.product_name, p_a.unit_price, sup.supplier_name, sup.id AS supplier_id
+FROM products AS p
+INNER JOIN product_availability AS p_a ON p_a.prod_id = p.id
+INNER JOIN suppliers AS sup ON sup.id = p_a.supp_id
+WHERE p_a.unit_price > 100;
 ```
 
 5. Retrieve the 5 most expensive products
