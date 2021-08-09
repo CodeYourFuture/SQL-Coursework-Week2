@@ -92,6 +92,12 @@ ORDER BY p.product_name, p_a.unit_price DESC;
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
 ```sql
+SELECT p.product_name, sup.supplier_name
+FROM products AS p
+INNER JOIN product_availability AS p_a ON p.id = p_a.prod_id
+INNER JOIN suppliers AS sup ON sup.id = p_a.supp_id
+WHERE sup.country = 'United Kingdom';
+
 
 ```
 
