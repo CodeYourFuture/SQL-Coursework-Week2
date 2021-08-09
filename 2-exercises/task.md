@@ -61,6 +61,16 @@ on customers.id = orders.id
 inner join product_availability
 on product_availability.prod_id = order_items.id;
 
+9. select *
+from orders
+inner join order_items
+on order_items.order_id = orders.id
+inner join customers
+on customers.id = orders.id
+where customers."name" = 'Hope Crosby';
+
+10. 
+
 
 
 ```
