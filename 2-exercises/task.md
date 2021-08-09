@@ -117,6 +117,10 @@ ORDER BY o.id;
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
 ```sql
+SELECT * FROM orders AS o
+INNER JOIN order_items AS o_i ON o.id = o_i.order_id
+INNER JOIN customers AS c ON c.id = o.customer_id
+WHERE c.name = 'Hope Crosby';
 
 ```
 
