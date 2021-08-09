@@ -65,7 +65,11 @@ WHERE p_a.unit_price > 100;
 
 5. Retrieve the 5 most expensive products
 ```sql
-
+SELECT p.product_name, p_a.unit_price
+FROM products AS p
+INNER JOIN product_availability AS p_a ON p_a.prod_id = p.id
+ORDER BY p_a.unit_price DESC
+LIMIT 5;
 ```
 
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
