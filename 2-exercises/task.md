@@ -49,7 +49,9 @@ ORDER BY name ASC;
 ```
 3. Retrieve all the products whose name contains the word `socks`
 ```sql
-
+SELECT *
+FROM products
+WHERE lower(product_name) ~* 'socks';
 ```
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
