@@ -127,6 +127,12 @@ WHERE c.name = 'Hope Crosby';
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
 ```sql
+SELECT p.product_name, p.id, p_a.unit_price, o_i.quantity
+FROM order_items AS o_i
+INNER JOIN products AS p ON o_i.product_id = p.id
+INNER JOIN orders AS o ON o.id = o_i.order_id
+INNER JOIN product_availability AS p_a ON o_i.product_id = p_a.prod_id AND o_i.supplier_id = p_a.supp_id
+WHERE o.order_reference = 'ORD006';
 
 ```
 
