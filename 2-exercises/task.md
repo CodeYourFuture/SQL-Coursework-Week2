@@ -152,6 +152,13 @@ INNER JOIN suppliers AS sup ON sup.id = o_i.supplier_id;
 
 ```sql
 
+SELECT DISTINCT c.name
+FROM customers AS c
+INNER JOIN orders AS o ON c.id = o.customer_id
+INNER JOIN order_items AS o_i ON o.id = o_i.order_id
+INNER JOIN suppliers AS sup ON sup.id = o_i.supplier_id
+WHERE sup.country = 'China';
+
 ```
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
