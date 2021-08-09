@@ -30,6 +30,13 @@ app.get('/suppliers', (req, res) => {
   });
 });
 
+// (STRETCH GOAL) Add a new GET endpoint /products to return all the product names along with their prices and supplier names.
+app.get('/products', (req, res) => {
+  pool.query('SELECT product_name, unit_price, supplier_name FROM order_items INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id INNER JOIN products ON order_items.Product_id = products.id INNER JOIN suppliers ON order_items.supplier_id = suppliers.id; ', (error, result) => {
+    res.json(result.rows)
+  });
+});
+
 const listener = app.listen(PORT, () => {
   console.log(`Server started on port: ${listener.address().port}`)
 });
