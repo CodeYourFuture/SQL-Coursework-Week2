@@ -9,6 +9,16 @@
             "database": "cyf_ecommerce",
             "username": "jonta",
             "password": "Heugh"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "JontaConnectWork",
+            "database": "cyf_ecommerce",
+            "username": "jonathanh",
+            "password": "Heugh"
         }
     ]
 }
