@@ -73,3 +73,39 @@ ON order_items.product_id = product_availability.prod_id
 INNER JOIN orders 
 ON orders.id = order_items.order_id 
 WHERE orders.order_reference = 'ORD006';
+
+--Question 11
+SELECT 
+customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity 
+FROM customers 
+INNER JOIN orders  
+ON orders.customer_id = customers.id 
+INNER JOIN order_items  
+ON order_items.order_id = orders.id 
+INNER JOIN products 
+ON order_items.product_id = products.id
+INNER JOIN suppliers 
+ON order_items.supplier_id = suppliers.id; 
+
+--Question 12
+SELECT name
+FROM customers 
+INNER JOIN orders 
+ON customers.id = orders.customer_id 
+INNER JOIN order_items 
+ON order_items.order_id = orders.id 
+INNER JOIN suppliers 
+ON suppliers.id = order_items.supplier_id 
+WHERE suppliers.country = 'China';
+
+--Question 13
+SELECT 
+customers.name, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price as order_total_amount 
+FROM orders  
+INNER JOIN customers  
+ON orders.customer_id = customers.id 
+INNER JOIN order_items  
+ON order_items.order_id = orders.id 
+INNER JOIN product_availability 
+ON order_items.product_id = product_availability.prod_id 
+ORDER BY order_total_amount DESC;
