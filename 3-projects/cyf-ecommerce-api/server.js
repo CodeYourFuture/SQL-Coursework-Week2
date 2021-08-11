@@ -16,3 +16,14 @@ app.get("/customers", (req, res) => {
         res.json(result.rows);
     });
 });
+
+app.get("/suppliers", (req, res) => {
+    pool.query("SELECT * FROM suppliers", (error, result) => {
+        res.json(result.rows);
+    })
+})
+
+const port = process.env.PORT || 3000
+app.listen(port, function () {
+    console.log(`App is listening on port: ${port}`)
+})
