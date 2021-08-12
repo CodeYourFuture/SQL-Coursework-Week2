@@ -7,6 +7,7 @@ In this homework, you are going to work with an ecommerce database. In this data
 Below you will find a set of tasks for you to complete to set up a database for an e-commerce app.
 
 To submit this homework write the correct commands for each question here:
+
 ```sql
 
 
@@ -35,16 +36,42 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+
+   `| SELECT name, address FROM customers WHERE country = 'United States'; |`
+
 2. Retrieve all the customers in ascending name sequence
+
+   `| SELECT * FROM customers ORDER BY name; |`
+
 3. Retrieve all the products whose name contains the word `socks`
+
+   `| SELECT * FROM products WHERE product_name LIKE '%socks%'; |`
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+   `| SELECT p.id, p.product_name, pa.unit_price, pa.supp_id FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id WHERE pa.unit_price > 100; |`
+
 5. Retrieve the 5 most expensive products
+
+   `| SELECT p.id, p.product_name, pa.unit_price FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id ORDER BY pa.unit_price DESC LIMIT 5; |`
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+   `| SELECT p.product_name, pa.unit_price, s.supplier_name FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN suppliers s ON s.id = pa.supp_id; |`
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
-8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+
+   `| SELECT p.product_name, s.supplier_name FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN suppliers s ON s.id = pa.supp_id WHERE s.country = 'United Kingdom'; |`
+
+8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
+
+   `| SELECT oi.order_id, o.order_reference, o.order_date, SUM(oi.quantity*pa.unit_price) AS total_cost FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN product_availability pa ON oi.product_id = pa.prod_id AND pa.supp_id = oi.supplier_id WHERE o.customer_id = 1 GROUP BY oi.order_id, o.order_reference, o.order_date; |`
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+
+    `| SELECT o.*, oi.* FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN customers c ON o.customer_id = c.id WHERE c.name = 'Hope Crosby'; |`    
+
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
-13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
-
+13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
