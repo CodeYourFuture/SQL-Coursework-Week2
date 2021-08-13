@@ -89,13 +89,50 @@ ON order_items.order_id = customers.id
 WHERE customers.name = 'Hope Crosby';
 
 10.
+SELECT product_name , unit_price, quantity
+FROM order_items as oi 
+INNER JOIN product_availability as pa 
+ON oi.product_id = pa.prod_id
+inner join products as p 
+ON oi.product_id = p.id 
+INNER JOIN orders AS o 
+ON oi.order_id = o.id 
+WHERE order_reference = 'ORD006';
 
 11.
+SELECT product_name AS Product, supplier_name AS Supplier, name AS Customer, order_reference AS Order_Number, order_date, quantity 
+FROM public.order_items AS oi
+INNER JOIN product_availability as pa 
+ON oi.product_id = pa.prod_id
+inner join products as p 
+ON oi.product_id = p.id 
+INNER JOIN orders AS o 
+ON oi.order_id = o.id
+INNER JOIN customers AS c
+ON oi.order_id = c.id
+INNER JOIN suppliers AS s
+ON oi.supplier_id = s.id ;
 
 12.
+SELECT name AS customers 
+FROM public.order_items AS oi
+INNER JOIN customers AS c
+ON oi.order_id = c.id
+INNER JOIN suppliers AS s
+ON oi.supplier_id = s.id
+WHERE s.country = 'China';
 
 13.
-
+SELECT name AS customer_name, order_reference, order_date, sum(quantity * unit_price) AS order_total_amount
+FROM order_items AS oi 
+INNER JOIN customers AS c 
+ON oi.order_id = c.id 
+INNER JOIN orders AS o 
+ON oi.order_id = o.id 
+INNER JOIN product_availability AS pa 
+ON oi.product_id = pa.prod_id
+GROUP BY c.name, order_reference, order_date
+ORDER BY order_total_amount DESC ;
 ```
 
 When you have finished all of the questions - open a pull request with your answers to the `Databases-Homework` repository.
