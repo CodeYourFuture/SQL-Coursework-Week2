@@ -31,9 +31,17 @@ To submit this homework write the correct commands for each question here:
       inner join product_availability pa on prod.id =pa.prod_id 
       inner join suppliers sup on pa.supp_id =sup .id ;
 
-8.
+8.   select o.id,o.order_reference,o.order_date,(oi.quantity*pa.unit_price) as total_cost 
+     from orders o 
+     inner join order_items oi on oi.order_id =o.id 
+     inner  join products p on p.id =oi.product_id 
+     inner join product_availability pa on pa.prod_id =p.id 
+     where o.id=1;
 
-9.
+9.   select * from orders o 
+     inner join order_items oi  on oi.order_id =o.id 
+     inner join customers c on c.id =o.customer_id 
+     where c.name = 'Hope Crosby'
 
 10.  select prod.product_name,pa.unit_price from
      products prod 
