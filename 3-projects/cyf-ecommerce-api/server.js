@@ -14,7 +14,7 @@ const pool = new Pool({
   user: "jonathanh",
   host: "localhost",
   database: "cyf_ecommerce",
-  password: "Heugh",
+  password: process.env.PASSWORD,
   port: 5432,
 });
 
