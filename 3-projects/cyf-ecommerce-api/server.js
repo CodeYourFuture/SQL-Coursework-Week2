@@ -31,10 +31,28 @@ app.get('/suppliers', (req, res) => {
 });
 
 // (STRETCH GOAL) Add a new GET endpoint /products to return all the product names along with their prices and supplier names.
+// Update the previous GET endpoint `/products` to filter the list of products by name using a query parameter, for example `/products?name=Cup`. This endpoint should still work even if you don't use the `name` query parameter!
 app.get('/products', (req, res) => {
-  pool.query('SELECT product_name, unit_price, supplier_name FROM order_items INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id INNER JOIN products ON order_items.Product_id = products.id INNER JOIN suppliers ON order_items.supplier_id = suppliers.id; ', (error, result) => {
-    res.json(result.rows)
-  });
+  const { name } = req.query;
+
+  if (name) {
+    query =
+      `
+      SELECT product_name, unit_price, supplier_name
+      FROM order_items
+      INNER JOIN product_availability
+      ON order_items.product_id = product_availability.prod_id
+      INNER JOIN products
+      ON order_items.Product_id = products.id
+      INNER JOIN suppliers
+      ON order_items.supplier_id = suppliers.id
+      WHERE product_name ILIKE '%${name}%';
+      `
+  }
+  pool
+    .query(query)
+    .then((result) => res.json(result.rows))
+    .catch((event) => console.error(event));
 });
 
 const listener = app.listen(PORT, () => {
