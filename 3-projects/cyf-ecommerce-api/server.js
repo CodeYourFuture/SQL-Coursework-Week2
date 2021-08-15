@@ -1,3 +1,4 @@
+const { query } = require('express');
 const express = require('express');
 const { Pool } = require('pg');
 
@@ -6,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// Setup POOL Credentials
 const pool = new Pool({
   user: 'douglas',
   host: 'localhost',
@@ -14,24 +16,46 @@ const pool = new Pool({
   port: 5432
 });
 
+// GET Started
 app.get('/', (req, res) => {
   res.send(`I feel like jumping into this POOL!`)
 });
 
+// GET All Customers
 app.get('/customers', (req, res) => {
   pool.query('SELECT * FROM customers', (error, result) => {
-    res.json(result.rows)
+    res.json(result.rows);
   });
 });
 
+// GET Customer by Id
+app.get('/customers/:customerId', (req, res) => {
+  const { customerId } = req.query;
+
+  if (customerId) {
+    query =
+      `
+      SELECT *
+      FROM customers
+      WHERE id = ${customerIdy
+      }
+      `
+  }
+
+  pool
+    .query(query)
+    .then((result) => res.json(result.rows))
+    .catch((event) => console.error(event));
+});
+
+//  GET all Suppliers
 app.get('/suppliers', (req, res) => {
   pool.query('SELECT * FROM suppliers', (error, result) => {
-    res.json(result.rows)
+    res.json(result.rows);
   });
 });
 
-// (STRETCH GOAL) Add a new GET endpoint /products to return all the product names along with their prices and supplier names.
-// Update the previous GET endpoint `/products` to filter the list of products by name using a query parameter, for example `/products?name=Cup`. This endpoint should still work even if you don't use the `name` query parameter!
+//  GET Products by Query String Parameter
 app.get('/products', (req, res) => {
   const { name } = req.query;
 
@@ -48,7 +72,8 @@ app.get('/products', (req, res) => {
       ON order_items.supplier_id = suppliers.id
       WHERE product_name ILIKE '%${name}%';
       `
-  }
+  };
+
   pool
     .query(query)
     .then((result) => res.json(result.rows))
