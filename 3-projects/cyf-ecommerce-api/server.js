@@ -56,8 +56,16 @@ app.get('/suppliers', (req, res) => {
   });
 });
 
+// GET All Products
 app.get('/products', (req, res) => {
   pool.query('SELECT * FROM products', (error, result) => {
+    res.json(result.rows);
+  });
+});
+
+// GET All Product_Availability
+app.get('/product_availability', (req, res) => {
+  pool.query('SELECT * FROM product_availability', (error, result) => {
     res.json(result.rows);
   });
 });
@@ -139,7 +147,33 @@ app.post('/products', (req, res) => {
           .catch((e) => console.error(e));
     // });
 });
-  
+
+
+// create table product_availability(
+//   prod_id       integer references products(id),
+//   supp_id       integer references suppliers(id),
+//   unit_price    integer not null,
+//   primary key(prod_id, supp_id)
+// );
+
+// POST New Product_Availabilty
+app.post('/product_availability', (req, res) => {
+  const { supp_id, unit_price } = req.body;
+
+  if (!supp_id && !unit_price) {
+    return res
+      .status(400)
+      .send("Please enter a supplier id and a price.");
+  };
+
+  const query =
+    `INSERT INTO product_availability (supp_id, unit_price) VALUES ('${supp_id}', '${unit_price}')`;
+  pool
+    .query(query)
+    .then(() => res.send("Product Availability created!"))
+    .catch((e) => console.error(e));
+  // });
+});
 
 const listener = app.listen(PORT, () => {
   console.log(`Server started on port: ${listener.address().port}`)
