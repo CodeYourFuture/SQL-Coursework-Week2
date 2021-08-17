@@ -48,43 +48,16 @@ app.get('/customers/:customerId', (req, res) => {
     .catch((event) => console.error(event));
 });
 
-// POST New Customer
-app.post('/customers', (req, res) => {
-  const {
-    name,
-    address,
-    city,
-    country
-  } = req.body;
-  console.log(`name:${name}`)
-
-  if (!name && !address && !city && !country) {
-    return res
-      .status(400)
-      .send("Please enter a name, address, city and country.");
-  };
-
-  // pool
-    // .query(`SELECT * FROM customers WHERE name=${name}`)
-    // .then((result) => {
-    //   if (result.rows.length > 0) {
-    //     return res
-    //       .status(400)
-    //       .send("A customer with the same name already exists!");
-    //   } else {
-        const query =
-          `INSERT INTO customers (name, address, city, country) VALUES ('${name}', '${address}', '${city}', '${country}')`;
-        pool
-          .query(query)
-          .then(() => res.send("Customer created!"))
-          .catch((e) => console.error(e));
-      // }
-    });
-// });
 
 //  GET all Suppliers
 app.get('/suppliers', (req, res) => {
   pool.query('SELECT * FROM suppliers', (error, result) => {
+    res.json(result.rows);
+  });
+});
+
+app.get('/products', (req, res) => {
+  pool.query('SELECT * FROM products', (error, result) => {
     res.json(result.rows);
   });
 });
@@ -94,7 +67,7 @@ app.get('/products', (req, res) => {
   const { name } = req.query;
 
   if (name) {
-    query =
+   query =
       `
       SELECT product_name, unit_price, supplier_name
       FROM order_items
@@ -108,11 +81,65 @@ app.get('/products', (req, res) => {
       `
   };
 
+    pool
+      .query(query)
+      .then((result) => res.json(result.rows))
+      .catch((event) => console.error(event));  
+});
+
+
+// POST New Customer
+app.post('/customers', (req, res) => {
+  const {
+    name,
+    address,
+    city,
+    country
+  } = req.body;
+
+  if (!name && !address && !city && !country) {
+    return res
+      .status(400)
+      .send("Please enter a name, address, city and country.");
+  };
+  // pool
+  // .query(`SELECT * FROM customers WHERE name=${name}`)
+  // .then((result) => {
+  //   if (result.rows.length > 0) {
+  //     return res
+  //       .status(400)
+  //       .send("A customer with the same name already exists!");
+  //   } else {
+  const query =
+    `INSERT INTO customers (name, address, city, country) VALUES ('${name}', '${address}', '${city}', '${country}')`;
   pool
     .query(query)
-    .then((result) => res.json(result.rows))
-    .catch((event) => console.error(event));
+    .then(() => res.send("Customer created!"))
+    .catch((e) => console.error(e));
+  // }
 });
+// });
+
+
+// POST New Product
+app.post('/products', (req, res) => {
+  const { product_name } = req.body;
+
+  if (!product_name) {
+    return res
+      .status(400)
+      .send("Please enter a product name.");
+  };
+
+        const query =
+          `INSERT INTO products (product_name) VALUES ('${product_name}')`;
+        pool
+          .query(query)
+          .then(() => res.send("Product created!"))
+          .catch((e) => console.error(e));
+    // });
+});
+  
 
 const listener = app.listen(PORT, () => {
   console.log(`Server started on port: ${listener.address().port}`)
