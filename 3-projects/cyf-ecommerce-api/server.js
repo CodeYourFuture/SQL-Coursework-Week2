@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+
 // Setup POOL Credentials
 const pool = new Pool({
   user: 'douglas',
@@ -28,7 +29,7 @@ app.get('/customers', (req, res) => {
   });
 });
 
-// GET Customer by Id
+// GET Customer by Id (NOT WORKING YET!!!)
 app.get('/customers/:customerId', (req, res) => {
   const { customerId } = req.query;
 
@@ -37,16 +38,49 @@ app.get('/customers/:customerId', (req, res) => {
       `
       SELECT *
       FROM customers
-      WHERE id = ${customerIdy
-      }
+      WHERE id = ${customerId}
       `
-  }
+  };
 
   pool
     .query(query)
     .then((result) => res.json(result.rows))
     .catch((event) => console.error(event));
 });
+
+// POST New Customer
+app.post('/customers', (req, res) => {
+  const {
+    name,
+    address,
+    city,
+    country
+  } = req.body;
+  console.log(`name:${name}`)
+
+  if (!name && !address && !city && !country) {
+    return res
+      .status(400)
+      .send("Please enter a name, address, city and country.");
+  };
+
+  // pool
+    // .query(`SELECT * FROM customers WHERE name=${name}`)
+    // .then((result) => {
+    //   if (result.rows.length > 0) {
+    //     return res
+    //       .status(400)
+    //       .send("A customer with the same name already exists!");
+    //   } else {
+        const query =
+          `INSERT INTO customers (name, address, city, country) VALUES ('${name}', '${address}', '${city}', '${country}')`;
+        pool
+          .query(query)
+          .then(() => res.send("Customer created!"))
+          .catch((e) => console.error(e));
+      // }
+    });
+// });
 
 //  GET all Suppliers
 app.get('/suppliers', (req, res) => {
