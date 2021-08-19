@@ -100,6 +100,39 @@ app.put("/customers/:customerId", async (req, res) => {
   }
 });
 
+// DELETE customer with no orders "/customers/:customerId"
+app.delete("/customers/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+    const hasOrder = await pool.query(
+      "SELECT * FROM orders WHERE customer_id = $1",
+      [customerId]
+    );
+    if (hasOrder.rows.length <= 0) {
+      await pool.query("DELETE FROM customers WHERE id = $1", [customerId]);
+      res.send("Customer Deleted!");
+    } else {
+      res.send(`Customer with id: ${customerId} has an order`);
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// GET customers with order info "/customers/:customerId/orders"
+app.get("/customers/:customerId/orders", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const query = `SELECT customers.name, orders.order_reference, orders.order_date, products.product_name,product_availability.unit_price, suppliers.supplier_name, order_items.quantity FROM customers INNER JOIN orders ON customers.id = orders.customer_id INNER JOIN order_items ON orders.id = order_items.order_id INNER JOIN products ON order_items.product_id = products.id INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id WHERE customers.id = ${customerId}`;
+
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 // GET "/suppliers"
 app.get("/suppliers", async (req, res) => {
   try {
@@ -181,19 +214,16 @@ app.delete("/orders/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const result = await pool.query("SELECT * FROM orders WHERE id = $1", [
-      orderId
+      orderId,
     ]);
     if (result.rows.length <= 0) {
-      return res
-        .status(400)
-        .send(`Order with id: ${orderId} does not exist!`);
+      return res.status(400).send(`Order with id: ${orderId} does not exist!`);
     } else {
-      await pool.query(
-        "DELETE orders WHERE id = $1", [orderId]);
+      await pool.query("DELETE FROM orders WHERE id = $1", [orderId]);
     }
     res.send("Order Deleted");
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
 });
 
