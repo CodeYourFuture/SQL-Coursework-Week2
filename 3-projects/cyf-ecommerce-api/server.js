@@ -33,19 +33,14 @@ app.get('/customers', (req, res) => {
 
 // GET Customer by ID
 app.get('/customers/:customerId', (req, res) => {
-  const { customerId } = req.query;
+  const { customerId } = req.params;
 
-  if (customerId) {
-    query =
-      `
-      SELECT *
-      FROM customers
-      WHERE id = ${customerId}
-      `
-  };
+  // if (id) {
+  //   query =`SELECT * FROM customers WHERE id = '${id}'`
+  // };
 
   pool
-    .query(query)
+    .query(`SELECT * FROM customers WHERE id = ${customerId}`)
     .then((result) => res.json(result.rows))
     .catch((event) => console.error(event));
 });
