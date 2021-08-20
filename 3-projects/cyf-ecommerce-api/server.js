@@ -149,31 +149,25 @@ app.post('/products', (req, res) => {
 });
 
 
-// create table product_availability(
-//   prod_id       integer references products(id),
-//   supp_id       integer references suppliers(id),
-//   unit_price    integer not null,
-//   primary key(prod_id, supp_id)
-// );
-
 // POST New Product_Availabilty
-app.post('/product_availability', (req, res) => {
-  const { supp_id, unit_price } = req.body;
+app.post('/availability', (req, res) => {
+  const { prod_id, supp_id, unit_price } = req.body;
 
-  if (!supp_id && !unit_price) {
+  if (!prod_id && !supp_id && !unit_price) {
     return res
       .status(400)
-      .send("Please enter a supplier id and a price.");
+      .send("Please enter a product_id supplier_id and a price.");
   };
 
   const query =
-    `INSERT INTO product_availability (supp_id, unit_price) VALUES ('${supp_id}', '${unit_price}')`;
+    `INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ('${prod_id}','${supp_id}', '${unit_price}')`;
   pool
     .query(query)
     .then(() => res.send("Product Availability created!"))
     .catch((e) => console.error(e));
   // });
 });
+
 
 const listener = app.listen(PORT, () => {
   console.log(`Server started on port: ${listener.address().port}`)
