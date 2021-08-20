@@ -35,10 +35,6 @@ app.get('/customers', (req, res) => {
 app.get('/customers/:customerId', (req, res) => {
   const { customerId } = req.params;
 
-  // if (id) {
-  //   query =`SELECT * FROM customers WHERE id = '${id}'`
-  // };
-
   pool
     .query(`SELECT * FROM customers WHERE id = ${customerId}`)
     .then((result) => res.json(result.rows))
@@ -153,6 +149,29 @@ app.post('/availability', (req, res) => {
     .catch((e) => console.error(e));
 });
 
+
+// Update Customer by ID
+app.put("/customers/:customerId", (req, res) => {
+  const { customerId } = req.params;
+  const { name, address, city, country } = req.body;
+
+  if (customerId) {
+    pool
+      .query(`SELECT * FROM customers WHERE id=${customerId}`)
+      .then((result) => {
+        if (result.rows.length > 0) {
+          return res
+            .status(400)
+            .send(`Customer with ${customerId} does not exist!`);
+        } else {
+          pool
+            .query(`UPDATE customers SET name='${name}', address='${address}', city='${city}', country='${country}' WHERE id=${customerId}`)
+            .then(() => res.send(`Customer ${customerId} updated!`))
+            .catch((e) => console.error(e));
+        }
+      })
+  };
+});
 
 const listener = app.listen(PORT, () => {
   console.log(`Server started on port: ${listener.address().port}`)
