@@ -17,10 +17,12 @@ const pool = new Pool({
   port: 5432
 });
 
+
 // GET Started
 app.get('/', (req, res) => {
   res.send(`I feel like jumping into this POOL!`)
 });
+
 
 // GET All Customers
 app.get('/customers', (req, res) => {
@@ -29,7 +31,7 @@ app.get('/customers', (req, res) => {
   });
 });
 
-// GET Customer by Id (NOT WORKING YET!!!)
+// GET Customer by ID
 app.get('/customers/:customerId', (req, res) => {
   const { customerId } = req.query;
 
@@ -110,23 +112,13 @@ app.post('/customers', (req, res) => {
       .status(400)
       .send("Please enter a name, address, city and country.");
   };
-  // pool
-  // .query(`SELECT * FROM customers WHERE name=${name}`)
-  // .then((result) => {
-  //   if (result.rows.length > 0) {
-  //     return res
-  //       .status(400)
-  //       .send("A customer with the same name already exists!");
-  //   } else {
   const query =
     `INSERT INTO customers (name, address, city, country) VALUES ('${name}', '${address}', '${city}', '${country}')`;
   pool
     .query(query)
     .then(() => res.send("Customer created!"))
     .catch((e) => console.error(e));
-  // }
 });
-// });
 
 
 // POST New Product
@@ -139,13 +131,12 @@ app.post('/products', (req, res) => {
       .send("Please enter a product name.");
   };
 
-        const query =
-          `INSERT INTO products (product_name) VALUES ('${product_name}')`;
-        pool
-          .query(query)
-          .then(() => res.send("Product created!"))
-          .catch((e) => console.error(e));
-    // });
+  const query =
+    `INSERT INTO products (product_name) VALUES ('${product_name}')`;
+  pool
+    .query(query)
+    .then(() => res.send("Product created!"))
+    .catch((e) => console.error(e));
 });
 
 
@@ -165,7 +156,6 @@ app.post('/availability', (req, res) => {
     .query(query)
     .then(() => res.send("Product Availability created!"))
     .catch((e) => console.error(e));
-  // });
 });
 
 
