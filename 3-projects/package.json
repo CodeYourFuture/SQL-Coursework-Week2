@@ -1,0 +1,15 @@
+{
+	"name": "cyf-ecommerce-api",
+	"version": "1.0.0",
+	"description": "backend project as part of SQL module for cyf South Africa student",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"author": "R.Smith",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"pg": "^8.7.1"
+	}
+}
