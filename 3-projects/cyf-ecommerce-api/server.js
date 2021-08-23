@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const { Pool } = require("pg");
 
+app.use(express.json());
+
 const pool = new Pool({
   user: "Ryno",
   host: "localhost",
@@ -25,9 +27,29 @@ app.get("/customers/:id", function (req, res) {
     .then((e) => console.error(e));
 });
 
-// app.post("/customers", function (req, res) {
+app.post("/customers", function (req, res) {
+  const { name, address, city, country } = req.body;
 
-// })
+  pool.query("SELECT * FROM customers WHERE name=$1", [name]).then((result) => {
+    if (result.rows.length > 0) {
+      return res
+        .status(400)
+        .send(`A customer with the same name already exists!`);
+    } else {
+      const query =
+        "INSERT INTO customers (name, address, city, country) VALUES ($1, $2, $3, $4)";
+      pool
+        .query(query, [name, address, city, country])
+        .then(() =>
+          res.send({
+            description: "Customer created!",
+            errorStatus: false,
+          })
+        )
+        .catch((e) => console.error(e));
+    }
+  });
+});
 
 app.get("/suppliers", (req, res) => {
   pool.query("SELECT * FROM suppliers", (error, result) => {
