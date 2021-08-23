@@ -72,9 +72,22 @@ app.get("/products", (req, res) => {
     .catch((e) => console.error(e));
 });
 
-// app.post("/products", function (req, res) {
+app.post("/products", function (req, res) {
+ const { product_name } = req.body;
 
-// })
+ const query = 
+ "INSERT INTO products (product_name) VALUES ($1)";
+ pool
+ .query(query, [product_name])
+ .then(() =>
+  res.send({
+    description: "Customer created!",
+    errorStatus: false,
+  })
+ )
+ .catch((e) => console.error(e));
+
+})
 
 const listener = app.listen(3000 || process.env.PORT, () => {
   console.log("Server is listening on port " + listener.address().port);
