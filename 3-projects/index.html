@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Create New Product</h1>
+    <form action="/products" method="post" >
+        <label for="id"> Product Id
+        <input type="number" name="id" min="10" required><br>
+
+        </label>
+        <label for="name"> Product Name
+        <input type="text" name="productName" required >
+
+        </label><br>
+      
+        <button type="submit"> Create</button>
+    </form>
+       <a href="/allProducts"> See Products
+        </a>
+
+
+
+         <h1>Create New Customers</h1>
+    <form action="/customers" method="post">
+        <label for="id"> Id
+        <input type="number" name="customerId" min="10" required><br>
+
+        </label>
+        <label for="name">  Name
+        <input type="text" name="customerName" required >
+
+        </label><br>
+          <label for="address">  Address
+        <input type="text" name="address" required >
+
+        </label><br>
+        <label for="city">City
+            <input type="text" name="city" required>
+        </label><br>
+        <label for="country">Country
+            <input type="text" name="country" required>
+        </label><br>
+     
+        <button type="submit"> Create</button>
+    </form>
+       <a href=""> View Customers
+        </a>
+</body>
+</html>
