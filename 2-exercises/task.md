@@ -55,7 +55,7 @@ To submit this homework write the correct commands for each question here:
      from customers cust 
      inner join orders ord on ord.customer_id =cust.id 
      inner join order_items ordIt on ord .id =ordIt.order_id 
-     inner  join  suppliers sup on sup .id =ordIt.supplier_id 
+     inner join  suppliers sup on sup .id =ordIt.supplier_id 
      inner join product_availability pa on pa.supp_id =sup.id 
      inner join products prod on prod.id =pa.prod_id ;
           
