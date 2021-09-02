@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 let bodyParser = require("body-parser");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.Router())
+app.use(express.Router());
 
 const { Pool } = require("pg");
 
@@ -29,11 +29,14 @@ app.post("/customers", (req, res) => {
   let address = req.body.address;
   let city = req.body.city;
   let country = req.body.country;
-  
-  pool.query("insert into customers (id,name,address,city,country) Values ($1 $2 $3 $4 $5),", [id, name, address, city, country]).then(
-    res.send("Dataset Added")
-  ).then(res.redirect(__dirname+"/index.html"))
-})
+
+  pool
+    .query(
+      "insert into customers (id,name,address,city,country) values ($1, $2, $3, $4, $5)",
+      [id, name, address, city, country]
+    )
+    .then(() => res.send("Dataset Added"));
+});
 //Get Customer By Id
 app.get("/customers/:customers", (req, res) => {
   let specificCustomer = req.params.customers;
@@ -65,8 +68,12 @@ app.get("/suppliers", (req, resp) => {
 app.post("/products", (req, res) => {
   let id = req.body.id;
   let productName = req.body.productName;
-  pool.query("insert into products (id,product_name) values ($1,$2)",[id,productName]).then(
-  res.send(id+" "+productName+" was added to the Database"));
+  pool
+    .query("insert into products (id,product_name) values ($1,$2)", [
+      id,
+      productName,
+    ])
+    .then(()=>res.send(id + " " + productName + " was added to the Database"));
 });
 //Get All Products
 app.get("/allProducts", (req, resp) => {
