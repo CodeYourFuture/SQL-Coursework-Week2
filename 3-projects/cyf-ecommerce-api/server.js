@@ -3,7 +3,7 @@ const express = require('express');
 const { Pool } = require('pg');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 
@@ -13,10 +13,9 @@ const pool = new Pool({
   user: 'douglas',
   host: 'localhost',
   database: 'cyf_ecommerce',
-  password: process.env.ADMIN_PASSWORD,
+  password: `PeanutbutteR2020%`,
   port: 5432
 });
-
 
 // GET Started
 app.get('/', (req, res) => {

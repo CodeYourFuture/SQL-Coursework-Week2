@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env-cmd -f ./config/.env node server.js"
+    "start": "nodemon server.js",
+    "dev": "nodemon -r dotenv/config server.js" 
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "nodemon": "^2.0.12"
   }
 }
