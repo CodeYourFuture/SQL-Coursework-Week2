@@ -49,13 +49,6 @@ app.get('/suppliers', (req, res) => {
   });
 });
 
-// GET All Products
-app.get('/products', (req, res) => {
-  pool.query('SELECT * FROM products', (error, result) => {
-    res.json(result.rows);
-  });
-});
-
 // GET All Product_Availability
 app.get('/product_availability', (req, res) => {
   pool.query('SELECT * FROM product_availability', (error, result) => {
@@ -63,25 +56,33 @@ app.get('/product_availability', (req, res) => {
   });
 });
 
-//  GET Products by Query String Parameter
+//  GET All Products and if Name includes by Query String
 app.get('/products', (req, res) => {
-  const { name } = req.query;
+  let { name } = req.query;
+  let query = `SELECT * FROM products ORDER BY product_name`
 
   if (name) {
-   query =
-      `
+    query =
+      `    
       SELECT product_name, unit_price, supplier_name
-      FROM order_items
-      INNER JOIN product_availability
-      ON order_items.product_id = product_availability.prod_id
+      FROM product_availability
       INNER JOIN products
-      ON order_items.Product_id = products.id
+      ON product_availability.prod_id = products.id
       INNER JOIN suppliers
-      ON order_items.supplier_id = suppliers.id
+      ON product_availability.supp_id = suppliers.id
       WHERE product_name ILIKE '%${name}%';
       `
+  } else {
+    query = 
+    `    
+      SELECT product_name, unit_price, supplier_name
+      FROM product_availability
+      INNER JOIN products
+      ON product_availability.prod_id = products.id
+      INNER JOIN suppliers
+      ON product_availability.supp_id = suppliers.id;
+      `
   };
-
     pool
       .query(query)
       .then((result) => res.json(result.rows))
@@ -159,10 +160,11 @@ app.put("/customers/:customerId", (req, res) => {
     pool
       .query(`SELECT * FROM customers WHERE id=${customerId}`)
       .then((result) => {
-        if (result.rows.length > 0) {
+        console.log(result)
+        if (result.rows.length === 0) {
           return res
             .status(400)
-            .send(`Customer with ${customerId} does not exist!`);
+            .send(`Customer with ${id} does not exist!`);
         } else {
           pool
             .query(`UPDATE customers SET name='${name}', address='${address}', city='${city}', country='${country}' WHERE id=${customerId}`)
@@ -172,6 +174,28 @@ app.put("/customers/:customerId", (req, res) => {
       })
   };
 });
+
+app.delete('/orders/:orderId', (req, res) => {  
+    const { orderId } = req.params
+    const numericId = parseInt(orderId)
+    if (numericId) {
+      pool
+        .query(`SELECT * FROM orders WHERE id=${numericId}`)
+        .then((result) => {
+          console.log(result)
+          if (result.rows.length === 0) {
+            return res
+              .status(400)
+              .send(`Order ${numericId} does not exist!`);
+          } else {
+            pool
+              .query(`DELETE FROM orders WHERE id=${numericId}`)
+              .then(() => res.send(`Order ${numericId} deleted!`))
+              .catch((e) => console.error(e));
+          }
+        })
+    }
+})
 
 const listener = app.listen(PORT, () => {
   console.log(`Server started on port: ${listener.address().port}`)
