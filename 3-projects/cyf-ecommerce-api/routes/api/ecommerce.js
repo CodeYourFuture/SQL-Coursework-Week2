@@ -114,7 +114,7 @@ router.post('/customers', (req, res) => {
     `INSERT INTO customers (name, address, city, country) VALUES ('${name}', '${address}', '${city}', '${country}')`;
   pool
     .query(query)
-    .then(() => res.send("Customer created!"))
+    .then(() => res.send(`Customer ${name} created!`))
     .catch((e) => console.error(e));
 });
 
