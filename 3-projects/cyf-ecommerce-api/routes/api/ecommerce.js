@@ -113,7 +113,7 @@ router.post('/customers', (req, res) => {
 
 // POST New Product
 router.post('/products', (req, res) => {
-  const { product_name, unit_price, supplier_name } = req.body;
+  const { product_name } = req.body;
 
   if (!product_name) {
     return res
@@ -122,7 +122,7 @@ router.post('/products', (req, res) => {
   };
 
   const query =
-    `INSERT INTO products (product_name,unit_price, supplier_name) VALUES ('${product_name}', ${unit_price}, '${supplier_name}')`;
+    `INSERT INTO products (product_name) VALUES ('${product_name}')`;
   pool
     .query(query)
     .then(() => res.send(`Product ${product_name} created!`))
