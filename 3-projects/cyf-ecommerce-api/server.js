@@ -34,10 +34,23 @@ app.get('/customers', (req, res) => {
 app.get('/customers/:customerId', (req, res) => {
   const { customerId } = req.params;
 
-  pool
-    .query(`SELECT * FROM customers WHERE id = ${customerId}`)
-    .then((result) => res.json(result.rows))
-    .catch((event) => console.error(event));
+  if (customerId) {
+    pool
+      .query(`SELECT * FROM customers WHERE id=${customerId}`)
+      .then((result) => {
+        console.log(result)
+        if (result.rows.length === 0) {
+          return res
+            .status(400)
+            .send(`Customer with id ${customerId} does not exist!`);
+        }
+      })
+  } else {
+    pool
+      .query(`SELECT * FROM customers WHERE id = ${customerId}`)
+      .then((result) => res.json(result.rows))
+      .catch((event) => console.error(event));
+  }
 });
 
 
