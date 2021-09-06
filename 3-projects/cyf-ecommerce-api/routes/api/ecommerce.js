@@ -4,11 +4,11 @@ const router = express.Router();
 
 // Setup POOL Credentials
 const pool = new Pool({
-  user: 'douglas',
-  host: 'localhost',
-  database: 'cyf_ecommerce',
-  password: `PeanutbutteR2020%`,
-  port: 5432
+  user: process.env.USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password: process.env.ADMIN_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
 // GET Started
