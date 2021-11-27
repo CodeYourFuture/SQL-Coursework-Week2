@@ -41,6 +41,8 @@ select name, address from customers where country='United States';
 select * from customers order by name asc;
 
 3. Retrieve all the products whose name contains the word `socks`
+select * from products where product_name like('%socks%');
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
