@@ -48,6 +48,8 @@ select products.id,products.product_name, product_availability.unit_price,  prod
 products inner join product_availability on products.id=product_availability.prod_id where product_availability.unit_price>100;
 
 5. Retrieve the 5 most expensive products
+select products.id,products.product_name, product_availability.unit_price,  product_availability.supp_id from 
+products inner join product_availability on products.id=product_availability.prod_id order by product_availability.unit_price desc limit 5;
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
