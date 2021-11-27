@@ -69,6 +69,10 @@ from orders inner join order_items on orders.id = order_items.id inner join cust
 where customers.name='Hope Crosby'; 
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+select distinct products.product_name, product_availability.unit_price , order_items.quantity from order_items inner join products on order_items.product_id=products.id  inner join
+product_availability on products.id=product_availability.prod_id inner join orders on orders.id = order_items.order_id where orders.order_reference ='ORD006' ;
+
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
