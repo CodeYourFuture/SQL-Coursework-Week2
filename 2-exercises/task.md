@@ -74,6 +74,12 @@ product_availability on products.id=product_availability.prod_id inner join orde
 
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
+
+select customers.name, orders.order_reference,orders.order_date, products.product_name, suppliers.supplier_name,order_items.quantity 
+from customers left outer join orders on customers.id = orders.customer_id left outer join order_items on orders.id = order_items.order_id 
+left outer join suppliers on order_items.supplier_id = suppliers.id left outer join products on order_items.product_id = products.id;
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 select distinct customers.name from customers inner join orders on customers.id=orders.customer_id inner join order_items on orders.id = order_items.order_id 
 inner join suppliers on order_items.supplier_id = suppliers.id where suppliers.country='China';
