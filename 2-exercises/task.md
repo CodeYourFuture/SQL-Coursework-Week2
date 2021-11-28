@@ -61,8 +61,9 @@ suppliers on product_availability.supp_id=suppliers.id where suppliers.country =
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 select orders.id,orders.order_date,orders.order_reference,orders.customer_id,  order_items.quantity * product_availability.unit_price as total_cost
-from orders inner join order_items on orders.id = order_items.id inner join product_availability on order_items.product_id = product_availability.prod_id 
+from orders inner join order_items on orders.id = order_items.id inner join product_availability on order_items.product_id = product_availability.prod_id and order_items.supplier_id = product_availability.supp_id
 where orders.customer_id=1; 
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 select *
 from orders inner join order_items on orders.id = order_items.id inner join customers on orders.customer_id = customers.id 
