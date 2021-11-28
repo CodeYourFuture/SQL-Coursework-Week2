@@ -83,5 +83,9 @@ left outer join suppliers on order_items.supplier_id = suppliers.id left outer j
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 select distinct customers.name from customers inner join orders on customers.id=orders.customer_id inner join order_items on orders.id = order_items.order_id 
 inner join suppliers on order_items.supplier_id = suppliers.id where suppliers.country='China';
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
+select customers.name,orders.order_date,orders.order_reference, order_items.quantity * product_availability.unit_price as total_cost
+from orders inner join order_items on orders.id = order_items.id inner join product_availability on order_items.product_id = product_availability.prod_id 
+inner join customers on orders.customer_id=customers.id order by total_cost desc;
