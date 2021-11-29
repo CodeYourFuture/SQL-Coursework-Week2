@@ -16,19 +16,21 @@ const pool = new Pool({
 
 app.get("/customers", function (req, res) {
   pool.query("SELECT * FROM customers", (error, result) => {
-    res.json(result.rows);
+    res.status(200).json(result.rows);
   });
 });
 app.get("/suppliers", function (req, res) {
   pool.query("SELECT * FROM suppliers", (error, result) => {
-    res.json(result.rows);
+    res.status(200).json(result.rows);
   });
 });
 
 app.get("/products", function (req, res) {
-  pool.query("select products.id,products.product_name, product_availability.unit_price,  product_availability.supp_id from products inner join product_availability on products.id=product_availability.prod_id;"
-  
-  , (error, result) => {
-    res.json(result.rows);
-  });
+  pool.query(
+    "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id;",
+
+    (error, result) => {
+      res.status(200).json(result.rows);
+    }
+  );
 });
