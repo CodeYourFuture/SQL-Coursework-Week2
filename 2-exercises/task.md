@@ -60,6 +60,15 @@ WHERE product_name ILIKE '%socks%';
 ```
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+```sql
+SELECT product_availability.prod_id , products.product_name, product_availability.unit_price, product_availability.supp_id
+FROM product_availability
+INNER JOIN products ON products.id = product_availability.prod_id
+WHERE product_availability.unit_price >  100;
+
+```
+
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
