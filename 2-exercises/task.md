@@ -52,6 +52,13 @@ ORDER BY name;
 ```
 
 3. Retrieve all the products whose name contains the word `socks`
+
+```sql
+SELECT *
+FROM products
+WHERE product_name ILIKE '%socks%';
+```
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
