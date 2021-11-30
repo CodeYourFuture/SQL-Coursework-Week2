@@ -137,5 +137,16 @@ WHERE orders.order_reference ='ORD006';
 ```
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
+```sql
+SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity
+FROM customers
+INNER JOIN orders ON customers.id = orders.id
+INNER JOIN order_items ON  orders.id = order_items.order_id
+INNER JOIN products ON  products.id = order_items.product_id
+INNER JOIN suppliers ON suppliers.id =order_items.supplier_id;
+
+```
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
