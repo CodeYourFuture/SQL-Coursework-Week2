@@ -23,6 +23,16 @@ app.get("/suppliers", (request, response) => {
   });
 });
 
+app.get("/products", (request, response) => {
+  const selectQuery = `SELECT product_name,unit_price, supplier_name
+                      FROM products
+                      INNER JOIN product_availability ON product_availability.prod_id = products.id
+                      INNER JOIN suppliers ON product_availability.supp_id  = suppliers.id; `;
+  pool.query(selectQuery, (error, result) => {
+    response.send(result.rows);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Port running on ${PORT}`);
 });
