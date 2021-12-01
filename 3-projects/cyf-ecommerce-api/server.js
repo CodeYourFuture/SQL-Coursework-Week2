@@ -17,6 +17,12 @@ app.get("/customers", function (req, res) {
   });
 });
 
+app.get("/suppliers", (request, response) => {
+  pool.query("SELECT * FROM suppliers", (error, result) => {
+    response.send(result.rows);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Port running on ${PORT}`);
 });
