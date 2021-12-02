@@ -8,7 +8,115 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+1. SELECT * FROM customers
+WHERE country = 'United States';
 
+2. SELECT *
+FROM customers
+ORDER BY name;
+
+3. SELECT *
+FROM products
+WHERE product_name LIKE '%socks%';
+
+4. SELECT order_items.product_id, products.product_name, product_availability.unit_price, order_items.supplier_id
+FROM order_items
+INNER JOIN products ON order_items.product_id = products.id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+WHERE unit_price > 100;
+
+5. SELECT products.product_name, product_availability.unit_price
+FROM product_availability
+INNER JOIN products ON products.id = product_availability.prod_id 
+ORDER BY unit_price DESC
+LIMIT 5;
+
+6. SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name
+FROM product_availability
+INNER JOIN productS ON products.id = product_availability.prod_id 
+INNER JOIN suppliers ON product_availability.supp_id = suppliers.id;
+
+7. SELECT products.product_name, suppliers.supplier_name
+FROM product_availability
+INNER JOIN productS ON products.id = product_availability.prod_id 
+INNER JOIN suppliers ON product_availability.supp_id = suppliers.id
+WHERE country = 'United Kingdom';
+
+8. 
+-- //Create view table:
+
+CREATE VIEW customer_Id_1 (order_id, order_reference, order_date, order_total)
+AS SELECT orders.id, 
+		 orders.order_reference,
+   		 orders.order_date,
+		(quantity*unit_price)
+FROM order_items
+INNER JOIN orders ON order_items.order_id = orders.id
+INNER JOIN product_availability ON 
+order_items.product_id = product_availability.prod_id
+WHERE orders.customer_id = 1;
+
+-- to retrieve view
+SELECT * FROM customer_Id_1;
+
+9. SELECT customers.id, customers.name, orders.id, order_items.product_id
+FROM orders
+INNER JOIN order_items
+ON order_items.order_id = orders.id
+INNER JOIN customers
+ON customers.id = orders.customer_id
+WHERE name = 'Hope Crosby';
+
+10. SELECT products.product_name, product_availability.unit_price,
+order_items.quantity
+FROM orders
+INNER JOIN order_items 
+ON order_items.order_id = orders.id
+INNER JOIN products 
+ON order_items.product_id = products.id
+INNER JOIN product_availability 
+ON order_items.product_id = products.id
+WHERE orders.order_reference = 'ORD006';
+
+11. SELECT customers.name , orders.order_reference, orders.order_date, 
+products.product_name, suppliers.supplier_name, order_items.quantity
+FROM orders
+INNER JOIN order_items
+ON order_items.order_id = orders.id
+INNER JOIN customers
+ON customers.id = orders.customer_id
+INNER JOIN products 
+ON order_items.product_id = products.id
+INNER JOIN suppliers
+ON order_items.supplier_id = suppliers.id;
+
+12. SELECT DISTINCT customers.name 
+FROM orders
+INNER JOIN order_items
+ON order_items.order_id = orders.id
+INNER JOIN customers
+ON customers.id = orders.customer_id
+INNER JOIN products 
+ON order_items.product_id = products.id
+INNER JOIN suppliers
+ON order_items.supplier_id = suppliers.id
+WHERE suppliers.country = 'China';
+
+13. 
+-- SIMILAR TO Q.8
+CREATE VIEW all_orders (customer_name, order_reference, order_date, order_total)
+AS SELECT customers.name, 
+		 orders.order_reference,
+   		 orders.order_date,
+		(quantity*unit_price)
+FROM order_items
+INNER JOIN orders ON order_items.order_id = orders.id
+INNER JOIN customers ON orders.customer_id = customers.id
+INNER JOIN product_availability ON 
+order_items.product_id = product_availability.prod_id;
+
+SELECT * FROM all_orders 
+ORDER BY order_total DESC;
 
 ```
 
