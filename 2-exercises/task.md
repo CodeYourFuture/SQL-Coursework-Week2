@@ -23,7 +23,8 @@ SELECT p.id, p.product_name, pa.unit_price, s.id AS supplierID FROM products p J
 ON p.id = pa.prod_id JOIN suppliers s ON pa.supp_id = s.id WHERE pa.unit_price > 100 ;
 
 ANSWER5 :
-
+SELECT p.product_name, pa.unit_price FROM products p JOIN product_availability pa ON p.id = pa.prod_id
+ORDER BY pa.unit_price DESC LIMIT 5;
 
 ANSWER6 :
 
