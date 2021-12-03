@@ -16,9 +16,16 @@ ANSWER2 :
 SELECT * FROM customers ORDER BY name ASC;
 
 ANSWER3 :
+SELECT product_name FROM products WHERE product_name LIKE  '%sock%';
+
+ANSWER4 :
+SELECT p.id, p.product_name, pa.unit_price, s.id AS supplierID FROM products p JOIN product_availability pa
+ON p.id = pa.prod_id JOIN suppliers s ON pa.supp_id = s.id WHERE pa.unit_price > 100 ;
+
+ANSWER5 :
 
 
-
+ANSWER6 :
 
 
 ```
