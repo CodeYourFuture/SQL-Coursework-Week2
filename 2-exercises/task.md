@@ -37,6 +37,13 @@ ON s.id = pa.prod_id  JOIN products p ON pa.prod_id = p.id where country = 'Unit
 ANSWER8 :
 SELECT o.id,o.order_reference, o.order_date, p.product_name,(oi.quantity)*(pa.unit_price) AS totalcost FROM customers c JOIN  orders o ON c.id = o.customer_id JOIN order_items oi ON o.id=oi.order_id JOIN products p ON oi.product_id
 = p.id JOIN product_availability pa ON p.id =  pa.prod_id where c.id =1;
+
+ANSWER9 :
+SELECT c.name, oi.quantity, p.product_name FROM customers c JOIN orders o ON c.id = o.customer_id JOIN order_items oi ON o.id = oi.order_id JOIN
+product_availability pa ON pa.prod_id = oi.product_id JOIN products p ON pa.prod_id = p.id WHERE c.name = 'Hope Crosby';
+
+ANSWER10 :
+
 ```
 
 When you have finished all of the questiONs - open a pull request with your answers to the `Databases-Homework` repository.
