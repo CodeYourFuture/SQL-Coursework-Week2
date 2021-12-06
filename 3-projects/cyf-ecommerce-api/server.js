@@ -39,7 +39,7 @@ app.get("/suppliers", (req, res) => {
 
 app.get("/products", (req, res) => {
   pool.query(
-    "SELECT product.product_name, product_availability.unit_price, suppliers.suppliers_name FROM product_availability INNER JOIN  products_availability.prod_id = products.id INNER JOIN suppliers on product_availability.supp_id = suppliers.id",
+    "SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM product_availability INNER JOIN  product_availability.prod_id = products.id INNER JOIN suppliers on product_availability.supp_id = suppliers.id",
     (err, result) => {
       if (res.status(200)) {
         res.json(result.rows);
