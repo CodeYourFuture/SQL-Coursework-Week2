@@ -43,7 +43,25 @@ SELECT c.name, oi.quantity, p.product_name FROM customers c JOIN orders o ON c.i
 product_availability pa ON pa.prod_id = oi.product_id JOIN products p ON pa.prod_id = p.id WHERE c.name = 'Hope Crosby';
 
 ANSWER10 :
+SELECT p.product_name, pa.unit_price,oi.quantity FROM products p JOIN product_availability pa
+ON p.id = pa.prod_id JOIN order_items oi on pa.prod_id = oi.product_id JOIN orders o ON oi.product_id = o.id
+WHERE o.order_reference = 'ORD006';
 
+ANSWER11 :
+SELECT c.name, o.order_reference, o.order_date,p.product_name,s.supplier_name,oi.quantity FROM customers c JOIN
+orders o ON c.id = o.customer_id JOIN order_items oi ON o.id = oi.order_id JOIN product_availability pa
+ON oi.product_id = pa.prod_id JOIN suppliers s ON pa.supp_id = s.id JOIN products p on pa.prod_id = p.id;
+
+ANSWER12 :
+SELECT c.name FROM customers c JOIN orders o ON c.id = o.customer_id JOIN order_items oi ON o.id = oi.order_id
+JOIN product_availability pa ON oi.product_id = pa.prod_id JOIN suppliers s ON pa.supp_id = s.id JOIN
+products p on pa.prod_id = p.id WHERE s.country = 'China' GROUP BY c.name;
+
+ANSWER13 :
+SELECT c.name,  o.order_reference, o.order_date, p.product_name,
+(oi.quantity)*(pa.unit_price)AS "total amount" FROM customers c JOIN  orders o ON c.id = o.customer_id
+JOIN order_items oi ON o.id=oi.order_id JOIN products p ON oi.product_id = p.id
+JOIN product_availability pa ON p.id =  pa.prod_id ORDER BY "total amount" DESC;
 ```
 
 When you have finished all of the questiONs - open a pull request with your answers to the `Databases-Homework` repository.
