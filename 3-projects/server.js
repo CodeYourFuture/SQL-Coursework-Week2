@@ -35,12 +35,12 @@ app.get("/products", (req, res) => {
   pool.query(
     `select
   p.product_name,
-  pa.unit_price as price,
+  pa.unit_price AS price,
   s.supplier_name
 from
-  products as p
-  inner join product_availability as pa on p.id = pa.prod_id
-  inner join suppliers as s on pa.supp_id = s.id;`,
+  products AS p
+  inner join product_availability AS pa on p.id = pa.prod_id
+  inner join suppliers AS s on pa.supp_id = s.id;`,
     (error, result) => {
       console.log(error);
       error
