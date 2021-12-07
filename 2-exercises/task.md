@@ -74,15 +74,15 @@ WHERE
 
 ```sql
 SELECT
-  product_availability.prod_id,
-  products.product_name AS name,
-  product_availability.unit_price,
-  product_availability.supp_id AS supplier_id
+  pa.prod_id,
+  p.product_name AS name,
+  pa.unit_price,
+  pa.supp_id AS supplier_id
 FROM
-  product_availability
-  INNER JOIN products ON product_availability.prod_id = products.id
+  product_availability AS pa
+  INNER JOIN products AS p ON pa.prod_id = p.id
 WHERE
-  product_availability.unit_price > 100;
+  pa.unit_price > 100;
 ```
 
 5. Retrieve the 5 most expensive products
@@ -91,15 +91,15 @@ WHERE
 
 ```sql
 SELECT
-  product_availability.prod_id,
-  products.product_name AS name,
-  product_availability.unit_price,
-  product_availability.supp_id AS supplier_id
+  pa.prod_id,
+  p.product_name AS name,
+  pa.unit_price,
+  pa.supp_id AS supplier_id
 FROM
-  product_availability
-  INNER JOIN products ON product_availability.prod_id = products.id
+  product_availability AS pa
+  INNER JOIN products AS p ON pa.prod_id = p.id
 ORDER BY
-  product_availability.unit_price DESC
+  pa.unit_price DESC
 LIMIT
   5;
 ```
@@ -108,12 +108,12 @@ LIMIT
 
 ```sql
 SELECT
-  products.product_name AS name
+  p.product_name AS name
 FROM
-  product_availability
-  INNER JOIN products ON product_availability.prod_id = products.id
+  product_availability AS pa
+  INNER JOIN products AS p ON pa.prod_id = p.id
 ORDER BY
-  product_availability.unit_price DESC
+  pa.unit_price DESC
 LIMIT
   5;
 ```
@@ -122,45 +122,45 @@ LIMIT
 
 ```sql
 SELECT
-  products.product_name,
-  product_availability.unit_price,
-  suppliers.supplier_name
+  p.product_name,
+  pa.unit_price,
+  s.supplier_name
 FROM
-  product_availability
-  INNER JOIN products ON product_availability.prod_id = products.id
-  INNER JOIN suppliers ON product_availability.supp_id = suppliers.id;
+  product_availability AS pa
+  INNER JOIN products AS p ON pa.prod_id = p.id
+  INNER JOIN suppliers AS s ON pa.supp_id = s.id;
 ```
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
 ```sql
 SELECT
-  products.product_name,
-  suppliers.supplier_name
+  p.product_name,
+  s.supplier_name
 FROM
-  products
-  INNER JOIN order_items ON products.id = order_items.product_id
-  INNER JOIN suppliers ON order_items.supplier_id = suppliers.id
+  products AS p
+  INNER JOIN order_items AS oi ON p.id = oi.product_id
+  INNER JOIN suppliers AS s ON oi.supplier_id = s.id
 WHERE
-  suppliers.country = 'United Kingdom';
+  s.country = 'United Kingdom';
 ```
 
 8. Retrieve all orders, including order items, FROM customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 
 ```sql
 SELECT
-  orders.id,
-  orders.order_reference,
-  orders.order_date,
+  o.id,
+  o.order_reference,
+  o.order_date,
   (
-    order_items.quantity * product_availability.unit_price
+    oi.quantity * pa.unit_price
   ) AS total_cost
 FROM
-  orders
-  INNER JOIN order_items ON order_items.order_id = orders.id
-  INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+  orders AS o
+  INNER JOIN order_items AS oi ON oi.order_id = o.id
+  INNER JOIN product_availability AS pa ON oi.product_id = pa.prod_id
 WHERE
-  orders.customer_id = 1;
+  o.customer_id = 1;
 ```
 
 9. Retrieve all orders, including order items, FROM customer named `Hope Crosby`
@@ -169,76 +169,76 @@ WHERE
 SELECT
   *
 FROM
-  customers
-  INNER JOIN orders ON customers.id = orders.customer_id
-  INNER JOIN order_items ON orders.id = order_items.order_id
+  customers AS c
+  INNER JOIN orders AS o ON c.id = o.customer_id
+  INNER JOIN order_items AS oi ON o.id = oi.order_id
 WHERE
-  customers.name = 'Hope Crosby';
+  c.name = 'Hope Crosby';
 ```
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
 ```sql
 SELECT
-  products.product_name,
-  product_availability.unit_price,
-  order_items.quantity,
+  p.product_name,
+  pa.unit_price,
+  oi.quantity
 FROM
-  products
-  INNER JOIN order_items ON order_items.product_id = products.id
-  INNER JOIN orders ON order_items.order_id = orders.id
-  INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+  products AS p
+  INNER JOIN order_items AS oi ON oi.product_id = p.id
+  INNER JOIN orders AS o ON oi.order_id = o.id
+  INNER JOIN product_availability AS pa ON oi.product_id = pa.prod_id
 WHERE
-  orders.order_reference = 'ORD006';
+  o.order_reference = 'ORD006';
 ```
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (FROM customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
 ```sql
 SELECT
-  customers.name,
-  orders.order_reference,
-  orders.order_date,
-  products.product_name,
-  suppliers.supplier_name,
-  order_items.quantity
+  c.name,
+  o.order_reference,
+  o.order_date,
+  p.product_name,
+  s.supplier_name,
+  oi.quantity
 FROM
-  customers
-  INNER JOIN orders ON orders.customer_id = customers.id
-  INNER JOIN order_items ON order_items.order_id = orders.id
-  INNER JOIN products ON products.id = order_items.product_id
-  INNER JOIN suppliers ON suppliers.id = order_items.supplier_id;
+  customers AS c
+  INNER JOIN orders AS o ON o.customer_id = c.id
+  INNER JOIN order_items AS oi ON oi.order_id = o.id
+  INNER JOIN products AS p ON p.id = oi.product_id
+  INNER JOIN suppliers AS s ON s.id = oi.supplier_id;
 ```
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
 ```sql
 SELECT
-  DISTINCT customers.name
+  DISTINCT c.name
 FROM
-  customers
-  INNER JOIN orders ON orders.customer_id = customers.id
-  INNER JOIN order_items ON order_items.order_id = orders.id
-  INNER JOIN suppliers ON suppliers.id = order_items.supplier_id;
+  customers AS c
+  INNER JOIN orders AS o ON o.customer_id = c.id
+  INNER JOIN order_items AS oi ON oi.order_id = o.id
+  INNER JOIN suppliers AS s ON s.id = oi.supplier_id
 WHERE
-  suppliers.country = 'China';
+  s.country = 'China';
 ```
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
 
 ```sql
 SELECT
-  customers.name,
-  orders.order_reference,
-  orders.order_date,
+  c.name,
+  o.order_reference,
+  o.order_date,
   (
-    order_items.quantity * product_availability.unit_price
+    oi.quantity * pa.unit_price
   ) AS order_total_amount
 FROM
-  customers
-  INNER JOIN orders ON customers.id = orders.customer_id
-  INNER JOIN order_items ON orders.id = order_items.order_id
-  INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+  customers AS c
+  INNER JOIN orders AS o ON c.id = o.customer_id
+  INNER JOIN order_items AS oi ON o.id = oi.order_id
+  INNER JOIN product_availability pa ON oi.product_id = pa.prod_id
 ORDER BY
   order_total_amount DESC;
 ```
