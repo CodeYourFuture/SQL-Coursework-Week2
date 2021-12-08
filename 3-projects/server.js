@@ -24,8 +24,7 @@ app.get('/customers', (req, res) => {
     pool.query('SELECT * FROM customers', (error, result) => {
         if(error) {
             console.log(error);
-            res.send(error);
-            return
+            return res.send(error);
         }
         res.json(result.rows);
     })
@@ -64,7 +63,6 @@ app.put('/customers/:customerId', (req, res) => {
       const updateCustomerQuery = 'UPDATE customers SET name=$1, address=$2, city=$3, country=$4 WHERE id=$5';
       pool.query(updateCustomerQuery, [name, address, city, country, customerId])
       .then((result) => {
-        console.log(result);
         res.send(`Successfully amended.`);
       })
       .catch((error) => {
@@ -75,14 +73,48 @@ app.put('/customers/:customerId', (req, res) => {
   })
 })
 
+//DELETE endpoint `/customers/:customerId` to delete an existing customer only if this customer doesn't have orders - if customerId exists in orders table, then this customer has an order return error, if not delete the customer from customers table
+app.delete('/customers/:customerId', (req, res) => {
+  const customerId = req.params.customerId;
+  const customerIdExistsQuery = 'SELECT EXISTS(SELECT 1 FROM customers WHERE id=$1)';
+  const customerHasAnOrderQuery = 'SELECT EXISTS(SELECT 1 FROM orders WHERE customer_id=$1)';
+
+  // check if the customerId is a valid id in customers table, if not return 400 
+  pool.query(customerIdExistsQuery, [customerId]) 
+  .then((result) => {
+    if(result.rows[0].exists === false) {
+      return res.status(400).send(`There is no customer with the id of ${customerId} in customers table.`);
+    } else {
+      // check if customer has an order in orders table, if so return 400, if not delete the customer
+      pool.query(customerHasAnOrderQuery, [customerId]).then((result) => {
+        console.log(result, "<----result");
+        if (result.rows[0].exists === true) {
+          // result.rows is an array
+          return res
+            .status(400)
+            .send(
+              `The customer with the id of ${customerId} has an order. Cannot delete it.`
+            );
+        } else {
+          const deleteCustomerQuery = "DELETE FROM customers WHERE id=$1";
+          pool.query(deleteCustomerQuery, [customerId]).then(() => {
+            return res.send(
+              `The customer with the id of ${customerId} has been deleted from the customers table.`
+            );
+          });
+        }
+      });
+    }
+  })
+})
+
 
 // return all the suppliers from the database
 app.get('/suppliers', (req, res) => {
     pool.query('SELECT * FROM suppliers', (error, result) => {
         if (error) {
           console.log(error);
-          res.send(error);
-          return;
+          return res.send(error);
         }
         res.json(result.rows);
     })
@@ -93,8 +125,7 @@ app.get('/products', (req, res) => {
     pool.query("SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id ORDER BY products.product_name", (error, result) => {
         if (error) {
           console.log(error);
-          res.send(error)
-          return;
+          return res.send(error);
         }
         res.json(result.rows);
     })
@@ -105,12 +136,11 @@ app.post('/products', (req, res) => {
   const {product_name} = req.body; // get the product name req object with object destructuring
   if(!product_name) { 
     // check if the client all the data needed, if not send status 400
-    res
+    return res
       .status(400)
       .send(
         `Please fill everything in the form including product name, unit price and supplier name.`
       );
-    return;
   }
   pool.query('SELECT * FROM products WHERE product_name=$1', [product_name])
     .then((result) => {
@@ -141,17 +171,13 @@ app.post('/availability', (req, res) => {
   console.log(reqValuesNotInRightFormat, "<-----reqValuesNotInRightFormat")
 
   if (reqNotIncludesAllColumns) {
-    res
-      .status(400)
+    return res.status(400)
       .send(
         `Please make sure adding product id, supplier id and unit price.`
       );
-    return;
   } else if (reqValuesNotInRightFormat) {
-    res
-    .status(400)
+    return res.status(400)
     .send(`Please make sure adding product id, supplier and unit price in the right format. They should be integer.`);
-    return;
   }
   
   const selectTheSameRowQueryIfExists = 'SELECT * FROM product_availability WHERE prod_id=$1 AND supp_id=$2 AND unit_price=$3';
@@ -163,10 +189,8 @@ app.post('/availability', (req, res) => {
     .query(selectTheSameRowQueryIfExists, [prod_id, supp_id, unit_price])
     .then((result) => {
       if (result.rows.length > 0) {
-        res
-          .status(400)
+        return res.status(400)
           .send(`This already exists, can not add it to the database.`);
-          return;
       } else {
         pool.query(insertQuery, [prod_id, supp_id, unit_price]).then(() => {
           res.send(`Added to the product_availability table.`);
@@ -180,10 +204,8 @@ app.post('/availability', (req, res) => {
 app.post('/customers', (req, res) => {
   const {name, address, city , country} = req.body; // get the each property from request object
   if(!name || !address || !city || !country) {  // if not included any of these, respond status 400
-    res
-    .status(400)
+    return res.status(400)
     .send(`Please fill everything in the form including name, address, city and country.`);
-    return;
   }
   pool.query('SELECT * FROM customers WHERE name=$1 AND address=$2 AND city=$3', [name, address, city])
   .then((result) => {
