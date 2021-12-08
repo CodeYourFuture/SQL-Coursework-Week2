@@ -49,6 +49,33 @@ app.get('/customers/:customerId', (req, res) => {
   })
 })
 
+//PUT endpoint `/customers/:customerId` to update an existing customer (name, address, city and country)
+app.put('/customers/:customerId', (req, res) => {
+  const customerId = req.params.customerId;
+  const {name, address, city, country} = req.body;
+  const selectCustomerQueryToUpdate = 'SELECT * FROM customers WHERE id=$1';
+  pool.query(selectCustomerQueryToUpdate, [customerId])
+  .then((result) => {
+    if(result.rows.length === 0) {
+      res
+      .status(400)
+      .send(`There is no customer to update with the id of ${customerId}`);
+    }else {
+      const updateCustomerQuery = 'UPDATE customers SET name=$1, address=$2, city=$3, country=$4 WHERE id=$5';
+      pool.query(updateCustomerQuery, [name, address, city, country, customerId])
+      .then((result) => {
+        console.log(result);
+        res.send(`Successfully amended.`);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(400).send(`Something went wrong!`);
+      })
+    }
+  })
+})
+
+
 // return all the suppliers from the database
 app.get('/suppliers', (req, res) => {
     pool.query('SELECT * FROM suppliers', (error, result) => {
@@ -102,6 +129,50 @@ app.post('/products', (req, res) => {
           });
       }
     })
+})
+
+// Add a new POST endpoint `/availability` to create a new product availability (with a price and a supplier id). Check that the price is a positive integer and that both the product and supplier ID's exist in the database, otherwise return an error.
+app.post('/availability', (req, res) => {
+  const {prod_id, supp_id, unit_price} = req.body;
+  console.log(Number.isInteger(prod_id), Number.isInteger(supp_id), Number.isInteger(unit_price));
+  const reqNotIncludesAllColumns = !prod_id || !supp_id || !unit_price;
+  const reqValuesNotInRightFormat = !Number.isInteger(prod_id) || !Number.isInteger(supp_id) || Number.isInteger(unit_price);
+  console.log(reqNotIncludesAllColumns, "<----reqNotIncludesAllColumns")
+  console.log(reqValuesNotInRightFormat, "<-----reqValuesNotInRightFormat")
+
+  if (reqNotIncludesAllColumns) {
+    res
+      .status(400)
+      .send(
+        `Please make sure adding product id, supplier id and unit price.`
+      );
+    return;
+  } else if (reqValuesNotInRightFormat) {
+    res
+    .status(400)
+    .send(`Please make sure adding product id, supplier and unit price in the right format. They should be integer.`);
+    return;
+  }
+  
+  const selectTheSameRowQueryIfExists = 'SELECT * FROM product_availability WHERE prod_id=$1 AND supp_id=$2 AND unit_price=$3';
+  const prodIdInDatabaseQuery = 'SELECT EXISTS(SELECT 1 FROM products WHERE id=$1)';
+  const suppIdInDatabaseQuery = 'SELECT EXISTS(SELECT 1 FROM suppliers WHERE id=$1)';
+  const insertQuery = 'INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES($1, $2, $3)';
+
+  pool
+    .query(selectTheSameRowQueryIfExists, [prod_id, supp_id, unit_price])
+    .then((result) => {
+      if (result.rows.length > 0) {
+        res
+          .status(400)
+          .send(`This already exists, can not add it to the database.`);
+          return;
+      } else {
+        pool.query(insertQuery, [prod_id, supp_id, unit_price]).then(() => {
+          res.send(`Added to the product_availability table.`);
+        });
+      }
+    });
 })
 
 
