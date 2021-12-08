@@ -97,17 +97,17 @@ app.post("/availability", (req, res) => {
   const unitPrice = req.body.unit_price;
   const prodId = req.body.prod_id;
   console.log(prodId);
-  //  const productId = "SELECT MAX(id) FROM  products";
+   // const productId = "SELECT MAX(id) FROM  products";
   const query =
-    "INSERT INTO product_availability ( id,unit_price,supp_id ) VALUES ($1,$2,)"
+    "INSERT INTO product_availability (prod_id, unit_price,supp_id ) VALUES ($1,$2,$3)";
    
-  if (!suppId || unitPrice === 0 ) {
-    res.send("not valid input")
+  if (!prodId || !suppId || unitPrice === 0) {
+    res.send("not valid input");
   } else {
     pool
-      .query(query, [unitPrice, suppId])
+      .query(query, [prodId, unitPrice, suppId])
       .then(() => res.send("thank you for submitting"))
-      .catch((e) => console.error(e));
+      .catch((e) => res.send(e.detail));
   }
 });
 
