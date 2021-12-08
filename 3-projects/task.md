@@ -6,7 +6,7 @@ Add all your `javascript` files in this folder and create a pull request to subm
 
 ## Task
 
-- Create a new NodeJS application called `cyf-ecommerce-api`
+- Create a new NodeJS application called ``
 - Add Express and node-postgres and make sure you can start the server with `node server.js`
 - Add a new GET endpoint `/customers` to return all the customers from the database
 - Add a new GET endpoint `/suppliers` to return all the suppliers from the database
