@@ -30,9 +30,43 @@ app.get('/customers', (req, res) => {
     })
 })
 
+//Add a new GET endpoint `/customers/:customerId/orders` to load all the orders along with the items in the orders of a specific customer
+app.get("/customers/:customerId/orders", (req, res) => {
+  const customerId = req.params.customerId;
+  //check if there is a customer with the customerId in the customers table
+  pool
+    .query("SELECT * FROM customers WHERE id=$1", [customerId])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        res.send(`There is no customer with the id of ${customerId}!`);
+        return;
+      } else {
+        // find the orders along with the items of a specific customer. Following information will be returned: order references, order dates, product names, unit prices, suppliers and quantities.
+        const query =
+          "SELECT ord.order_reference,  ord.order_date, ordit.quantity, pravab.unit_price, pr.product_name, supp.supplier_name FROM orders ord INNER JOIN order_items ordit ON ord.id = ordit.order_id INNER JOIN products pr ON ordit.product_id = pr.id INNER JOIN product_availability pravab ON pr.id = pravab.prod_id INNER JOIN suppliers supp ON pravab.supp_id = supp.id WHERE ord.customer_id = $1";
+        pool
+          .query(query, [customerId])
+          .then((result) => {
+            if (result.rows.length === 0) {
+              res.send(
+                `The customer with the if of ${customerId} has no orders.`
+              );
+            } else {
+              res.send(result.rows);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            res.send(error);
+          });
+      }
+    });
+});
+
 // GET endpoint `/customers/:customerId` to load a single customer by ID.
 app.get('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
+ 
   //check if there is a customer with the customerId in the customers table
   pool.query('SELECT * FROM customers WHERE id=$1', [customerId])
   .then((result) => {
@@ -54,6 +88,9 @@ app.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const {name, address, city, country} = req.body;
   const selectCustomerQueryToUpdate = 'SELECT * FROM customers WHERE id=$1';
+  if(!name || !address || !city || !country) {
+    return res.status(400).send(`This code is programmed to update name, address, city and country altogether. Please make sure you have everything included.`)
+  }
   pool.query(selectCustomerQueryToUpdate, [customerId])
   .then((result) => {
     if(result.rows.length === 0) {
@@ -242,13 +279,13 @@ app.delete('/orders/:orderId', (req, res) => {
       const deleteOrderIdFromOrdersQuery = 'DELETE FROM orders WHERE id=$1';
       const deleteOrdersFromOrderItemsQuery = 'DELETE FROM order_items WHERE order_id=$1';
 
-      pool.query(deleteOrdersFromOrderItemsQuery, [orderId]).then(() => [
+      pool.query(deleteOrdersFromOrderItemsQuery, [orderId]).then(() => 
         pool.query(deleteOrderIdFromOrdersQuery, [orderId]).then(() => {
           res.send(
             `Order with the id of ${orderId} and order items related to the order with the id of ${orderId} has been deleted.`
           );
         }),
-      ]);
+      );
 
     }
   })
