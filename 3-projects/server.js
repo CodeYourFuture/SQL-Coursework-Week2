@@ -63,6 +63,35 @@ app.get("/customers/:customerId/orders", (req, res) => {
     });
 });
 
+//Add a new POST endpoint `/customers/:customerId/orders` to create a new order (including an order date, and an order reference) for a customer. Check that the customerId corresponds to an existing customer or return an error.
+app.post('/customers/:customerId/orders', (req, res) => {
+  const customerId = req.params.customerId;
+  const customerIdExistsQuery = 'SELECT * FROM customers WHERE id=$1';
+  
+  pool.query(customerIdExistsQuery, [customerId])
+  .then((result) => {
+    if(result.rows.length === 0) {
+      return res.status(400).send(`There is no customer with the id of ${customerId}`);
+    } else {
+      const {order_date, order_reference} = req.body;
+      if(!order_date || !order_reference) {
+        res.status(400).send(`Please include both order date and order reference.`);
+      } else {
+        const insertOrderQuery = 'INSERT INTO orders (order_date, order_reference, customer_id) VALUES ($1, $2, $3)';
+        pool.query(insertOrderQuery, [order_date, order_reference, customerId])
+        .then(() => {
+          return res.send(`The order has been added for the customer with the id of ${customerId}`)
+        }).catch((error) => {
+          console.error(error);
+          res.status(400).send(`Something went wrong!`);
+        })
+      }
+    }
+  })
+
+})
+
+
 // GET endpoint `/customers/:customerId` to load a single customer by ID.
 app.get('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
