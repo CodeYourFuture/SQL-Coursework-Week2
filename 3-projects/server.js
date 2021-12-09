@@ -160,13 +160,37 @@ app.get('/suppliers', (req, res) => {
 
 // return all the product names along with their prices and supplier names
 app.get('/products', (req, res) => {
-    pool.query("SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id ORDER BY products.product_name", (error, result) => {
-        if (error) {
-          console.log(error);
-          return res.send(error);
-        }
-        res.json(result.rows);
-    })
+
+  const productQueryName = req.query.name;
+  const queryForAllProducts = "SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id ORDER BY products.product_name" 
+
+  const queryWhereProductNameIsQueryName =
+    "SELECT * FROM (SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id ORDER BY products.product_name) AS results WHERE product_name=$1";
+
+    if (productQueryName) {
+      pool
+        .query(queryWhereProductNameIsQueryName, [productQueryName])
+        .then((result) => {
+          if (result.rows.length === 0) {
+            return res
+              .status(200)
+              .send(`There is no product with the name of ${productQueryName}.`);
+          }else {
+            return res.send(result.rows)
+          }
+        }).catch((error) => {
+          console.error(error);
+          res.send(`Something went wrong`);
+        })
+    } else {
+      pool.query(queryForAllProducts)
+      .then((result) => {
+        return res.send(result.rows);
+      }).catch((error) => {
+        console.error(error);
+        res.send(`Something went wrong!`);
+      })
+    }
 })
 
 // POST endpoint `/products` to create a new product.
