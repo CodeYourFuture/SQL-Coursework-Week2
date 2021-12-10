@@ -3,7 +3,7 @@ const app = express();
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: "negin",
+  user: "maziar",
   host: "localhost",
   database: "cyf_ecommerce",
   password: "",
