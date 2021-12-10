@@ -25,6 +25,38 @@ app.get("/customers", function (req, res) {
     .catch((e) => console.error(e));
     })
     
+
+
+app.post("/customers/:customerId/orders", function (req, res) {
+  const newCustomerID = req.params.customerId;
+  const newOrderDate = req.body.order_date;
+  const NewOrderRef = req.body.order_reference;
+ 
+  
+  pool
+    .query(
+      "SELECT * FROM customers WHERE customers.id=$1",
+      [newCustomerID]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return res
+          .status(400)
+          .send("No customer with this id exists!");
+      } else {
+        const query =
+          "INSERT INTO orders (order_date, order_reference, customer_id)VALUES ($1, $2, $3)";
+        pool
+          .query(query, [ newOrderDate,NewOrderRef,newCustomerID
+           
+          ])
+          .then(() => res.send("new order created!"))
+          .catch((e) => console.error(e));
+      }
+    });
+});
+
+
 app.get("/customers/:customerId", function (req, res) {
   let customerId = req.params.customerId;
   pool
@@ -122,7 +154,7 @@ app.post("/availability", function (req, res) {
   if (newUnitPrice<=0) {
     return res.status(400).send("Please enter valid price");
   }
-  
+
  pool
     .query(
       "SELECT p.id, s.id FROM  products p, suppliers s  WHERE p.id=$1 and s.id=$2",
@@ -143,7 +175,6 @@ app.post("/availability", function (req, res) {
       }
     });
 });
-
 
 
 
