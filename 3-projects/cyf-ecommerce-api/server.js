@@ -16,14 +16,14 @@ app.get("/customers", function (req, res) {
   pool
     .query("SELECT * FROM customers")
     .then((result) => res.status(200).json(result.rows))
-    .catch((e) => console.error(e));
+    .catch((e) => res.status(500).send(e));
 });
 app.get("/customers/:id", function (req, res) {
   let id =req.params.id;
   pool
     .query("SELECT * FROM customers where customers.id =$1", [Number(id)])
   .then((result) => res.status(200).json(result.rows))
-    .catch((e) => console.error(e));
+    .catch((e) => res.status(500).send(e));
     }
   );
 
@@ -31,7 +31,7 @@ app.get("/suppliers", function (req, res) {
   pool
     .query("SELECT * FROM suppliers")
     .then((result) => res.status(200).json(result.rows))
-    .catch((e) => console.error(e));
+    .catch((e) => res.status(500).send(e));
   });
 
 app.get("/products", function (req, res) {
@@ -40,8 +40,8 @@ app.get("/products", function (req, res) {
     product_name = req.query.name.toLowerCase();
     pool.query(
       "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id where LOWER(products.product_name) like $1", ['%' +product_name + '%']).
-      then((result) => res.status(200).json(result.rows)).
-      catch((e) => console.error(e))
+      then((result) => res.status(200).json(result.rows))
+       .catch((e) => res.status(500).send(e));
   }
       
     
@@ -50,7 +50,7 @@ app.get("/products", function (req, res) {
     pool.query(
       "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id").
       then((result) => res.status(200).json(result.rows)).
-      catch((e) => console.error(e))
+      catch((e) => res.status(500).send(e));
   }
     
 });
