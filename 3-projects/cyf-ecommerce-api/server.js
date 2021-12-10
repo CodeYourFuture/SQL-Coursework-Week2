@@ -34,15 +34,37 @@ app.get("/suppliers", function (req, res) {
 });
 
 app.get("/products", function (req, res) {
-  pool.query(
-    "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id;",
-
-    (error, result) => {
-      if (res.status(200)) {
-        res.status(200).json(result.rows);
-      } else {
-        res.status(500).send(error.message);
+  let product_name
+  if (req.query.name) {
+    product_name = req.query.name.toLowerCase();
+    pool.query(
+      "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id where LOWER(products.product_name) like '%" + product_name +
+      "%'; ",
+    
+      (error, result) => {
+        if (res.status(200)) {
+          res.status(200).json(result.rows);
+        } else {
+          res.status(500).send(error.message);
+        }
       }
-    }
-  );
-});
+    );
+    
+  }
+
+  else {
+
+    pool.query(
+      "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id",
+  
+
+      (error, result) => {
+        if (res.status(200)) {
+          res.status(200).json(result.rows);
+        } else {
+          res.status(500).send(error.message);
+        }
+      }
+    );
+  };
+})
