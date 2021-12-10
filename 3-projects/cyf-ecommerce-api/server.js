@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 
 
 const { Pool } = require("pg");
@@ -18,14 +19,40 @@ app.get("/customers", function (req, res) {
     .then((result) => res.status(200).json(result.rows))
     .catch((e) => res.status(500).send(e));
 });
-app.get("/customers/:id", function (req, res) {
-  let id =req.params.id;
+app.get("/customers/:customerId", function (req, res) {
+  let customerId = req.params.customerId;
   pool
-    .query("SELECT * FROM customers where customers.id =$1", [Number(id)])
-  .then((result) => res.status(200).json(result.rows))
+    .query("SELECT * FROM customers where customers.id =$1", [
+      Number(customerId),
+    ])
+    .then((result) => res.status(200).json(result.rows))
     .catch((e) => res.status(500).send(e));
-    }
-  );
+});
+
+app.post("/customers", function (req, res) {
+  const newCustomerName = req.body.name;
+  const newCustomerAddress = req.body.address;
+  const newCustomerCity= req.body.city;
+   const newCustomerCountry = req.body.country;
+
+  pool
+    .query("SELECT * FROM customers WHERE customers.address=$1 AND customers.name=$2 And customers.city=$3  And  customers.country=$4",
+      [newCustomerAddress,newCustomerName,newCustomerCity,newCustomerCountry])
+    .then((result) => {
+      if (result.rows.length > 0) {
+        return res
+          .status(400)
+          .send("A customer with the same name already exists!");
+      } else {
+        const query =
+          "INSERT INTO customers (name,address,city,country) VALUES ($1, $2, $3,$4)";
+        pool
+          .query(query, [newCustomerName,newCustomerAddress, newCustomerCity, newCustomerCountry])
+          .then(() => res.send("customer created!"))
+          .catch((e) => console.error(e));
+      }
+    });
+});
 
 app.get("/suppliers", function (req, res) {
   pool
