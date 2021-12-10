@@ -16,12 +16,20 @@ const pool = new Pool({
 
 app.get("/customers", function (req, res) {
   pool.query("SELECT * FROM customers", (error, result) => {
-    res.status(200).json(result.rows);
+    if (res.status(200)) {
+      res.status(200).json(result.rows);
+    } else {
+      res.status(500).send(error.message);
+    }
   });
 });
 app.get("/suppliers", function (req, res) {
   pool.query("SELECT * FROM suppliers", (error, result) => {
-    res.status(200).json(result.rows);
+    if (res.status(200)) {
+      res.status(200).json(result.rows);
+    } else {
+      res.status(500).send(error.message);
+    }
   });
 });
 
@@ -30,7 +38,11 @@ app.get("/products", function (req, res) {
     "select products.product_name, product_availability.unit_price,suppliers.supplier_name from products inner join product_availability on products.id=product_availability.prod_id inner join suppliers on product_availability.supp_id=suppliers.id;",
 
     (error, result) => {
-      res.status(200).json(result.rows);
+      if (res.status(200)) {
+        res.status(200).json(result.rows);
+      } else {
+        res.status(500).send(error.message);
+      }
     }
   );
 });
