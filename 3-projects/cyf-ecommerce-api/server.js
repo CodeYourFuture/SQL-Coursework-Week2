@@ -57,6 +57,38 @@ app.get("/customers/:customerId", function (req, res) {
     .catch((e) => console.error(e));
 });
 
+
+
+app.put("/customers/:customerId", function (req, res) {
+  const customerId = req.params.customerId;
+  const newCustomerName = req.body.name;
+  const newCustomerAddress = req.body.address;
+  const newCustomerCity = req.body.city;
+  const newCustomerCountry = req.body.country;
+     pool
+       .query("SELECT * FROM customers where customers.id =$1", [
+         Number(customerId),
+       ])
+       .then((result) => {
+         if (result.rowCount === 0)
+           res.status(400).send("customer doesn't exist");
+         else {
+           const query =
+             "update customers set name=$1,address=$2,city=$3,country=$4 where id= $5";
+           pool
+             .query(query, [
+               newCustomerName,
+               newCustomerAddress,
+               newCustomerCity,
+               newCustomerCountry,
+               customerId,
+             ])
+             .then((result) => res.send("customer updated!"))
+             .catch((e) => console.error(e));
+         }
+       });
+});
+
 app.post("/customers", function (req, res) {
   const newCustomerName = req.body.name;
   const newCustomerAddress = req.body.address;
@@ -190,6 +222,6 @@ app.get("/products", function (req, res) {
       .catch((e) => console.error(e));
   }
 });
-app.listen(3001, function () {
-  console.log("Server is listening on port 3000. Ready to accept requests!");
+app.listen(4000, function () {
+  console.log("Server is listening on port 4000. Ready to accept requests!");
 });
