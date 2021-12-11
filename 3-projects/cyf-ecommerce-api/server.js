@@ -222,6 +222,31 @@ app.get("/products", function (req, res) {
       .catch((e) => console.error(e));
   }
 });
+
+
+app.delete("/customers/:customerId", function (req, res) {
+  const customerId = req.params.customerId;
+
+
+
+  pool
+    .query("SELECT * FROM orders WHERE customer_id=$1", [customerId])
+    .then((result) => {
+      if (result.rowCount !== 0) {
+        res.status(400).send(`Delete not allowed for customer ${customerId}`);
+      } else {
+        pool
+          .query("DELETE FROM customers WHERE id=$1", [customerId])
+          .then(() => res.send(`customer ${customerId} deleted`))
+          .catch((e) => console.error(e));
+      }
+    })
+    .catch((e) => console.error(e));
+});
+
+
+
+
 app.listen(4000, function () {
   console.log("Server is listening on port 4000. Ready to accept requests!");
 });
