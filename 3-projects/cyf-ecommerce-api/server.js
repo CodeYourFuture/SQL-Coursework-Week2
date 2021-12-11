@@ -245,6 +245,25 @@ app.delete("/customers/:customerId", function (req, res) {
 });
 
 
+app.delete("/orders/:orderId", function (req, res) {
+  const orderId = req.params.orderId;
+
+  pool
+    .query("select FROM order_items WHERE order_id=$1", [orderId])
+    .then((result) => {
+      if (result.rowCount === 0) {
+        res.status(400).send(`Delete not allowed for order ${orderId}`);
+      } else {
+        pool
+          .query("DELETE FROM order_items WHERE order_id=$1", [orderId])
+          .then(() => res.send(`order ${orderId} deleted`))
+          .catch((e) => console.error(e));
+      }
+    })
+    .catch((e) => console.error(e));
+});
+
+
 
 
 app.listen(4000, function () {
