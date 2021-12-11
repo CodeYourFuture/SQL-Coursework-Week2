@@ -22,7 +22,17 @@ app.get("/customers", function (req, res) {
     })
     .catch((e) => console.error(e));
 });
+app.get("/customers/:customerId/orders", function (req, res) {
+  const customerId = req.params.customerId;
 
+  const query =
+    "SELECT o.order_reference, o.order_date, p.product_name, pa.unit_price, s.supplier_name, oi.quantity  FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN products p ON oi.product_id = p.id INNER JOIN product_availability pa ON oi.product_id = pa.prod_id INNER JOIN suppliers s ON oi.supplier_id = s.id WHERE customer_id = $1";
+
+  pool
+    .query(query, [customerId])
+    .then((result) => res.json(result.rows))
+    .catch((e) => console.error(e));
+});
 app.post("/customers/:customerId/orders", function (req, res) {
   const newCustomerID = req.params.customerId;
   const newOrderDate = req.body.order_date;
@@ -57,36 +67,33 @@ app.get("/customers/:customerId", function (req, res) {
     .catch((e) => console.error(e));
 });
 
-
-
 app.put("/customers/:customerId", function (req, res) {
   const customerId = req.params.customerId;
   const newCustomerName = req.body.name;
   const newCustomerAddress = req.body.address;
   const newCustomerCity = req.body.city;
   const newCustomerCountry = req.body.country;
-     pool
-       .query("SELECT * FROM customers where customers.id =$1", [
-         Number(customerId),
-       ])
-       .then((result) => {
-         if (result.rowCount === 0)
-           res.status(400).send("customer doesn't exist");
-         else {
-           const query =
-             "update customers set name=$1,address=$2,city=$3,country=$4 where id= $5";
-           pool
-             .query(query, [
-               newCustomerName,
-               newCustomerAddress,
-               newCustomerCity,
-               newCustomerCountry,
-               customerId,
-             ])
-             .then((result) => res.send("customer updated!"))
-             .catch((e) => console.error(e));
-         }
-       });
+  pool
+    .query("SELECT * FROM customers where customers.id =$1", [
+      Number(customerId),
+    ])
+    .then((result) => {
+      if (result.rowCount === 0) res.status(400).send("customer doesn't exist");
+      else {
+        const query =
+          "update customers set name=$1,address=$2,city=$3,country=$4 where id= $5";
+        pool
+          .query(query, [
+            newCustomerName,
+            newCustomerAddress,
+            newCustomerCity,
+            newCustomerCountry,
+            customerId,
+          ])
+          .then((result) => res.send("customer updated!"))
+          .catch((e) => console.error(e));
+      }
+    });
 });
 
 app.post("/customers", function (req, res) {
@@ -164,8 +171,8 @@ app.post("/availability", function (req, res) {
 
   pool
     .query(
-      "SELECT p.id, s.id FROM  products p, suppliers s  WHERE p.id=$1 and s.id=$2",
-      [Number(newProductID), Number(newSupplierID)]
+      "SELECT p.id, s.id FROM  products p,suppliers s WHERE p.id=$1 and s.id=$2",
+      [newProductID, newSupplierID]
     )
     .then((result) => {
       if (result.rowCount === 0) {
@@ -175,11 +182,7 @@ app.post("/availability", function (req, res) {
           "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3)";
 
         pool
-          .query(query, [
-            Number(newProductID),
-            Number(newSupplierID),
-            Number(newUnitPrice),
-          ])
+          .query(query, [newProductID, newSupplierID, newUnitPrice])
           .then(() => res.send("Product availability added"))
           .catch((e) => console.error(e));
       }
@@ -223,11 +226,8 @@ app.get("/products", function (req, res) {
   }
 });
 
-
 app.delete("/customers/:customerId", function (req, res) {
   const customerId = req.params.customerId;
-
-
 
   pool
     .query("SELECT * FROM orders WHERE customer_id=$1", [customerId])
@@ -243,7 +243,6 @@ app.delete("/customers/:customerId", function (req, res) {
     })
     .catch((e) => console.error(e));
 });
-
 
 app.delete("/orders/:orderId", function (req, res) {
   const orderId = req.params.orderId;
@@ -262,9 +261,6 @@ app.delete("/orders/:orderId", function (req, res) {
     })
     .catch((e) => console.error(e));
 });
-
-
-
 
 app.listen(4000, function () {
   console.log("Server is listening on port 4000. Ready to accept requests!");
