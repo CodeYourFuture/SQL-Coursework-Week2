@@ -101,21 +101,38 @@ psql
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 --
 psql
-
+select p.product_name, pa.unit_price, oi.quantity from orders o 
+inner join order_items oi on oi.order_id = o.id 
+inner join products p on p.id = oi.product_id 
+inner join product_availability pa on pa.prod_id = p.id 
+where o.order_reference = 'ORD006';
 --
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 --
 psql
-
+select c.name, o.order_reference, o.order_date, p.product_name, s.supplier_name, oi.quantity from customers c 
+inner join orders o on o.customer_id = c.id
+inner join order_items oi on oi.order_id = o.id 
+inner join products p on p.id = oi.product_id 
+inner join suppliers s on s.id = oi.supplier_id;
 --
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 --
 psql
-
+select c.name from customers c 
+inner join orders o on o.customer_id = c.id 
+inner join order_items oi on oi.order_id = o.id 
+inner join suppliers s on s.id = oi.supplier_id 
+where s.country = 'China';
 --
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 --
 psql
-
+select c.name, o.order_reference, o.order_date, (pa.unit_price * oi.quantity) as total_amount from orders o 
+inner join customers c on c.id = o.customer_id 
+inner join order_items oi on oi.order_id = o.id 
+inner join products p on p.id = oi.product_id 
+inner join product_availability pa on pa.prod_id = p.id
+order by total_amount desc;
 --
 
