@@ -103,6 +103,39 @@ app.post("/products", (req, res) => {
       .send("Please check the data should be string and non empty");
   }
 });
+
+// post to create a new product availability
+app.post('/availability', (req,res) => {
+ const newProdId = req.body.prod_id;
+ const newSuppId = req.body.supp_id;
+ const newUnitPrice = req.body.unit_price; 
+
+
+ const query =
+   "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3)";
+
+ // pool
+ //   .query(
+ //     `SELECT * FROM product_availability pa inner join products p on p.id = pa.prod_id inner join suppliers s on s.id = pa.supp_id WHERE p.id = ${newProdId} AND s.id = ${newSuppId}`
+ //   )
+ //   .then((result) => {
+ //     if (result.rows.length > 0) {
+       pool
+         .query(query, [newProdId, newSuppId, newUnitPrice])
+         .then(() =>
+           res.status(201).send("The Product Availability has been updated")
+         )
+         .catch((e) => console.error(e));
+     // } else {
+     //   res
+     //     .status(400)
+     //     .send(
+     //       "The product_id or supplier_id is not found in the products or suppliers table"
+     //     );
+     // }
+   // })
+   // .catch((e) => console.error(e));
+})
 app.listen(3000, function () {
   console.log("Server is listening on port 3000. Ready to accept requests!");
 });
