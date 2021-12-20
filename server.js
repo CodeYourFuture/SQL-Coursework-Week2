@@ -13,7 +13,6 @@ app.use(cors());
 // );
 // app.use(bodyParser.json());
 
-
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
@@ -120,73 +119,146 @@ app.post("/availability", (req, res) => {
   const query =
     "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3)";
   pool
-  .query('SELECT * FROM products p WHERE id = $1', [newProdId])
-  .then(result => {
-   if (result.rows.length === 0) {
-     res.status(400).send("The product ID is not existed in products table");
-   } else {
-     pool
-       .query("SELECT * FROM suppliers s WHERE id = $1", [newSuppId])
-       .then((result) => {
-         if (result.rows.length === 0) {
-           res
-             .status(400)
-             .send("The supplier ID is not existed in suppliers table");
-         } else {
-           pool
-             .query(
-               "SELECT * FROM product_availability WHERE prod_id = $1 AND supp_id = $2",
-               [newProdId, newSuppId]
-             )
-             .then((result) => {
-               // console.log(result.rows)
-               if (result.rows.length > 0) {
-                 res
-                   .status(400)
-                   .send("The product ID is existed with the supplier ID");
-               } else if (newUnitPrice < 0) {
-                 res.status(400).send("The price should be positive number");
-               } else {
-                 pool
-                   .query(query, [newProdId, newSuppId, newUnitPrice])
-                   .then(() =>
-                     res
-                       .status(201)
-                       .send("The Product Availability has been updated")
-                   )
-                   .catch((e) => console.error(e));
-               }
-             })
-             .catch((e) => console.error(e));
-         }
-       })
-       .catch((e) => console.error(e));
-   }
-  })
-  .catch(e => console.error(e))
+    .query("SELECT * FROM products p WHERE id = $1", [newProdId])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        res.status(400).send("The product ID is not existed in products table");
+      } else {
+        pool
+          .query("SELECT * FROM suppliers s WHERE id = $1", [newSuppId])
+          .then((result) => {
+            if (result.rows.length === 0) {
+              res
+                .status(400)
+                .send("The supplier ID is not existed in suppliers table");
+            } else {
+              pool
+                .query(
+                  "SELECT * FROM product_availability WHERE prod_id = $1 AND supp_id = $2",
+                  [newProdId, newSuppId]
+                )
+                .then((result) => {
+                  // console.log(result.rows)
+                  if (result.rows.length > 0) {
+                    res
+                      .status(400)
+                      .send("The product ID is existed with the supplier ID");
+                  } else if (newUnitPrice < 0) {
+                    res.status(400).send("The price should be positive number");
+                  } else {
+                    pool
+                      .query(query, [newProdId, newSuppId, newUnitPrice])
+                      .then(() =>
+                        res
+                          .status(201)
+                          .send("The Product Availability has been updated")
+                      )
+                      .catch((e) => console.error(e));
+                  }
+                })
+                .catch((e) => console.error(e));
+            }
+          })
+          .catch((e) => console.error(e));
+      }
+    })
+    .catch((e) => console.error(e));
 });
 
 // post endpoint `/customers/:customerId/orders` to create a new order
-app.post('/customers/:customerId/orders', (req, res) => {
- const customerId = req.params.customerId;
- const newOrderDate = req.body.order_date;
- const newOrderReference = req.body.order_reference;
- const query = "INSERT INTO orders (order_date, order_reference, customer_id) VALUES ($1, $2, $3)";
- pool
- .query(`SELECT * FROM customers WHERE id = ${customerId}`)
- .then(result => {
-  if (result.rows.length === 0){
-   res.status(400).send('The customer ID is NOT existed in customers table.')
-  }else{
-   pool
-   .query(query, [newOrderDate, newOrderReference, customerId])
-   .then(() => res.status(201).send('The order has been UPDATED'))
-   .catch(e => console.error(e))
-  }
- })
- .catch(e => console.error(e))
+app.post("/customers/:customerId/orders", (req, res) => {
+  const customerId = req.params.customerId;
+  const newOrderDate = req.body.order_date;
+  const newOrderReference = req.body.order_reference;
+  const query =
+    "INSERT INTO orders (order_date, order_reference, customer_id) VALUES ($1, $2, $3)";
+  pool
+    .query(`SELECT * FROM customers WHERE id = ${customerId}`)
+    .then((result) => {
+      if (result.rows.length === 0) {
+        res
+          .status(400)
+          .send("The customer ID is NOT existed in customers table.");
+      } else {
+        pool
+          .query(query, [newOrderDate, newOrderReference, customerId])
+          .then(() => res.status(201).send("The order has been CREATED"))
+          .catch((e) => console.error(e));
+      }
+    })
+    .catch((e) => console.error(e));
 });
 
+// PUT endpoint `/customers/:customerId`
+app.put("/customers/:customerId", (req, res) => {
+  const customerId = req.params.customerId;
+  const name = req.body.name;
+  const address = req.body.address;
+  const city = req.body.city;
+  const country = req.body.country;
+  console.log(req.body);
+  const query = `UPDATE customers SET name=$1, address=$2, city=$3, country=$4 WHERE id=$5`;
+  // pool
+  //   .query(query, [name, address, city, country, customerId])
+  //   .then(() => res.status(204).send(`The customer ${name} has been updated`))
+  //   .catch((e) => console.error(e));
+  if (name != undefined) {
+    pool
+      .query(`UPDATE customers SET name=$1 WHERE id=$2`, [name, customerId])
+      .then(() => res.status(204))
+      .catch((e) => console.error(e));
+  } else {
+    console.log(name);
+  }
+  if (address != undefined) {
+    pool
+      .query(`UPDATE customers SET address=$1 WHERE id=$2`, [
+        address,
+        customerId,
+      ])
+      .then(() => res.status(204))
+      .catch((e) => console.error(e));
+  } else {
+    console.log(address);
+  }
+  if (city != undefined) {
+    pool
+      .query(`UPDATE customers SET city=$1 WHERE id=$2`, [city, customerId])
+      .then(() => res.status(204))
+      .catch((e) => console.error(e));
+  } else {
+    console.log(city);
+  }
+  if (country != undefined) {
+    pool
+      .query(`UPDATE customers SET country=$1 WHERE id=$2`, [
+        country,
+        customerId,
+      ])
+      .then(() => res.status(204))
+      .catch((e) => console.error(e));
+  } else {
+    console.log(city);
+  }
+});
+
+// DELETE endpoint `/orders/:orderId` to delete an existing order with customerID in customers table
+
+app.delete(`/orders/:orderId`, (req, res) => {
+  const orderId = req.params.orderId;
+pool
+  .query(`DELETE FROM order_items WHERE order_id=${orderId}`)
+  .then(() => {
+    pool
+      .query(`DELETE FROM orders WHERE id=${orderId}`)
+      .then(() => {
+        res.status(201).send("The order has been deleted in the orders table");
+      })
+      .catch((e) => console.error(e));
+  })
+  .catch((e) => console.error(e));
+  
+});
 app.listen(3000, function () {
   console.log("Server is listening on port 3000. Ready to accept requests!");
 });
