@@ -259,6 +259,25 @@ pool
   .catch((e) => console.error(e));
   
 });
+
+// DELETE endpoint `/customers/:customerId` to delete an existing customer only if this customer doesn't have orders.
+app.delete(`/customers/:customerId`, (req, res) => {
+ const customerId = req.params.customerId;
+
+ pool
+ .query(`SELECT * FROM orders WHERE customer_id=${customerId}`)
+ .then((result) => {
+  if(result.rows.length === 0){
+   pool
+   .query(`DELETE FROM customers WHERE id=${customerId}`)
+   .then(() => res.status(201).send("The customer does not have an order, so it has been deleted"))
+   .catch(e => console.error(e))
+  }else{
+   res.status(400).send("The customer has an order, so it cannot be deleted")
+  }
+ })
+ .catch(e => console.error(e))
+});
 app.listen(3000, function () {
   console.log("Server is listening on port 3000. Ready to accept requests!");
 });
