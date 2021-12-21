@@ -278,6 +278,22 @@ app.delete(`/customers/:customerId`, (req, res) => {
  })
  .catch(e => console.error(e))
 });
+
+// GET endpoint `/customers/:customerId/orders` to load all the orders along with the items in the orders of a specific customer
+app.get(`/customers/:customerId/orders`, (req, res) => {
+ const customerId = req.params.customerId;
+
+ const query =
+   "SELECT o.order_date, o.order_reference, p.product_name, pa.unit_price, s.supplier_name, oi.quantity From orders o inner join order_items oi on oi.order_id = o.id inner join products p on oi.product_id = p.id inner join suppliers s on s.id = oi.supplier_id inner join product_availability pa on pa.prod_id = p.id WHERE customer_id=$1";
+
+   pool
+   .query(query, [customerId])
+   .then ((result) => {
+    res.send(result.rows)
+   })
+   .catch(e => console.error(e))
+});
+
 app.listen(3000, function () {
   console.log("Server is listening on port 3000. Ready to accept requests!");
 });
