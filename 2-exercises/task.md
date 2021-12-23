@@ -35,16 +35,104 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+-- 
+psql
+select name, address from customers c where country = 'United States';
+--
 2. Retrieve all the customers in ascending name sequence
+--
+psql
+select name from customers c order by "name" ;
+--
 3. Retrieve all the products whose name contains the word `socks`
+--
+psql
+select * from products p where product_name like '%socks%';
+--
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+--
+psql
+select p.product_name from products p 
+inner join product_availability pa on p.id = pa.prod_id 
+inner join order_items oi on oi.product_id = p.id 
+where (pa.unit_price * oi.quantity) > 100;
+--
 5. Retrieve the 5 most expensive products
+--
+psql
+select p.product_name from products p inner join product_availability pa 
+on p.id = pa.prod_id
+order by unit_price desc
+limit 5;
+--
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+--
+psql
+select p.product_name, pa.unit_price, s.supplier_name from products p 
+inner join product_availability pa on p.id = pa.prod_id
+inner join suppliers s on s.id = pa.supp_id ;
+--
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+--
+psql
+select p.product_name, s.supplier_name from products p 
+inner join product_availability pa on p.id = pa.prod_id
+inner join suppliers s on s.id = pa.supp_id
+inner join order_items oi on p.id = oi.product_id 
+inner join orders o on oi.order_id = o.id 
+inner join customers c on c.id = o.customer_id 
+where c.country = 'United Kingdom';
+--
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+--
+psql
+select oi.order_id, o.order_reference, o.order_date, (pa.unit_price * oi.quantity) as total_cost from order_items oi 
+inner join orders o on o.id = oi.order_id 
+inner join products p on p.id = oi.product_id 
+inner join product_availability pa on pa.prod_id = oi.product_id 
+inner join customers c on c.id = o.customer_id 
+where c.id = 1;
+--
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+--
+psql
+
+--
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+--
+psql
+select p.product_name, pa.unit_price, oi.quantity from orders o 
+inner join order_items oi on oi.order_id = o.id 
+inner join products p on p.id = oi.product_id 
+inner join product_availability pa on pa.prod_id = p.id 
+where o.order_reference = 'ORD006';
+--
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+--
+psql
+select c.name, o.order_reference, o.order_date, p.product_name, s.supplier_name, oi.quantity from customers c 
+inner join orders o on o.customer_id = c.id
+inner join order_items oi on oi.order_id = o.id 
+inner join products p on p.id = oi.product_id 
+inner join suppliers s on s.id = oi.supplier_id;
+--
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+--
+psql
+select c.name from customers c 
+inner join orders o on o.customer_id = c.id 
+inner join order_items oi on oi.order_id = o.id 
+inner join suppliers s on s.id = oi.supplier_id 
+where s.country = 'China';
+--
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+--
+psql
+select c.name, o.order_reference, o.order_date, (pa.unit_price * oi.quantity) as total_amount from orders o 
+inner join customers c on c.id = o.customer_id 
+inner join order_items oi on oi.order_id = o.id 
+inner join products p on p.id = oi.product_id 
+inner join product_availability pa on pa.prod_id = p.id
+order by total_amount desc;
+--
 

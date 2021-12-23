@@ -38,7 +38,7 @@ CREATE TABLE orders (
     customer_id     INT REFERENCES customers(id)
 );
 
-CREATE TABLE order_items (
+CREATE TABLE order_items ( --Child table to the referenced/parent table of product_availability
     id          SERIAL PRIMARY KEY,
     order_id    INT NOT NULL REFERENCES orders(id),
     product_id  INT NOT NULL,
