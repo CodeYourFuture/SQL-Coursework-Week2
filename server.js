@@ -189,6 +189,26 @@ app.post("/customers/:customerId/orders", (req, res) => {
     .catch((e) => console.error(e));
 });
 
+// patch endpoint `/customers/:customerId`
+// app.patch("/customers/:customerId", (req, res) => {
+//    const customerId = req.params.customerId;
+//   //  const name = req.body.name;
+//   //  const address = req.body.address;
+//   //  const city = req.body.city;
+//   //  const country = req.body.country;
+//   const data = req.data
+//   const obj = req.body
+//    obj.name = data.get("name", obj.name);
+//    obj.address = data.get("address", obj.address);
+//    obj.city = data.get("city", obj.city);
+//    obj.country = data.get("country", obj.country);
+//   const query = `UPDATE customers SET name=$1, address=$2, city=$3, country=$4 WHERE id=$5`;
+//   pool
+//     .query(query, [obj.name, obj.address, obj.city, obj.country, customerId])
+//     .then(() => res.status(201).send("Updated"))
+//     .catch((e) => console.error(e));
+// })
+
 // PUT endpoint `/customers/:customerId`
 app.put("/customers/:customerId", (req, res) => {
   const customerId = req.params.customerId;
