@@ -1,9 +1,9 @@
 drop table if exists order_items;
-drop table if exists orders cascade;
-DROP TABLE IF EXISTS product_availability cascade;
-drop table if exists customers cascade;
-drop table if exists products cascade;
-drop table if exists suppliers cascade;
+drop table if exists orders_cascade;
+DROP TABLE IF EXISTS product_availability_cascade;
+drop table if exists customers_cascade;
+drop table if exists products_cascade;
+drop table if exists suppliers_cascade;
 
 CREATE TABLE customers (
   id       SERIAL PRIMARY KEY,
