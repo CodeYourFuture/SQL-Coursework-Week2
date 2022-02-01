@@ -1,0 +1,17 @@
+   product_name   | unit_price | quantity 
+------------------+------------+----------
+ Coffee Cup       |          3 |        3
+ Coffee Cup       |          4 |        3
+ Coffee Cup       |          4 |        3
+ Coffee Cup       |          5 |        3
+ Javascript Book  |         40 |        1
+ Javascript Book  |         41 |        1
+ Javascript Book  |         39 |        1
+ Le Petit Prince  |         10 |        1
+ Le Petit Prince  |         10 |        1
+ Super warm socks |         10 |        3
+ Super warm socks |          5 |        3
+ Super warm socks |          8 |        3
+ Super warm socks |         10 |        3
+(13 rows)
+
