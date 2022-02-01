@@ -100,7 +100,10 @@ INNER JOIN suppliers ON product_availability.supp_id = suppliers.id;
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
 ```sql
-
+SELECT products.product_name, suppliers.supplier_name FROM products
+INNER JOIN product_availability ON products.id = product_availability.prod_id
+INNER JOIN suppliers ON product_availability.supp_id = suppliers.id
+WHERE suppliers.country = 'United Kingdom';
 
 ```
 
@@ -109,7 +112,9 @@ INNER JOIN suppliers ON product_availability.supp_id = suppliers.id;
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 
 ```sql
-
+SELECT orders.id, orders.order_reference, orders.order_date, (order_items.quantity*product_availability.unit_price) AS total_cost FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id WHERE orders.customer_id = 1
 
 ```
 
