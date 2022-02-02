@@ -114,7 +114,7 @@ WHERE suppliers.country = 'United Kingdom';
 ```sql
 SELECT orders.id, orders.order_reference, orders.order_date, (order_items.quantity*product_availability.unit_price) AS total_cost FROM orders
 INNER JOIN order_items ON orders.id = order_items.order_id
-INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id WHERE orders.customer_id = 1
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id WHERE orders.customer_id = 1;
 
 ```
 
