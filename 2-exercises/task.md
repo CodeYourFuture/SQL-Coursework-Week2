@@ -134,6 +134,11 @@ WHERE customers.name ILIKE ('%Hope Crosby%');
 
 ```sql
 
+SELECT products.product_name, product_availability.unit_price, order_items.quantity
+FROM products INNER JOIN product_availability ON products.id = product_availability.prod_id
+INNER JOIN order_items ON product_availability.prod_id = order_items.product_id
+INNER JOIN orders ON order_items.order_id = orders.id
+WHERE orders.order_reference = 'ORD006';
 
 ```
 
@@ -142,7 +147,12 @@ WHERE customers.name ILIKE ('%Hope Crosby%');
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
 ```sql
-
+SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity
+FROM customers INNER JOIN orders on customers.id = orders.customer_id
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN products ON order_items.product_id = products.id
+INNER JOIN product_availability ON products.id = product_availability.prod_id
+INNER JOIN suppliers ON product_availability.supp_id = suppliers.id
 
 ```
 

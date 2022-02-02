@@ -15,7 +15,11 @@ CREATE TABLE customers (
 
 CREATE TABLE suppliers (
     id              SERIAL PRIMARY KEY,
-    supplier_name   VARCHAR(100) NOT NULL,
+    supplier_name   VARCHAR(100) NOT NULL,s(id),
+  unit_price    integer not null,
+  primary key (prod_id, supp_id)
+);
+
     country         VARCHAR(20) NOT NULL
 );
 
