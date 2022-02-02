@@ -123,7 +123,8 @@ INNER JOIN product_availability ON order_items.product_id = product_availability
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
 ```sql
-
+SELECT * FROM orders INNER JOIN order_items ON orders.id = order_items.order_id INNER JOIN customers ON orders.customer_id = customers.id
+WHERE customers.name ILIKE ('%Hope Crosby%');
 
 ```
 
