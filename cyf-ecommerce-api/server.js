@@ -8,10 +8,10 @@ app.listen(4000, function () {
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: "*****",
+  user: "*****",  // my computer username
   host: "localhost",
   database: "cyf_ecommerce",
-  password: "*****",
+  password: "*****", //  my password
   port: 5432,
 });
 
