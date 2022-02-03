@@ -1,40 +1,45 @@
 const express = require('express');
 const {Pool} = require('pg');
 
+
 const app = express();
 const pool = new Pool({
-  host: 'localhost',
-  port: 5432,
   user: 'codeyourfuture',
-  password: 'codeyourfuture',
+  host: 'localhost',
   database: 'cyf_ecommerce',
+  password: 'CYFStudent123',
+  port: 5432,
 });
 
+
+
 //Add a new GET endpoint `/customers` to return all the customers from the database:
+const customersSelect = `SELECT * FROM customers`;
 app.get('/customers', (req, res) => {
-    pool.query('SELECT * FROM customers', (error, result) => {
-        if(error) {
-            res.status(500).send(error);
-        } else {
-            res.send(result.rows);
-        }
-    })
+    pool.query(customersSelect)
+        .then(result => res.send(result.rows))
+        .catch(error => res.status(500).send(error));
 });
 
 //Add a new GET endpoint `/suppliers` to return all the suppliers from the database:
 app.get('/suppliers', (req, res) => {
   pool.query('SELECT * FROM suppliers', (error, result) => {
     if (error) {
-      res.status(500).send(error);
+      res.status(500).json(error);
     } else {
-      res.send(result.rows);
+      res.json(result.rows);
     }
   });
 });
 
 //Add a new GET endpoint `/products` to return all the product names along with their prices and supplier names:
-const productsSelectQuery =  SELECT product_name, supplier_name, unit_price FROM products INNER JOIN product_availability
-ON products.id = product_availability.prod_id INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;
+const productsSelectQuery =`
+SELECT products.product_name, suppliers.supplier_name, product_availability.unit_price 
+FROM products 
+INNER JOIN product_availability
+ON products.id = product_availability.prod_id 
+INNER JOIN suppliers 
+ON suppliers.id = product_availability.supp_id`;
 
 
 app.get('/products', (req, res) => {
