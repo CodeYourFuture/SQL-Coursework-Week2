@@ -10,56 +10,67 @@ To submit this homework write the correct commands for each question here:
 
 ```sql
 
-# 1 : SELECT name, address FROM customers
+# 1 
+SELECT name, address FROM customers
 WHERE country = 'United States';
 
 
-# 2 : SELECT * FROM customers ORDER BY name ASC;
+# 2 
+SELECT * FROM customers ORDER BY name ASC;
 
-# 3 : SELECT * FROM products WHERE product_name LIKE '%_ocks%';
+# 3 
+SELECT * FROM products WHERE product_name LIKE '%_ocks%';
 
-# 4 : SELECT products.id, products.product_name, product_availability.unit_price, product_availability.supp_id
+# 4 
+SELECT products.id, products.product_name, product_availability.unit_price, product_availability.supp_id
 FROM products
 INNER JOIN product_availability ON product_availability.prod_id = products.id
 WHERE product_availability.unit_price >= 100;
 
-# 5 : SELECT products.product_name, product_availability.unit_price
+# 5 
+SELECT products.product_name, product_availability.unit_price
 FROM products
 INNER JOIN product_availability ON product_availability.prod_id = products.id
 ORDER BY product_availability.unit_price DESC LIMIT(5);
 
-# 6 : SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name
+# 6 
+SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name
 FROM products
 INNER JOIN product_availability ON product_availability.prod_id = products.id
 INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;
 
 
-# 7 : SELECT suppliers.supplier_name, products.product_name
+# 7 
+SELECT suppliers.supplier_name, products.product_name
 FROM suppliers
 INNER JOIN product_availability ON product_availability.supp_id = suppliers.id
 INNER JOIN products ON products.id = product_availability.prod_id
 WHERE suppliers.country = 'United Kingdom';
 
-# 8 : SELECT orders.id, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price AS total_cost
+# 8 
+SELECT orders.id, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price AS total_cost
 FROM orders
 INNER JOIN order_items ON order_items.order_id = orders.id
 INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id
 WHERE orders.customer_id = 1;
 
-# 9 : SELECT orders.order_date, orders.order_reference, order_items.product_id, order_items.quantity
+# 9 
+SELECT orders.order_date, orders.order_reference, order_items.product_id, order_items.quantity
 FROM orders
 INNER JOIN order_items ON order_items.order_id = orders.id
 INNER JOIN customers ON customers.id = orders.customer_id
 WHERE customers.name = 'Hope Crosby';
 
-# 10 : SELECT products.product_name, product_availability.unit_price, order_items.quantity
+# 10  
+SELECT products.product_name, product_availability.unit_price, order_items.quantity
 FROM products
 INNER JOIN product_availability ON product_availability.prod_id = products.id
 INNER JOIN order_items ON order_items.product_id = products.id
 INNER JOIN orders ON orders.id = order_items.order_id
 WHERE orders.order_reference = 'ORD006';
 
-# 11 : SELECT customers.name, orders.order_date, orders.order_reference, products.product_name, suppliers.supplier_name, order_items.quantity
+# 11 
+SELECT customers.name, orders.order_date, orders.order_reference, products.product_name, suppliers.supplier_name, order_items.quantity
 FROM customers
 INNER JOIN orders ON orders.customer_id = customers.id
 INNER JOIN order_items ON order_items.order_id = orders.id
@@ -67,14 +78,16 @@ INNER JOIN product_availability ON product_availability.prod_id = order_items.pr
 INNER JOIN suppliers ON suppliers.id = product_availability.supp_id
 INNER JOIN products ON products.id = product_availability.prod_id;
 
-# 12 : SELECT name FROM customers
+# 12 
+SELECT name FROM customers
 INNER JOIN orders ON orders.customer_id = customers.id
 INNER JOIN order_items ON order_items.order_id = orders.id
 INNER JOIN product_availability ON product_availability.supp_id = order_items.supplier_id
 INNER JOIN suppliers ON suppliers.id = product_availability.supp_id
 WHERE suppliers.country = 'China';
 
-# 13 : SELECT customers.name, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price AS total_amount
+# 13  
+SELECT customers.name, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price AS total_amount
 FROM customers
 INNER JOIN orders ON orders.customer_id = customers.id
 INNER JOIN order_items ON order_items.order_id = orders.id
