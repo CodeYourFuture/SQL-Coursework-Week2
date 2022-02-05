@@ -48,3 +48,34 @@ Once you understand the database that you are going to work with, solve the foll
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
+--SEARCH MAX--- 
+--Group by : Run the Query with and without it before 
+Replace it with Where and assign it to specific value - Don't pick an ID that have one item.
+Look into insert statement to figure out what data we expecting - and verify it.
+You need to know these two values composite key 
+Entity relations diagrams ERD 
+
+
+
+
+
+SELECT MAX(customers.name), orders.order_reference, orders.order_date, SUM(order_items.quantity * product_availability.unit_price) AS total_amount 
+FROM customers 
+INNER JOIN orders ON customers.id = orders.customer_id 
+INNER JOIN order_items ON orders.id = order_items.order_id 
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id AND product_availability.supp_id = order_items.supplier_id 
+GROUP BY orders.id 
+ORDER BY total_amount DESC;
+
+
+2=== 
+
+
+SELECT customers.name, orders.order_reference, orders.order_date, order_items.quantity ,product_availability.unit_price
+FROM orders 
+INNER JOIN customers ON customers.id = orders.customer_id 
+INNER JOIN order_items ON orders.id = order_items.order_id 
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id AND product_availability.supp_id = order_items.supplier_id
+WHERE orders.id = 1;
+
+
