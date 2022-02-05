@@ -1,4 +1,4 @@
-drop table if exists order_items;
+productdrop table if exists order_items;
 drop table if exists orders cascade;
 DROP TABLE IF EXISTS product_availability cascade;
 drop table if exists customers cascade;
