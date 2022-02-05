@@ -8,7 +8,7 @@ const dbConfig1 = {
   host: "localhost",
   port: 5432,
   user: "gorma",
-  password: "JPG12345$",
+  password: "",
   database: "cyf_ecommerce",
 };
 
