@@ -118,4 +118,25 @@ Once you understand the database that you are going to work with, solve the foll
     ON suppliers.id = order_items.supplier_id; -->
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+<!-- ANSWER -->
+<!-- SELECT customers.name, suppliers.country FROM customers
+JOIN orders
+ON orders.customer_id = customers.id
+JOIN order_items 
+ON order_items.order_id = orders.id
+JOIN suppliers 
+ON suppliers.id = order_items.supplier_id
+WHERE suppliers.country = 'China';. -->
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
+<!-- ANSWER -->
+<!-- SELECT customers.name, orders.order_reference, order_date,(order_items.quantity * product_availability.unit_price) AS  total_amount FROM orders
+JOIN customers 
+ON customers.id = orders.customer_id
+JOIN order_items
+ON order_items.order_id = orders.id
+JOIN products 
+ON products.id = order_items.product_id
+INNER JOIN product_availability
+ON product_availability.prod_id = products.id
+ORDER BY total_amount DESC; -->
