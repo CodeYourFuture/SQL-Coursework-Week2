@@ -19,19 +19,19 @@ app.get("/", (req, res) => {
 
 // GET "/customers" : serve all customers in the database
 app.get("/customers", async (req, res) => {
-  const result = await pool.query(
+  const { rows } = await pool.query(
     "SELECT name, address, city, country FROM customers;"
   );
 
-  res.json(result.rows);
+  res.json(rows);
 });
 
 app.get("/suppliers", async (req, res) => {
-  const result = await pool.query(
+  const { rows } = await pool.query(
     "SELECT supplier_name, country FROM suppliers;"
   );
 
-  res.json(result.rows);
+  res.json(rows);
 });
 
 const query = `SELECT products.product_name, suppliers.supplier_name, product_availability.unit_price
@@ -40,9 +40,9 @@ INNER JOIN product_availability ON product_availability.prod_id = products.id
 INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;`;
 
 app.get("/products", async (req, res) => {
-  const result = await pool.query(query);
+  const { rows } = await pool.query(query);
 
-  res.json(result.rows);
+  res.json(rows);
 });
 
 app.listen(3000, () =>
