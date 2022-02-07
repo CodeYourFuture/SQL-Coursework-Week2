@@ -18,22 +18,20 @@ app.get("/", (req, res) => {
 });
 
 // GET "/customers" : serve all customers in the database
-app.get("/customers", (req, res) => {
-  pool
-    .query("SELECT * FROM customers;")
-    .then((result) => {
-      res.json(result.rows);
-    })
-    .catch((error) => {
-      res.status(500).json(error);
-    });
+app.get("/customers", async (req, res) => {
+  const result = await pool.query(
+    "SELECT name, address, city, country FROM customers;"
+  );
+
+  res.json(result.rows);
 });
 
-app.get("/suppliers", (req, res) => {
-  pool
-    .query("SELECT * FROM suppliers;")
-    .then((result) => res.json(result.rows))
-    .catch((error) => res.status(500).json(error));
+app.get("/suppliers", async (req, res) => {
+  const result = await pool.query(
+    "SELECT supplier_name, country FROM suppliers;"
+  );
+
+  res.json(result.rows);
 });
 
 const query = `SELECT products.product_name, suppliers.supplier_name, product_availability.unit_price
@@ -41,11 +39,10 @@ FROM products
 INNER JOIN product_availability ON product_availability.prod_id = products.id
 INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;`;
 
-app.get("/products", (req, res) => {
-  pool
-    .query(query)
-    .then((result) => res.json(result.rows))
-    .catch((error) => res.status(500).json(error));
+app.get("/products", async (req, res) => {
+  const result = await pool.query(query);
+
+  res.json(result.rows);
 });
 
 app.listen(3000, () =>
