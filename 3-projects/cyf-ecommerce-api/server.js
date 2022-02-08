@@ -89,6 +89,8 @@ app.post(`/products`, (req, res) => {
 });
 
 
+//Week3 
+
 //Add a new POST endpoint `/availability` to create a new product availability (with a price and a supplier id). Check that the price is a positive integer and that both the product and supplier ID's exist in the database, otherwise return an error 
 app.post(`/availability`, (req, res) => {
     const { price, supplier_id, product_id } = req.body;
