@@ -48,6 +48,15 @@ app.get("/suppliers", function (req, res) {
 /* (STRETCH GOAL) Add a new GET endpoint `/products` to return all the product names along with their prices and supplier names. */
 
 
+app.get("/products", function (req, res) {
+  pool
+    .query("SELECT products.product_name, suppliers.supplier_name, product_availability.unit_price FROM product_availability INNER JOIN  products ON product_availability.prod_id = products.id INNER JOIN  suppliers ON product_availability.supp_id = suppliers.id;")
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json(error);
+    });
+});
 
 
 /* Week 3 */ 
