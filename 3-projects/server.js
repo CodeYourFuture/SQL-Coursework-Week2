@@ -9,49 +9,59 @@ const app = express();
 app.use(express.json());
 
 app.use(cors());
-// I dont like the below one bit, change tomorrow :p
-// app.post("/availability", (req, res) => {
-//   const { productPrice, productId, supplierId } = req.body;
-//   let validityCheck = [];
 
-//   pool
-//     .query("SELECT products.id FROM products WHERE products.id = $1", [
-//       productId,
-//     ])
-//     .then((result) => {
-//       if (result.rows.length === 0) {
-//         validityCheck.push(false);
-//       }
-//     });
+app.post("/availability", (req, res) => {
+  const { productId, supplierId, price } = req.body;
 
-//   pool
-//     .query("SELECT suppliers.id FROM suppliers WHERE suppliers.id = $1", [
-//       supplierId,
-//     ])
-//     .then((result) => {
-//       if (result.rows.length === 0) {
-//         validityCheck.push(false);
-//       }
-//     });
+  if (
+    !Number.isInteger(productId) ||
+    !Number.isInteger(supplierId) ||
+    !Number.isInteger(price)
+  ) {
+    return res.status(400).send({
+      success: false,
+      message:
+        "make sure to provide all the necessary fields (productId, supplierId and price >= 0...",
+    });
+  }
 
-//   if (!Number.isInteger(productPrice) || validityCheck.length) {
-//     return res
-//       .status(400)
-//       .send(
-//         "The product price should be a positive number and the product as well as the supplier id must exist"
-//       );
-//   }
-
-//   const query =
-//     "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3);";
-//   pool
-//     .query(query, [productId, supplierId, productPrice])
-//     .then(() => res.send("product is now available!"))
-//     .catch((error) => {
-//       console.log(error);
-//       res.status(500).json(error);
-//     });
-// });
+  pool
+    .query("SELECT * FROM products WHERE products.id = $1", [productId])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return res
+          .status(400)
+          .send(
+            "Provided product id does not match any existing in the system..."
+          );
+      } else {
+        pool
+          .query("SELECT * FROM suppliers WHERE suppliers.id = $1", [
+            supplierId,
+          ])
+          .then((result) => {
+            if (result.rows.length === 0) {
+              return res
+                .status(400)
+                .send(
+                  "Provided supplier Id does not match any existing in the system..."
+                );
+            } else {
+              pool
+                .query(
+                  "INSERT INTO product_availability(prod_id, supp_id, unit_price) VALUES ($1, $2, $3)",
+                  [productId, supplierId, price]
+                )
+                .then(() => res.send("product availability added"))
+                .catch((error) => {
+                  console.log(error);
+                  res.status(500).json(error);
+                });
+            }
+          });
+      }
+    });
+});
 
 app.post("/products", (req, res) => {
   const { productName } = req.body;
@@ -94,7 +104,10 @@ app.post("/customers", (req, res) => {
       message:
         "Name field cannot be empty when adding a new customer, please fix and try again...",
     });
-  }
+  } //       console.log(error);
+  //       res.status(500).json(error);
+  //     });
+  // });
 
   pool
     .query("SELECT * FROM customers WHERE name=$1", [customerName])
