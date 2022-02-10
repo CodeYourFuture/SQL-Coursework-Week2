@@ -10,18 +10,49 @@ app.use(express.json());
 
 app.use(cors());
 
+app.post("/customers/:customerId/orders", (req, res) => {
+  const { customerId } = req.params;
+
+  const { orderDate, orderReference } = req.body;
+
+  if (!orderDate.length || !orderReference.length) {
+    return res.status(400).send({
+      success: false,
+      message: "orderDate and orderReference must be included",
+    });
+  }
+
+  pool
+    .query("SELECT * FROM customers WHERE customers.id = $1", [customerId])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return res
+          .status(400)
+          .send(
+            "Customer Id provided does not match any existing customer ids..."
+          );
+      } else {
+        pool
+          .query(
+            "INSERT INTO orders (order_date, order_reference, customer_id) VALUES($1, $2, $3)",
+            [orderDate, orderReference, customerId]
+          )
+          .then(() => res.send("order Added!"))
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json(error);
+          });
+      }
+    });
+});
+
 app.post("/availability", (req, res) => {
   const { productId, supplierId, price } = req.body;
 
-  if (
-    !Number.isInteger(productId) ||
-    !Number.isInteger(supplierId) ||
-    !Number.isInteger(price)
-  ) {
+  if (price < 0) {
     return res.status(400).send({
       success: false,
-      message:
-        "make sure to provide all the necessary fields (productId, supplierId and price >= 0...",
+      message: "make sure price >= 0...",
     });
   }
 
