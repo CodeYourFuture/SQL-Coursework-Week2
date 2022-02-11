@@ -28,7 +28,7 @@ create table product_availability (
   prod_id       integer references products(id),
   supp_id       integer references suppliers(id),
   unit_price    integer not null,
-  primary key (prod_id, supp_id)
+  primary key (prod_id, supp_id) 
 );
 
 CREATE TABLE orders (
@@ -70,7 +70,7 @@ INSERT INTO products (product_name) VALUES ('Ball');
 INSERT INTO products (product_name) VALUES ('Tee Shirt Olympic Games');
 
 INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (1, 4, 249);
-INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (1, 1, 299);
+INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (1, 1, 299); 
 INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (2, 2, 41);
 INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (2, 3, 39);
 INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (2, 1, 40);
@@ -121,4 +121,5 @@ INSERT INTO order_items VALUES (16, 8, 1, 4, 1);
 INSERT INTO order_items VALUES (17, 9, 6, 4, 2);
 INSERT INTO order_items VALUES (18, 10, 6, 2, 1);
 INSERT INTO order_items VALUES (19, 10, 4, 1, 5);
+
 
