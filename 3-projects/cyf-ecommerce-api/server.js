@@ -2,6 +2,17 @@ const express = require("express");
 const app = express();
 const { Pool } = require("pg");
 
+
+var bodyParser = require('body-parser')
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+
+
 const pool = new Pool({
     user: "davidandtiana",
     host: "localhost",
@@ -11,7 +22,7 @@ const pool = new Pool({
 });
 
 app.get(`/customers`, (req, res) => {
-    //console.log(pool);
+   // console.log(pool);
     pool.query(`SELECT * FROM customers`, (err, result) => {
         if (err) {
             console.log(err);
@@ -52,7 +63,7 @@ app.get(`/products`, (req, res) => {
 // Add a new GET endpoint `/customers/:customerId` to load a single customer by ID.
 app.get(`/customers/:customerId`, (req, res) => {
     const customerId = req.params.customerId;
-    pool.query(`SELECT * FROM customers WHERE customer_id = ${customerId}`, (err, result) => {
+    pool.query(`SELECT * FROM customers WHERE id = ${customerId}`, (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -64,7 +75,9 @@ app.get(`/customers/:customerId`, (req, res) => {
 
 //- Add a new POST endpoint `/customers` to create a new customer with name, address, city and country. 
 app.post(`/customers`, (req, res) => {
-    const { name, address, city, country } = req.body;
+
+    const { name, address, city, country } = req.body; // destructuring
+   // console.log("trial", req.body);
     pool.query(`INSERT INTO customers (name, address, city, country) VALUES ('${name}', '${address}', '${city}', '${country}')`, (err, result) => {
         if (err) {
             res.status(500).send(err);
@@ -79,6 +92,7 @@ app.post(`/customers`, (req, res) => {
 // Add a new POST endpoint `/products` to create a new product with name, price and quantity.
 app.post(`/products`, (req, res) => {
     const { name, price, quantity } = req.body;
+    console.log("trial", req.body);
     pool.query(`INSERT INTO products (name, price, quantity) VALUES ('${name}', ${price}, ${quantity})`, (err, result) => {
         if (err) {
             res.status(500).send(err);
