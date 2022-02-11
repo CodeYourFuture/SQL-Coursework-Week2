@@ -35,16 +35,124 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+-------------------------------------------------------------------------------------
+SELECT name, address FROM customers WHERE country LIKE '%United States%';
+-------------------------------------------------------------------------------------
+
+
 2. Retrieve all the customers in ascending name sequence
+-------------------------------------------------------------------------------------
+SELECT * FROM customers ORDER BY name;
+-------------------------------------------------------------------------------------
+
+
 3. Retrieve all the products whose name contains the word `socks`
+-------------------------------------------------------------------------------------
+SELECT * FROM products WHERE product_name LIKE '%socks%';
+--------------------------------------------------------------------------------------
+
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+--------------------------------------------------------------------------------------
+SELECT product_availability.prod_id, products.product_name, product_availability.unit_price, product_availability.supp_id
+FROM Products 
+JOIN product_availability
+ON products.id=product_availability.prod_id
+WHERE unit_price > 100;
+--------------------------------------------------------------------------------------
+
+
 5. Retrieve the 5 most expensive products
+--------------------------------------------------------------------------------------
+SELECT products.product_name AS "Top 5 Expensive Items", product_availability.unit_price AS "Price"
+FROM products
+JOIN product_availability  
+ON products.id = product_availability.prod_id 
+ORDER BY unit_price DESC 
+LIMIT 5;
+--------------------------------------------------------------------------------------
+
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+--------------------------------------------------------------------------------------
+SELECT products.product_name AS "Product", product_availability.unit_price AS "Price", suppliers.supplier_name AS "Supplier"
+FROM products
+JOIN product_availability  
+ON products.id = product_availability.prod_id 
+JOIN suppliers
+ON product_availability.prod_id=suppliers.id;
+--------------------------------------------------------------------------------------
+
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+--------------------------------------------------------------------------------------
+SELECT products.product_name AS "Product", suppliers.supplier_name AS "Supplier"
+FROM suppliers
+JOIN products  
+ON products.id = suppliers.id 
+WHERE suppliers.country LIKE '%United Kingdom%';
+--------------------------------------------------------------------------------------
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+--------------------------------------------------------------------------------------
+SELECT orders.id AS "ID", orders.order_reference AS "Order Ref", orders.order_date AS "Date", (order_items.quantity*product_availability.unit_price) AS "Total"
+FROM orders INNER JOIN order_items ON orders.id=order_items.order_id
+INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id
+WHERE orders.customer_id=1;
+--------------------------------------------------------------------------------------
+
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+--------------------------------------------------------------------------------------
+SELECT orders.id AS "ID", orders.order_date AS "Date", orders.order_reference AS "Order Ref", order_items.id AS "Item ID", order_items.product_id AS "Product ID"
+FROM orders 
+INNER JOIN order_items 
+ON orders.id=order_items.order_id 
+INNER JOIN customers 
+ON orders.customer_id=customers.id
+WHERE customers.name LIKE '%Hope Crosby%';
+--------------------------------------------------------------------------------------
+
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+--------------------------------------------------------------------------------------
+SELECT products.product_name AS "Product Name", product_availability.unit_price AS "Price", order_items.quantity AS "Quantity" 
+FROM orders INNER JOIN order_items 
+ON orders.id=order_items.order_id
+INNER JOIN product_availability 
+ON order_items.product_id=product_availability.prod_id
+INNER JOIN products 
+ON product_availability.prod_id=products.id 
+WHERE orders.order_reference LIKE '%ORD006%';
+------------------------------------------------------------------------------------
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+------------------------------------------------------------------------------------
+SELECT customers.name AS "Name", orders.order_reference AS "Order Ref", orders.order_date AS "Date", products.product_name AS "Product", suppliers.supplier_name AS "Supplier", order_items.quantity AS "Quantity" 
+FROM order_items
+INNER JOIN products ON order_items.product_id=products.id
+INNER JOIN suppliers ON order_items.supplier_id=suppliers.id
+INNER JOIN orders ON order_items.order_id=orders.id
+INNER JOIN customers ON orders.customer_id=customers.id;
+-------------------------------------------------------------------------------------
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+-------------------------------------------------------------------------------------
+SELECT DISTINCT customers.name AS "Name" 
+FROM orders
+INNER JOIN customers ON orders.customer_id=customers.id 
+INNER JOIN order_items ON orders.id=order_items.order_id     
+INNER JOIN suppliers ON order_items.supplier_id=suppliers.id
+WHERE suppliers.country LIKE '%China%'; 
+-------------------------------------------------------------------------------------
+
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+--------------------------------------------------------------------------------------
+SELECT customers.name AS "Name", orders.order_reference AS "Order Ref", orders.order_date AS "Date", (order_items.quantity*product_availability.unit_price) AS "Total"
+FROM customers 
+INNER JOIN orders ON customers.id=orders.customer_id                         
+INNER JOIN order_items ON orders.id=order_items.order_id
+INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id
+ORDER BY "Total" DESC;
+--------------------------------------------------------------------------------------
 

@@ -1,0 +1,27 @@
+{
+  "name": "cyf-ecommerce-api",
+  "version": "1.0.0",
+  "description": "SQL & Node.js project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sinead-CYF/SQL-Coursework-Week2.git"
+  },
+  "keywords": [
+    "SQL",
+    "NODE.js"
+  ],
+  "author": "Sinead Osborne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sinead-CYF/SQL-Coursework-Week2/issues"
+  },
+  "homepage": "https://github.com/Sinead-CYF/SQL-Coursework-Week2#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "pg": "^8.7.3"
+  }
+}
