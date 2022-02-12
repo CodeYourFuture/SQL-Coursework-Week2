@@ -24,7 +24,7 @@ app.delete("/orders/:orderId", (req, res) => {
   if (!parseInt(orderId) || parseInt(orderId) < 0 || isNaN(orderId)) {
     return res
       .status(400)
-      .send({ success: false, message: "please provide a valid customerId" });
+      .send({ success: false, message: "please provide a valid orderId" });
   }
 
   pool
