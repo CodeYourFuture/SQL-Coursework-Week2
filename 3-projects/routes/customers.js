@@ -4,6 +4,43 @@ const pool = require("../Pool");
 
 const router = express.Router();
 
+// Add a new PUT endpoint /customers/:customerId to update an existing customer (name, address, city and country).
+
+router.put("/:customerId", (req, res) => {
+  const { customerId } = req.params;
+
+  const { name, address, city, country } = req.body;
+
+  if (customerId < 0) {
+    return res.status(400).send({
+      success: false,
+      message: "customer Id must be > 0",
+    });
+  }
+
+  pool
+    .query("SELECT * FROM customers WHERE customers.id = $1", [customerId])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return res.status(400).send({
+          success: false,
+          message: "Customer Id not within the database...",
+        });
+      } else {
+        pool
+          .query(
+            "UPDATE customers SET name = COALESCE ($1,name), address = COALESCE ($2,address), city = COALESCE ($3, city), country = COALESCE ($4, country) WHERE id = $5",
+            [name, address, city, country, customerId]
+          )
+          .then(() => res.send("Customer details updated"))
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json(error);
+          });
+      }
+    });
+});
+
 // POST /customers/:customerId/orders
 router.post("/:customerId/orders", (req, res) => {
   const { customerId } = req.params;

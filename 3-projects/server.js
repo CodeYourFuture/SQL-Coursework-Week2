@@ -18,6 +18,53 @@ const productsRoutes = require("./routes/products");
 // Importing customers routes
 const customersRoutes = require("./routes/customers");
 
+app.delete("/orders/:orderId", (req, res) => {
+  const { orderId } = req.params;
+
+  if (!parseInt(orderId) || parseInt(orderId) < 0 || isNaN(orderId)) {
+    return res
+      .status(400)
+      .send({ success: false, message: "please provide a valid customerId" });
+  }
+
+  pool
+    .query("SELECT id FROM orders WHERE id = $1", [orderId])
+
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return res.status(400).send({
+          success: false,
+          message:
+            "The order you are trying to delete doesn't exist in the database,make sure you have an existing orderId",
+        });
+      } else {
+        pool
+          .query("SELECT order_id FROM order_items WHERE order_id = $1", [
+            orderId,
+          ])
+          .then((result) => {
+            if (result.rows.length === 0) {
+              pool
+                .query("DELETE FROM orders WHERE id = $1", [orderId])
+                .then(() => res.send("order successfully deleted"));
+            } else {
+              pool
+                .query("DELETE FROM order_items WHERE order_id = $1", [orderId])
+                .then(() =>
+                  pool
+                    .query("DELETE FROM orders WHERE id = $1", [orderId])
+                    .then(() => res.send("order successfully deleted..."))
+                );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json(error);
+          });
+      }
+    });
+});
+
 app.post("/availability", (req, res) => {
   const { productId, supplierId, price } = req.body;
 
