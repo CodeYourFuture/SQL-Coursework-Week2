@@ -4,6 +4,39 @@ const pool = require("../Pool");
 
 const router = express.Router();
 
+router.get("/:customerId/orders", (req, res) => {
+  const { customerId } = req.params;
+
+  if (!parseInt(customerId) || parseInt(customerId) < 0 || isNaN(customerId)) {
+    return res
+      .status(400)
+      .send({ success: false, message: "please provide a valid customerId" });
+  }
+
+  pool
+    .query("SELECT customer_id FROM orders WHERE customer_id = $1", [
+      customerId,
+    ])
+    .then((result) => {
+      if (!result.rows.length) {
+        return res.status(400).send({
+          success: false,
+          message: "selected customer id doesn't have any orders...",
+        });
+      } else {
+        pool
+          .query(
+            "SELECT order_reference, order_date, products.product_name, product_availability.unit_price, suppliers.supplier_name, order_items.quantity FROM orders INNER JOIN order_items ON orders.id = order_items.order_id INNER JOIN products ON order_items.product_id = products.id INNER JOIN product_availability ON products.id = product_availability.prod_id INNER JOIN suppliers ON product_availability.supp_id = suppliers.id"
+          )
+          .then((result) => res.send({ customerId, results: result.rows }));
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
+
 router.delete("/:customerId", (req, res) => {
   const { customerId } = req.params;
 
@@ -39,6 +72,10 @@ router.delete("/:customerId", (req, res) => {
             }
           });
       }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
     });
 });
 
