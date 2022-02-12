@@ -4,7 +4,43 @@ const pool = require("../Pool");
 
 const router = express.Router();
 
-// Add a new PUT endpoint /customers/:customerId to update an existing customer (name, address, city and country).
+router.delete("/:customerId", (req, res) => {
+  const { customerId } = req.params;
+
+  if (!parseInt(customerId) || parseInt(customerId) < 0 || isNaN(customerId)) {
+    return res
+      .status(400)
+      .send({ success: false, message: "please provide a valid customerId" });
+  }
+
+  pool
+    .query("SELECT * FROM customers WHERE id = $1", [customerId])
+    .then((result) => {
+      if (!result.rows.length) {
+        return res.status(400).send({
+          success: false,
+          message:
+            "provided customerId not found in database, make sure are trying to delete an existing customer",
+        });
+      } else {
+        pool
+          .query("SELECT customer_id FROM orders WHERE customer_id = $1", [
+            customerId,
+          ])
+          .then((result) => {
+            if (result.rows.length > 0) {
+              return res
+                .status(400)
+                .send("Unable to delete customer linked to existing orders");
+            } else {
+              pool
+                .query("DELETE FROM customers WHERE id = $1", [customerId])
+                .then(() => res.send("Customer successfully deleted..."));
+            }
+          });
+      }
+    });
+});
 
 router.put("/:customerId", (req, res) => {
   const { customerId } = req.params;
