@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+
+app.use(express.json());
+
 app.listen(3000, () => {
     console.log("Server is listening on port 3000. Ready to accept request!");
 });
@@ -15,15 +18,18 @@ const pool = new Pool({
     port: 5432
 });
 
-app.get("/customers", (req, res) => {
+app.get("/customers/:customerId", (req, res) => {
+    const customerId = req.params.customerId;
     pool
-    .query('SELECT * FROM customers')
-    .then((result) => res.json(result.rows))
-    .catch((error) => {
-        console.error(error);
-        res.status(500).json(error);
-    });
+        .query("SELECT * FROM customers WHERE id = $1", [customerId])
+        .then((result) => res.json(result.rows))
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json(error);
+        });
 });
+
+
 
 app.get("/suppliers", (req, res) => {
     pool
@@ -36,8 +42,104 @@ app.get("/suppliers", (req, res) => {
 });
 
 app.get("/products", (req, res) => {
+    const productName = req.query.name;
+    let query = `SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM product_availability INNER JOIN products ON products.id = product_availability.prod_id INNER JOIN suppliers ON suppliers.id = product_availability.supp_id`;
+    let params = [];
+    if (productName) {
+        query = `SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM product_availability INNER JOIN products ON products.id = product_availability.prod_id INNER JOIN suppliers ON suppliers.id = product_availability.supp_id WHERE LOWER (product_name) LIKE LOWER ($1)`;
+        params.push(`%${productName}%`);
+    }
     pool
-        .query('SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM product_availability INNER JOIN products ON products.id = product_availability.prod_id INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;')
+        .query(query, params)
+        .then((result) => res.json(result.rows))
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json(error);
+        });
+});
+
+app.post("/products", (req, res) => {
+    const newProduct = req.body.product_name;
+    const query = "INSERT INTO products (product_name) VALUES ($1)";
+
+    if (newProduct) {
+    pool
+    .query(query, [newProduct])
+    .then((result) => res.json({
+        msg: "Success",
+        product: result.rows[0]
+    }))
+    .catch((error) => {
+        console.error(error);
+        res.status(500).json(error);
+    });
+    } else {
+        res.status(400).json({msg: "Product not registered."})
+    }
+});
+
+app.post("/availability", (req, res) => {
+    const productId = +req.body.prod_id;
+    const supplierId = +req.body.supp_id;
+    const cost = +req.body.unit_price;
+
+    if (!Number.isInteger(cost) || cost <= 0) {
+        res.status(400).json({msg: "unit_cost must be positive number!"})
+    } 
+    pool
+    .query("SELECT * FROM products WHERE id = $1", [productId])
+    .then(async (result) => {
+        if (result.rows.length > 0) {
+            const result1 = await pool
+                .query("SELECT * FROM suppliers WHERE id = $1", [supplierId]);
+                if (result1.rows.length > 0) {
+                    const query = "INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES ($1, $2, $3)";
+                    return pool
+                        .query(query, [productId, supplierId, cost])
+                        .then(() => {
+                            res.json({
+                                msg: "Unit cost successfully added!"
+                            });
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            res.status(500).json(error);
+                        });
+
+                } else {
+                    res.status(400).json({ msg: "Supplier_id not found!"});
+                }
+        } else {
+            res.status(400).json({msg: "Product_id not found!"})
+        }
+    })
+})
+
+app.post("/customers/:customerId/orders", (req, res) => {
+    const customerId = +req.params.customerId;
+    const orderDate = req.body.order_date;
+    const orderRef = req.body.order_reference;
+    pool
+    .query("SELECT * FROM customers WHERE id= $1", [customerId])
+    .then(async (result) => {
+        if (result.rows.length > 0) {
+            try {
+                await pool
+                    .query("INSERT INTO orders (order_date, order_reference, customer_id) VALUES ($1, $2, $3)", [orderDate, orderRef, customerId]);
+                res.status(200).json({ msg: "Order successful!" });
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ msg: error });
+            }
+        } else {
+            res.status(400).json({msg: "Customer ID does not exist!"})
+        }
+    })
+})
+
+app.get("/customers", (req, res) => {
+    pool
+        .query('SELECT * FROM customers')
         .then((result) => res.json(result.rows))
         .catch((error) => {
             console.error(error);
