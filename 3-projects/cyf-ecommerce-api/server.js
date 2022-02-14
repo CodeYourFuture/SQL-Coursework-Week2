@@ -146,3 +146,82 @@ app.get("/customers", (req, res) => {
             res.status(500).json(error);
         });
 });
+
+app.put("/customers/:customerId", (req, res) => {
+    const newName = req.body.name;
+    const newAdds = req.body.address;
+    const newCity = req.body.city;
+    const newCountry = req.body.country;
+    const customerId = +req.params.customerId;
+
+    if (newName && newCity && newCity && newCountry) {
+        pool
+        .query("SELECT id FROM customers WHERE id=$1", [customerId])
+        .then(async (result) => {
+            if (result.rows.length > 0) {
+                try {
+                    await pool
+                        .query("UPDATE customers SET name=$1, address=$2, city=$3, country=$4 WHERE id=$5", [newName, newAdds, newCity, newCountry, customerId]);
+                    return res.send(`Customer ${customerId}'s data successfully updated!`);
+                } catch (error) {
+                    console.error(error);
+                    res.status(500).json(error);
+                }
+            } else {
+                res.status(400).send("Customer ID does not exist!");
+            }
+        })
+    } else {
+        res.status(400).send("One or more fields are incomplete!")
+    }   
+})
+
+//for deleting orders, items in order_items table must be deleted first as order's id is being used there. 
+app.delete("/orders/:orderId", (req, res) => {
+    const orderId = req.params.orderId;
+
+    pool
+    .query("SELECT id FROM orders WHERE id=$1", [orderId])
+    .then((result) => {
+        if (result.rows.length > 0) {
+            pool
+                .query("DELETE FROM order_items WHERE order_id=$1", [orderId])
+                .then(() => pool.query("DELETE FROM orders WHERE id=$1", [orderId]))
+                .then(() => res.send(`Order ${orderId} successfully deleted!`))
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).json(error);
+                })
+        } else {
+            res.status(400).json("Order id not found!")
+        }
+    })
+})
+
+app.delete("/customers/:customerId", (req, res) => {
+    const customerId = req.params.customerId;
+    pool
+    .query("SELECT id FROM customers WHERE id=$1", [customerId])
+    .then((result) => {
+        if (result.rows.length > 0) {
+            pool
+                .query("SELECT customer_id FROM orders WHERE customer_id=$1", [customerId])
+                .then((result1) => {
+                    if (result1.rows.length === 0) {
+                        pool
+                            .query("DELETE FROM customers WHERE id=$1", [customerId])
+                            .then(() => res.send(`Customer ${customerId} successfully deleted!`))
+                            .catch((error) => {
+                                console.error(error);
+                                res.status(500).json(error);
+                            });
+                    } else {
+                        res.status(400).send("Customer's order is alive, cannot delete!")
+                    }
+                })
+        } else {
+            res.status(400).send("Customer ID does not exist!")
+        }
+    })
+    
+})
