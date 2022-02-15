@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const app = express();
 
@@ -17,6 +18,26 @@ const pool = new Pool({
     password: null,
     port: 5432
 });
+
+app.get("/customers/:customerId/orders", (req, res) => {
+    const customerId = req.params.customerId;
+
+    pool
+    .query("SELECT id FROM customers WHERE id=$1", [customerId])
+    .then((result) => {
+        if (result.rows.length > 0) {
+            pool
+                .query("SELECT orders.order_reference, orders.order_date, products.product_name, product_availability.unit_price, suppliers.supplier_name, order_items.quantity FROM orders INNER JOIN order_items ON orders.id = order_items.order_id INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN suppliers ON suppliers.id=order_items.supplier_id INNER JOIN products ON products.id=order_items.product_id INNER JOIN product_availability on product_availability.prod_id=products.id WHERE customers.id=$1", [customerId])
+                .then((response) => res.status(200).json(response.rows))
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).json(error);
+                });
+        } else {
+            res.status(400).send("Customer ID does not exist!")
+        }
+    })
+})
 
 app.get("/customers/:customerId", (req, res) => {
     const customerId = req.params.customerId;
@@ -225,3 +246,4 @@ app.delete("/customers/:customerId", (req, res) => {
     })
     
 })
+
