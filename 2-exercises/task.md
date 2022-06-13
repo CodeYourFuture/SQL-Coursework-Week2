@@ -7,8 +7,45 @@ In this homework, you are going to work with an ecommerce database. In this data
 Below you will find a set of tasks for you to complete to set up a database for an e-commerce app.
 
 To submit this homework write the correct commands for each question here:
+
 ```sql
 
+SELECT name, address FROM customers WHERE country = 'United States';
+
+SELECT * FROM customers ORDER BY name ASC;
+
+SELECT * FROM products WHERE product_name LIKE '%socks%';
+
+SELECT prod_id, product_name, unit_price, supp_id FROM product_availability INNER JOIN products ON products.id = product_availability.prod_id WHERE product_availability.unit_price > 100;
+
+SELECT * FROM product_availability INNER JOIN products ON products.id = product_availability.prod_id ORDER BY product_availability.unit_price DESC LIMIT 5;
+
+SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM product_availability
+INNER JOIN products ON products.id = product_availability.prod_id
+INNER JOIN suppliers ON suppliers.id = product_availability.supp_id;
+
+SELECT products.product_name, suppliers.supplier_name FROM product_availability
+INNER JOIN products ON products.id = product_availability.prod_id
+INNER JOIN suppliers ON suppliers.id = product_availability.supp_id
+WHERE suppliers.country = 'United Kingdom';
+
+SELECT order_id, order_reference, order_date, order_items.quantity * product_availability.unit_price AS total FROM orders
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id
+WHERE orders.customer_id = 1;
+
+SELECT * FROM orders
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN customers ON customers.id = orders.customer_id
+WHERE customers.name = 'Hope Crosby';
+
+SELECT products.product_name, product_availability.unit_price, quantity FROM products
+INNER JOIN order_items ON order_items.product_id = products.id
+INNER JOIN orders ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = products.id
+WHERE orders.order_reference = 'ORD006';
+
+11
 
 ```
 
@@ -41,10 +78,9 @@ Once you understand the database that you are going to work with, solve the foll
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
-8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
-13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
-
+13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
