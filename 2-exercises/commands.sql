@@ -93,3 +93,6 @@ order by order_total_amount DESC;
 
 
 --return all the product names along with their prices and supplier names.
+-- select products.product_name, product_availability.unit_price, suppliers.supplier_name from products
+-- inner join product_availability on products.id = product_availability.prod_id
+-- inner join suppliers on suppliers.id = product_availability.supp_id;
