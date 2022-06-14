@@ -32,6 +32,7 @@ app.get("/suppliers", function (req, res) {
     });
 });
 
+// Stretch goal endpoint
 app.get("/products", function (req, res) {
   pool
     .query(
