@@ -1,19 +1,27 @@
 const express = require("express");
 const app = express();
+const { Pool } = require("pg");
 
 const PORT = 3000;
 
-// app.get("/users/:id", (req, res) => {
-//   const user = data.find((u) => u.id === Number(req.params.id));
+const pool = new Pool({
+  user: "harsheek",
+  host: "localhost",
+  database: "cyf_ecommerce",
+  password: "",
+  port: 5433,
+});
 
-//   if (user) return res.send(user);
-//   res.status(404).send("Whoops, not here sorry");
-// });
-
-// app.get("/users", (req, res) => {
-//   res.send(data);
-// });
+app.get("/customers", function (req, res) {
+  pool
+    .query("SELECT * FROM customers;")
+    .then((result) => res.json(result))
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
 
 app.listen(PORT, () => {
-  console.log(`Hello my service is running on ${PORT}`);
+  console.log(`Hello my service is running on port ${PORT}`);
 });
