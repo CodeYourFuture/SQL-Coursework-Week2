@@ -90,3 +90,6 @@ inner join product_availability on order_items.product_id = product_availability
 inner join products on products.id = product_availability.prod_id
 inner join suppliers on suppliers.id = product_availability.prod_id
 order by order_total_amount DESC;
+
+
+--return all the product names along with their prices and supplier names.
