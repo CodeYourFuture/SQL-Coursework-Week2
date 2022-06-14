@@ -1,0 +1,17 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+*/node_modules
+*node_modules
+3-projects/node_modules
+/.pnp
+.pnp.js
+
+
+
+# file
+*note
+*.json
+*.sql
+
