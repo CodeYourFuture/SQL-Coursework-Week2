@@ -1,15 +1,7 @@
 const express = require("express");
+const app = express();
 
-// const express = require("express");
-// const app = express();
-
-// const PORT = 9001;
-
-// const data = [
-//   { id: 1, name: "Harsheek", age: 35 },
-//   { id: 2, name: "Helen", age: 30 },
-//   { id: 3, name: "Jack", age: 25 },
-// ];
+const PORT = 3000;
 
 // app.get("/users/:id", (req, res) => {
 //   const user = data.find((u) => u.id === Number(req.params.id));
@@ -22,6 +14,6 @@ const express = require("express");
 //   res.send(data);
 // });
 
-// app.listen(PORT, () => {
-//   console.log(`Hello my service is running on ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Hello my service is running on ${PORT}`);
+});
