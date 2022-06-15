@@ -8,7 +8,56 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+Q1:
+SELECT name, address 
+FROM customers 
+WHERE country 
+LIKE '%United States';
+Q2:
+SELECT * 
+FROM customers 
+ORDER BY
+name ASC;
+Q3:
+SELECT * 
+FROM products 
+WHERE product_name 
+LIKE '%socks%';
 
+Q4:
+SELECT products.product_name, product_availability.* 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+WHERE unit_price >= 100;
+
+Q5:
+SELECT products.product_name, product_availability.* 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+ORDER BY product_availability.unit_price 
+DESC LIMIT 5;
+
+Q6:
+SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+LEFT JOIN suppliers 
+ON suppliers.id=product_availability.supp_id;
+
+Q7:
+SELECT products.product_name, suppliers.supplier_name 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+LEFT JOIN suppliers 
+ON suppliers.id=product_availability.supp_id 
+WHERE suppliers.country 
+LIKE '%United Kingdom%';
+
+Q8:
 
 ```
 
