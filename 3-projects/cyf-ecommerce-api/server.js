@@ -4,21 +4,14 @@ const { Pool } = require("pg");
 const app = express();
 
 
-// const pool = new Pool({
-//   user: "saman",
-//   host: "localhost",
-//   database: "cyf_ecommerce",
-//   password: "1234",
-//   port: 5432,
-// });
-
 const pool = new Pool({
-  user: "postgres",
+  user: "saman",
   host: "localhost",
-  database: "postgres",
-  password: "",
+  database: "cyf_ecommerce",
+  password: "1234",
   port: 5432,
 });
+
 
 app.get("/customers", function (req, res) {
   pool
