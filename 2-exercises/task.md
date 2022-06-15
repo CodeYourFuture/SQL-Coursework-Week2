@@ -37,12 +37,29 @@ INNER JOIN customers ON customers.id = orders.customer_id
 INNER JOIN products ON products.id = product_id
 WHERE customers.name = 'Hope Crosby';
 
-SELECT products.product_name, product_availability.unit_price, quantity FROM products
+SELECT DISTINCT customers.name ,order_date ,products.product_name, supplier_name	, quantity FROM products
 INNER JOIN order_items ON order_items.product_id = products.id
 INNER JOIN orders ON orders.id = order_items.order_id
 INNER JOIN product_availability ON product_availability.prod_id = products.id
+INNER JOIN suppliers ON supplier_id = suppliers.id
+INNER JOIN customers ON customers.id =  orders.customer_id
 WHERE orders.order_reference = 'ORD006';
 
+SELECT distinct customers.name  FROM products
+INNER JOIN order_items ON order_items.product_id = products.id
+INNER JOIN orders ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = products.id
+INNER JOIN suppliers on supplier_id = suppliers.id
+INNER JOIN customers ON customers.id =  orders.customer_id
+WHERE suppliers.country LIKE 'China';
+
+SELECT distinct customers.name,order_reference,order_date ,(quantity * unit_price) AS TOTAl_AMOUNT  FROM products
+INNER JOIN order_items ON order_items.product_id = products.id
+INNER JOIN orders ON orders.id = order_items.order_id
+INNER JOIN product_availability ON product_availability.prod_id = products.id
+INNER JOIN suppliers on supplier_id = suppliers.id
+INNER JOIN customers ON customers.id =  orders.customer_id
+order by TOTAl_AMOUNT DESC;
 ```
 
 When you have finished all of the questions - open a pull request with your answers to the `Databases-Homework` repository.
