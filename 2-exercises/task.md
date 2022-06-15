@@ -34,7 +34,7 @@ WHERE orders.customer_id = 1;
 SELECT customers.name , product_name FROM orders
 INNER JOIN order_items ON order_items.order_id = orders.id
 INNER JOIN customers ON customers.id = orders.customer_id
-INNER JOIN customers ON customers.id = orders.customer_id
+INNER JOIN products ON products.id = product_id
 WHERE customers.name = 'Hope Crosby';
 
 SELECT products.product_name, product_availability.unit_price, quantity FROM products
