@@ -26,13 +26,14 @@ SELECT product_name,  supplier_name FROM products
 INNER JOIN product_availability ON products.id = prod_id
 INNER JOIN suppliers ON suppliers.id = supp_id WHERE country LIKE 'United Kingdom';
 
-SELECT order_id, order_reference, order_date, order_items.quantity * product_availability.unit_price AS total FROM orders
+SELECT order_id, order_reference, order_date, quantity * unit_price AS total FROM orders
 INNER JOIN order_items ON order_items.order_id = orders.id
 INNER JOIN product_availability ON product_availability.prod_id = order_items.product_id
 WHERE orders.customer_id = 1;
 
-SELECT * FROM orders
+SELECT customers.name , product_name FROM orders
 INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN customers ON customers.id = orders.customer_id
 INNER JOIN customers ON customers.id = orders.customer_id
 WHERE customers.name = 'Hope Crosby';
 
