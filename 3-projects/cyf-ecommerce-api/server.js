@@ -1,14 +1,13 @@
 const express = require("express");
+require('dotenv').config()
 const app = express();
 const { Pool } = require("pg");
 
-const port = 3000;
-
 const pool = new Pool({
-  user: "marina",
+  user: process.env.SQL_USERNAME,
   host: "localhost",
   database: "cyf_ecommerce",
-  password: "",
+  password: process.env.SQL_PASSWORD,
   port: 5432,
 });
 
@@ -32,6 +31,6 @@ app.get("/suppliers", (req, res) => {
       });
   });
 
-app.listen(port, () => {
-  console.log(`Listen in http://localhost:${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Listen in http://localhost:${process.env.PORT}`);
 });
