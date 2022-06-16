@@ -31,6 +31,18 @@ app.get("/suppliers", (req, res) => {
       });
   });
 
+  app.get("/products", function (req, res) {
+    pool
+      .query(
+        "select products.product_name, product_availability.unit_price, suppliers.supplier_name from products inner join product_availability on products.id = product_availability.prod_id inner join suppliers on suppliers.id = product_availability.supp_id;"
+      )
+      .then((result) => res.json(result))
+      .catch((error) => {
+        console.log(error);
+        res.status(500), json(error);
+      });
+  });
+
 app.listen(process.env.PORT, () => {
   console.log(`Listen in http://localhost:${process.env.PORT}`);
 });
