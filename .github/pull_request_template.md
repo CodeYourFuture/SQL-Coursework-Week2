@@ -6,7 +6,7 @@ CITY CLASS_NO - FIRST_NAME LAST_NAME - MODULE - WEEK_NO
 
 For example,
 
-London Class 7 - Chris Owen - HTML/CSS - Week 1
+London Class 8 - Chris Owen - HTML/CSS - Week 1
 
 Please complete the details below this message
 
@@ -16,7 +16,7 @@ Please complete the details below this message
 
 # Your Details
 
-- Your Name:
+- Your Name: Alireza    bagheri
 - Your City:
 - Your Slack Name:
 
