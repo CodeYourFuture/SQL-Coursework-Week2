@@ -8,8 +8,99 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+Q1:
+SELECT name, address 
+FROM customers 
+WHERE country 
+LIKE '%United States';
+Q2:
+SELECT * 
+FROM customers 
+ORDER BY
+name ASC;
+Q3:
+SELECT * 
+FROM products 
+WHERE product_name 
+LIKE '%socks%';
 
+Q4:
+SELECT products.product_name, product_availability.* 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+WHERE unit_price >= 100;
 
+Q5:
+SELECT products.product_name, product_availability.* 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+ORDER BY product_availability.unit_price 
+DESC LIMIT 5;
+
+Q6:
+SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+LEFT JOIN suppliers 
+ON suppliers.id=product_availability.supp_id;
+
+Q7:
+SELECT products.product_name, suppliers.supplier_name 
+FROM product_availability 
+INNER JOIN products 
+ON products.id=product_availability.prod_id 
+LEFT JOIN suppliers 
+ON suppliers.id=product_availability.supp_id 
+WHERE suppliers.country 
+LIKE '%United Kingdom%';
+
+Q8:
+SELECT orders.id, orders.order_reference, orders.order_date, product_availability.unit_price * order_items.quantity 
+AS total_cost 
+FROM orders 
+INNER JOIN order_items 
+ON orders.id = order_items.order_id 
+INNER JOIN product_availability 
+ON order_items.product_id = product_availability.prod_id 
+WHERE customer_id = 1;
+
+Q9:
+SELECT * FROM orders
+INNER JOIN order_items 
+ON order_items.order_id = orders.id
+WHERE customer_id = (SELECT id FROM customers WHERE name = 'Hope Crosby');
+
+Q10:
+SELECT products.product_name, product_availability.unit_price, order_items.quantity FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN products ON order_items.product_id = products.id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id  AND products.id = product_availability.prod_id
+WHERE orders.order_reference = 'ORD006';
+
+Q11:
+SELECT products.product_name, product_availability.unit_price, order_items.quantity FROM orders
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN products ON order_items.product_id = products.id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id  
+AND products.id = product_availability.prod_id
+WHERE orders.order_reference = 'ORD006';
+
+Q12:
+SELECT name FROM orders
+INNER JOIN customers ON orders.customer_id = customers.id
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN suppliers ON order_items.supplier_id = suppliers.id
+WHERE suppliers.country = 'China';
+
+Q13:
+SELECT customers.name, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price AS total_amount FROM orders
+INNER JOIN customers ON orders.customer_id = customers.id
+INNER JOIN order_items ON orders.id = order_items.order_id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+ORDER BY total_amount DESC;
 ```
 
 When you have finished all of the questions - open a pull request with your answers to the `Databases-Homework` repository.
