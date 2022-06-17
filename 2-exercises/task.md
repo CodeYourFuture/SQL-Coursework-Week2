@@ -45,7 +45,23 @@ INNER JOIN orders ON orders.id = order_items.order_id
 INNER JOIN product_availability ON product_availability.prod_id = products.id
 WHERE orders.order_reference = 'ORD006';
 
-11
+SELECT name, order_reference, order_date, product_name, supplier_name, quantity FROM orders
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN products ON products.id = product_id
+INNER JOIN suppliers ON suppliers.id = supplier_id
+INNER JOIN customers ON customers.id = customer_id;
+
+SELECT DISTINCT name FROM orders
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN products ON products.id = product_id
+INNER JOIN suppliers ON suppliers.id = supplier_id
+INNER JOIN customers ON customers.id = customer_id
+WHERE suppliers.country = 'China';
+
+SELECT name, order_reference, order_date, quantity * unit_price AS total_amount  FROM orders
+INNER JOIN customers ON customers.id = customer_id
+INNER JOIN order_items ON order_items.id = orders.id
+INNER JOIN product_availability ON product_availability.prod_id = product_id;
 
 ```
 
