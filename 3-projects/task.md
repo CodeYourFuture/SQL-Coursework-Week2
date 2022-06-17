@@ -11,3 +11,7 @@ Add all your `javascript` files in this folder and create a pull request to subm
 - Add a new GET endpoint `/customers` to return all the customers from the database
 - Add a new GET endpoint `/suppliers` to return all the suppliers from the database
 - (STRETCH GOAL) Add a new GET endpoint `/products` to return all the product names along with their prices and supplier names.
+
+
+SELECT product_name from products
+INNER JOIN suppliers name ON product_availabity.supp.id;
