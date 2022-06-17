@@ -35,8 +35,35 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+cyf_ecommerce=> SELECT name, address
+                FROM customers 
+                WHERE country = 'United States';
+     name     |          address           
+--------------+----------------------------
+ Amber Tran   | 6967 Ac Road
+ Edan Higgins | Ap #840-3255 Tincidunt St.
+(2 rows)
 2. Retrieve all the customers in ascending name sequence
+cyf_ecommerce=> SELECT * FROM Customers
+                ORDER BY name ASC;
+ id |        name        |           address           |       city       |    country     
+----+--------------------+-----------------------------+------------------+----------------
+  4 | Amber Tran         | 6967 Ac Road                | Villafranca Asti | United States
+  3 | Britanney Kirkland | P.O. Box 577, 5601 Sem, St. | Little Rock      | United Kingdom
+  5 | Edan Higgins       | Ap #840-3255 Tincidunt St.  | Arles            | United States
+  1 | Guy Crawford       | 770-2839 Ligula Road        | Paris            | France
+  2 | Hope Crosby        | P.O. Box 276, 4976 Sit Rd.  | Steyr            | United Kingdom
+  6 | Quintessa Austin   | 597-2737 Nunc Rd.           | Saint-Marc       | United Kingdom
+(6 rows)
 3. Retrieve all the products whose name contains the word `socks`
+cyf_ecommerce=> SELECT * FROM products 
+                  WHERE products.product_name 
+                  LIKE '%socks%';
+ id |   product_name   
+----+------------------
+  4 | Super warm socks
+(1 row)
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
