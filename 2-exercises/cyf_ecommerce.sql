@@ -10,7 +10,7 @@ CREATE TABLE customers (
   name     VARCHAR(50) NOT NULL,
   address  VARCHAR(120),
   city     VARCHAR(30),
-  country  VARCHAR(20)
+
 );
 
 CREATE TABLE suppliers (
