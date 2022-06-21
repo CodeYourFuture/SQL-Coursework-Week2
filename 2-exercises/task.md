@@ -19,7 +19,6 @@ WHERE country = 'United States';
  Edan Higgins | Ap #840-3255 Tincidunt St.
 (2 rows)
 
-
 2. Retrieve all the customers in ascending name sequence
 
 SELECT * FROM customers
@@ -58,6 +57,8 @@ SELECT * FROM products WHERE product_name LIKE '%socks%';
        1 | Mobile Phone X |        299 |       1
 (2 rows)
 
+5. Retrieve the 5 most expensive products
+
  SELECT *
  FROM products AS p
  JOIN product_availability AS pa 
@@ -65,8 +66,6 @@ SELECT * FROM products WHERE product_name LIKE '%socks%';
  ORDER BY unit_price DESC
  LIMIT 5;
  
-5. Retrieve the 5 most expensive products
-
  id |  product_name   | prod_id | supp_id | unit_price 
 ----+-----------------+---------+---------+------------
   1 | Mobile Phone X  |       1 |       1 |        299
@@ -82,33 +81,43 @@ SELECT DISTINCT p.product_name, pa.unit_price, s.supplier_name
  JOIN product_availability AS pa 
  ON p.id = pa.prod_id 
  JOIN suppliers AS s
- ON p.id = s.id; 
+ ON p.id = s.id
+ ORDER BY p.product_name; 
  
-    product_name   | unit_price | supplier_name 
+   product_name   | unit_price | supplier_name 
 ------------------+------------+---------------
- Mobile Phone X   |        249 | Amazon
+ Javascript Book  |         39 | Taobao
  Javascript Book  |         40 | Taobao
- Mobile Phone X   |        299 | Amazon
- Super warm socks |         10 | Sainsburys
  Javascript Book  |         41 | Taobao
  Le Petit Prince  |         10 | Argos
+ Mobile Phone X   |        249 | Amazon
+ Mobile Phone X   |        299 | Amazon
  Super warm socks |          5 | Sainsburys
- Javascript Book  |         39 | Taobao
  Super warm socks |          8 | Sainsburys
+ Super warm socks |         10 | Sainsburys
 (9 rows)
  
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
 SELECT p.product_name, s.supplier_name
- FROM products AS p
- JOIN suppliers AS s
- ON p.id = s.id AND s.country = 'United Kingdom';
- 
-    product_name   | supplier_name 
-------------------+---------------
- Le Petit Prince  | Argos
- Super warm socks | Sainsburys
-(2 rows)
+ FROM products AS p,
+ product_availability AS pa, 
+ suppliers AS s
+ WHERE p.id = pa.prod_id AND pa.supp_id = s.id AND s.country = 'United Kingdom'
+ ORDER BY p.product_name, s.supplier_name;
+
+      product_name       | supplier_name 
+-------------------------+---------------
+ Ball                    | Sainsburys
+ Coffee Cup              | Argos
+ Coffee Cup              | Sainsburys
+ Javascript Book         | Argos
+ Le Petit Prince         | Sainsburys
+ Mobile Phone X          | Sainsburys
+ Super warm socks        | Argos
+ Super warm socks        | Sainsburys
+ Tee Shirt Olympic Games | Argos
+(9 rows)
  
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 
@@ -132,12 +141,21 @@ WHERE customer_id = 1 AND supplier_id = supp_id;
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
-SELECT orders.order_date, orders.order_reference, orders.customer_id, order_id, product_id, supplier_id, quantity FROM order_items
+SELECT orders.order_date, orders.order_reference, orders.customer_id, order_id, product_id, supplier_id, quantity 
+FROM order_items
 JOIN customers
 ON customers.name = 'Hope Crosby'
 JOIN orders
 ON customer_id = customers.id
 WHERE customers.name = 'Hope Crosby';
+
+<< or >>
+
+SELECT orders.order_date, orders.order_reference, orders.customer_id, order_id, product_id, supplier_id, quantity 
+FROM order_items,
+customers,
+orders
+WHERE customers.name = 'Hope Crosby' AND customer_id = customers.id;
 
  order_date | order_reference | customer_id | order_id | product_id | supplier_id | quantity 
 ------------+-----------------+-------------+----------+------------+-------------+----------
@@ -164,143 +182,94 @@ WHERE customers.name = 'Hope Crosby';
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
-SELECT product_name, unit_price, quantity
+SELECT product_name, unit_price, quantity                       
 FROM orders
 JOIN order_items
-ON orders.id = order_id
-JOIN products
-ON product_id = products.id
+ON order_reference = 'ORD006' AND orders.id = order_id
 JOIN product_availability
-ON product_id = prod_id
-WHERE customer_id = 1 AND supplier_id = supp_id;
+ON product_id = prod_id AND supplier_id = supp_id
+JOIN products
+ON product_id = products.id;
 
-      product_name       | unit_price | quantity 
--------------------------+------------+----------
- Tee Shirt Olympic Games |         18 |        1
- Super warm socks        |          5 |        5
- Super warm socks        |          8 |        4
- Le Petit Prince         |         10 |        1
- Coffee Cup              |          4 |       10
- Ball                    |         20 |        2
-(6 rows)
+   product_name   | unit_price | quantity 
+------------------+------------+----------
+ Coffee Cup       |          4 |        3
+ Javascript Book  |         41 |        1
+ Le Petit Prince  |         10 |        1
+ Super warm socks |         10 |        3
+(4 rows)
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
-SELECT customers.name, order_reference, order_date, product_name, supplier_name, quantity 
+SELECT customers.name, order_reference, order_date, product_name, quantity 
 FROM customers
-FULL JOIN orders
-ON customer_id = customers.id
-JOIN order_items
-ON orders.id = order_id
-JOIN products
-ON product_id = products.id
-JOIN product_availability
-ON product_id = prod_id
-JOIN suppliers
-ON supplier_id = supp_id;
-
-        name        | order_reference | order_date |      product_name       | supplier_name | quantity 
---------------------+-----------------+------------+-------------------------+---------------+----------
- Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games | Amazon        |        1
- Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games | Taobao        |        1
- Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games | Argos         |        1
- Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games | Sainsburys    |        1
- Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        | Amazon        |        5
- Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        | Taobao        |        5
- Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        | Argos         |        5
- Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        | Sainsburys    |        5
- Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        | Amazon        |        4
- Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        | Taobao        |        4
- Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        | Argos         |        4
- Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        | Sainsburys    |        4
- Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         | Amazon        |        1
- Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         | Taobao        |        1
- Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         | Argos         |        1
- Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         | Sainsburys    |        1
- Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              | Amazon        |       10
- Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              | Taobao        |       10
- Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              | Argos         |       10
- Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              | Sainsburys    |       10
- Guy Crawford       | ORD003          | 2019-07-11 | Ball                    | Amazon        |        2
- Guy Crawford       | ORD003          | 2019-07-11 | Ball                    | Taobao        |        2
- Guy Crawford       | ORD003          | 2019-07-11 | Ball                    | Argos         |        2
- Guy Crawford       | ORD003          | 2019-07-11 | Ball                    | Sainsburys    |        2
- Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          | Amazon        |        1
- Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          | Taobao        |        1
- Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          | Argos         |        1
- Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          | Sainsburys    |        1
- Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         | Amazon        |        2
- Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         | Taobao        |        2
- Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         | Argos         |        2
- Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         | Sainsburys    |        2
- Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         | Amazon        |        1
- Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         | Taobao        |        1
- Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         | Argos         |        1
- Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         | Sainsburys    |        1
- Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              | Amazon        |        3
- Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              | Taobao        |        3
- Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              | Argos         |        3
- Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              | Sainsburys    |        3
- Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         | Amazon        |        1
- Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         | Taobao        |        1
- Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         | Argos         |        1
- Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         | Sainsburys    |        1
- Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         | Amazon        |        1
- Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         | Taobao        |        1
- Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         | Argos         |        1
- Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         | Sainsburys    |        1
- Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        | Amazon        |        3
- Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        | Taobao        |        3
- Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        | Argos         |        3
- Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        | Sainsburys    |        3
- Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        | Amazon        |       15
- Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        | Taobao        |       15
- Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        | Argos         |       15
- Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        | Sainsburys    |       15
- Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games | Amazon        |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games | Taobao        |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games | Argos         |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games | Sainsburys    |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          | Amazon        |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          | Taobao        |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          | Argos         |        1
- Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          | Sainsburys    |        1
- Edan Higgins       | ORD009          | 2019-07-24 | Ball                    | Amazon        |        2
- Edan Higgins       | ORD009          | 2019-07-24 | Ball                    | Taobao        |        2
- Edan Higgins       | ORD009          | 2019-07-24 | Ball                    | Argos         |        2
- Edan Higgins       | ORD009          | 2019-07-24 | Ball                    | Sainsburys    |        2
- Edan Higgins       | ORD010          | 2019-05-10 | Ball                    | Amazon        |        1
- Edan Higgins       | ORD010          | 2019-05-10 | Ball                    | Taobao        |        1
- Edan Higgins       | ORD010          | 2019-05-10 | Ball                    | Argos         |        1
- Edan Higgins       | ORD010          | 2019-05-10 | Ball                    | Sainsburys    |        1
- Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        | Amazon        |        5
- Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        | Taobao        |        5
- Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        | Argos         |        5
- Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        | Sainsburys    |        5
-(76 rows)
-
-12. Retrieve the names of all customers who bought a product from a supplier based in China.
-
-SELECT * FROM customers
 JOIN orders
 ON customer_id = customers.id
 JOIN order_items
 ON orders.id = order_id
-WHERE supplier_id = 2; 
+JOIN product_availability
+ON product_id = prod_id AND supplier_id = supp_id
+JOIN products
+ON product_id = products.id
+JOIN suppliers
+ON supp_id = suppliers.id
+ORDER BY customers.name, order_reference;
 
- id |     name     |          address           |       city       |    country    | id | order_date | order_reference | customer_id | id | order_id | product_id | supplier_id | quantity 
-----+--------------+----------------------------+------------------+---------------+----+------------+-----------------+-------------+----+----------+------------+-------------+----------
-  1 | Guy Crawford | 770-2839 Ligula Road       | Paris            | France        |  1 | 2019-06-01 | ORD001          |           1 |  2 |        1 |          4 |           2 |        5
-  1 | Guy Crawford | 770-2839 Ligula Road       | Paris            | France        |  1 | 2019-06-01 | ORD001          |           1 |  1 |        1 |          7 |           2 |        1
-  1 | Guy Crawford | 770-2839 Ligula Road       | Paris            | France        |  3 | 2019-07-11 | ORD003          |           1 |  6 |        3 |          6 |           2 |        2
-  4 | Amber Tran   | 6967 Ac Road               | Villafranca Asti | United States |  6 | 2019-07-05 | ORD006          |           4 | 11 |        6 |          2 |           2 |        1
-  4 | Amber Tran   | 6967 Ac Road               | Villafranca Asti | United States |  6 | 2019-07-05 | ORD006          |           4 | 10 |        6 |          5 |           2 |        3
-  5 | Edan Higgins | Ap #840-3255 Tincidunt St. | Arles            | United States | 10 | 2019-05-10 | ORD010          |           5 | 18 |       10 |          6 |           2 |        1
-(6 rows)
+        name        | order_reference | order_date |      product_name       | quantity 
+--------------------+-----------------+------------+-------------------------+----------
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              |        3
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        |        3
+ Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         |        1
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        |       15
+ Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         |        2
+ Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         |        1
+ Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          |        1
+ Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games |        1
+ Edan Higgins       | ORD009          | 2019-07-24 | Ball                    |        2
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        |        5
+ Edan Higgins       | ORD010          | 2019-05-10 | Ball                    |        1
+ Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games |        1
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        |        5
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        |        4
+ Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         |        1
+ Guy Crawford       | ORD003          | 2019-07-11 | Ball                    |        2
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              |       10
+ Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          |        1
+(19 rows)
+
+12. Retrieve the names of all customers who bought a product from a supplier based in China.
+
+SELECT DISTINCT customers.id,name,address,city,customers.country FROM customers
+JOIN orders
+ON customer_id = customers.id
+JOIN order_items
+ON orders.id = order_id
+JOIN suppliers
+ON suppliers.country = 'China' AND supplier_id = suppliers.id
+ORDER BY name;
+
+<< or >>
+
+SELECT DISTINCT customers.id,name,address,city,customers.country FROM customers
+JOIN orders
+ON customer_id = customers.id
+JOIN order_items
+ON orders.id = order_id
+WHERE supplier_id = 2
+ORDER BY name;
+
+ id |     name     |          address           |       city       |    country    
+----+--------------+----------------------------+------------------+---------------
+  4 | Amber Tran   | 6967 Ac Road               | Villafranca Asti | United States
+  5 | Edan Higgins | Ap #840-3255 Tincidunt St. | Arles            | United States
+  1 | Guy Crawford | 770-2839 Ligula Road       | Paris            | France
+(3 rows)
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
-SELECT customers.name AS "customer name", orders.order_reference AS "order reference", orders.order_date AS "order date", quantity * unit_price AS "order total amount" 
+SELECT customers.name AS "customer name", orders.order_reference AS "order reference", 
+    orders.order_date AS "order date", quantity * unit_price AS "order total amount"
 FROM order_items
 JOIN orders
 ON orders.id = order_id
@@ -309,71 +278,31 @@ ON customer_id = customers.id
 JOIN products
 ON product_id = products.id
 JOIN product_availability
-ON product_id = prod_id
+ON product_id = prod_id AND supplier_id = supp_id
 ORDER BY quantity * unit_price DESC;
 
    customer name    | order reference | order date | order total amount 
 --------------------+-----------------+------------+--------------------
  Hope Crosby        | ORD004          | 2019-05-24 |                299
- Edan Higgins       | ORD008          | 2019-07-23 |                299
- Hope Crosby        | ORD004          | 2019-05-24 |                249
  Edan Higgins       | ORD008          | 2019-07-23 |                249
- Amber Tran         | ORD007          | 2019-04-05 |                150
- Amber Tran         | ORD007          | 2019-04-05 |                150
  Amber Tran         | ORD007          | 2019-04-05 |                120
- Britanney Kirkland | ORD005          | 2019-05-30 |                 82
- Britanney Kirkland | ORD005          | 2019-05-30 |                 80
  Britanney Kirkland | ORD005          | 2019-05-30 |                 78
- Amber Tran         | ORD007          | 2019-04-05 |                 75
- Edan Higgins       | ORD010          | 2019-05-10 |                 50
- Guy Crawford       | ORD003          | 2019-07-11 |                 50
- Guy Crawford       | ORD001          | 2019-06-01 |                 50
- Guy Crawford       | ORD001          | 2019-06-01 |                 50
  Edan Higgins       | ORD010          | 2019-05-10 |                 50
  Amber Tran         | ORD006          | 2019-07-05 |                 41
  Guy Crawford       | ORD003          | 2019-07-11 |                 40
- Guy Crawford       | ORD001          | 2019-06-01 |                 40
- Guy Crawford       | ORD002          | 2019-07-15 |                 40
- Guy Crawford       | ORD002          | 2019-07-15 |                 40
  Guy Crawford       | ORD003          | 2019-07-11 |                 40
- Guy Crawford       | ORD003          | 2019-07-11 |                 40
- Amber Tran         | ORD006          | 2019-07-05 |                 40
- Edan Higgins       | ORD009          | 2019-07-24 |                 40
- Edan Higgins       | ORD010          | 2019-05-10 |                 40
- Amber Tran         | ORD006          | 2019-07-05 |                 39
  Guy Crawford       | ORD002          | 2019-07-15 |                 32
- Amber Tran         | ORD006          | 2019-07-05 |                 30
- Guy Crawford       | ORD003          | 2019-07-11 |                 30
- Amber Tran         | ORD006          | 2019-07-05 |                 30
- Guy Crawford       | ORD003          | 2019-07-11 |                 30
  Edan Higgins       | ORD009          | 2019-07-24 |                 30
- Edan Higgins       | ORD009          | 2019-07-24 |                 28
- Guy Crawford       | ORD003          | 2019-07-11 |                 28
+ Amber Tran         | ORD006          | 2019-07-05 |                 30
  Guy Crawford       | ORD001          | 2019-06-01 |                 25
- Edan Higgins       | ORD010          | 2019-05-10 |                 25
- Amber Tran         | ORD006          | 2019-07-05 |                 24
- Guy Crawford       | ORD001          | 2019-06-01 |                 21
- Edan Higgins       | ORD008          | 2019-07-23 |                 21
- Edan Higgins       | ORD010          | 2019-05-10 |                 20
- Guy Crawford       | ORD001          | 2019-06-01 |                 20
- Guy Crawford       | ORD002          | 2019-07-15 |                 20
  Edan Higgins       | ORD008          | 2019-07-23 |                 20
+ Edan Higgins       | ORD010          | 2019-05-10 |                 20
  Guy Crawford       | ORD001          | 2019-06-01 |                 18
- Edan Higgins       | ORD008          | 2019-07-23 |                 18
- Amber Tran         | ORD006          | 2019-07-05 |                 15
- Amber Tran         | ORD006          | 2019-07-05 |                 15
- Edan Higgins       | ORD010          | 2019-05-10 |                 15
- Edan Higgins       | ORD010          | 2019-05-10 |                 14
  Amber Tran         | ORD006          | 2019-07-05 |                 12
- Amber Tran         | ORD006          | 2019-07-05 |                 12
- Britanney Kirkland | ORD005          | 2019-05-30 |                 10
  Amber Tran         | ORD006          | 2019-07-05 |                 10
- Amber Tran         | ORD006          | 2019-07-05 |                 10
- Guy Crawford       | ORD002          | 2019-07-15 |                 10
- Guy Crawford       | ORD002          | 2019-07-15 |                 10
  Britanney Kirkland | ORD005          | 2019-05-30 |                 10
- Amber Tran         | ORD006          | 2019-07-05 |                  9
-(59 rows)
+ Guy Crawford       | ORD002          | 2019-07-15 |                 10
+(19 rows)
 
 
 
