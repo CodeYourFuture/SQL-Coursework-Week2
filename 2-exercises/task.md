@@ -267,12 +267,13 @@ ON orders.id = order_id
 WHERE supplier_id = 2
 ORDER BY name;
 
- id |     name     |          address           |       city       |    country    
-----+--------------+----------------------------+------------------+---------------
-  4 | Amber Tran   | 6967 Ac Road               | Villafranca Asti | United States
-  5 | Edan Higgins | Ap #840-3255 Tincidunt St. | Arles            | United States
-  1 | Guy Crawford | 770-2839 Ligula Road       | Paris            | France
+     name     
+--------------
+ Amber Tran
+ Edan Higgins
+ Guy Crawford
 (3 rows)
+
 
 13. List all orders giving customer name, order reference, order date and 
                            order total amount (quantity * unit price) in descending order of total.
