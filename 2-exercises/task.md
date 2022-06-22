@@ -74,7 +74,8 @@ SELECT * FROM products WHERE product_name LIKE '%socks%';
   2 | Javascript Book |       2 |       1 |         40
   2 | Javascript Book |       2 |       3 |         39
 
-6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+6. Retrieve all the products with their corresponding suppliers.
+The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 
 SELECT DISTINCT p.product_name, pa.unit_price, s.supplier_name
  FROM products AS p
@@ -97,7 +98,8 @@ SELECT DISTINCT p.product_name, pa.unit_price, s.supplier_name
  Super warm socks |         10 | Sainsburys
 (9 rows)
  
-7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+7. Retrieve all the products sold by suppliers based in the United Kingdom.
+The result should only contain the columns `product_name` and `supplier_name`.
 
 SELECT p.product_name, s.supplier_name
  FROM products AS p,
@@ -119,7 +121,8 @@ SELECT p.product_name, s.supplier_name
  Tee Shirt Olympic Games | Argos
 (9 rows)
  
-8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+8. Retrieve all orders, including order items, from customer ID `1`.
+Include order id, reference, date and total cost (calculated as quantity * unit price).
 
 SELECT order_id AS "order id", order_reference AS reference, order_date AS date, quantity * unit_price AS "total cost"
 FROM order_items
@@ -180,7 +183,8 @@ WHERE customers.name = 'Hope Crosby' AND customer_id = customers.id;
  2019-05-24 | ORD004          |           2 |       10 |          4 |           1 |        5
 (19 rows)
 
-10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+10. Retrieve all the products in the order `ORD006`. 
+The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
 SELECT product_name, unit_price, quantity                       
 FROM orders
@@ -199,7 +203,9 @@ ON product_id = products.id;
  Super warm socks |         10 |        3
 (4 rows)
 
-11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+11. Retrieve all the products with their supplier for all orders of all customers. 
+The result should only contain the columns `name` (from customer), `order_reference`, 
+                                           `order_date`, `product_name`, `supplier_name` and `quantity`.
 
 SELECT customers.name, order_reference, order_date, product_name, quantity 
 FROM customers
@@ -240,7 +246,8 @@ ORDER BY customers.name, order_reference;
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
-SELECT DISTINCT customers.id,name,address,city,customers.country FROM customers
+SELECT DISTINCT name
+FROM customers
 JOIN orders
 ON customer_id = customers.id
 JOIN order_items
@@ -251,7 +258,8 @@ ORDER BY name;
 
 << or >>
 
-SELECT DISTINCT customers.id,name,address,city,customers.country FROM customers
+SELECT DISTINCT name
+FROM customers
 JOIN orders
 ON customer_id = customers.id
 JOIN order_items
@@ -266,7 +274,8 @@ ORDER BY name;
   1 | Guy Crawford | 770-2839 Ligula Road       | Paris            | France
 (3 rows)
 
-13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+13. List all orders giving customer name, order reference, order date and 
+                           order total amount (quantity * unit price) in descending order of total.
 
 SELECT customers.name AS "customer name", orders.order_reference AS "order reference", 
     orders.order_date AS "order date", quantity * unit_price AS "order total amount"
