@@ -35,16 +35,72 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
-2. Retrieve all the customers in ascending name sequence
-3. Retrieve all the products whose name contains the word `socks`
-4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
-5. Retrieve the 5 most expensive products
-6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
-7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
-8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
-9. Retrieve all orders, including order items, from customer named `Hope Crosby`
-10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
-11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
-12. Retrieve the names of all customers who bought a product from a supplier based in China.
-13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+Ans: SELECT name, address FROM customers WHERE country='United States';
 
+2. Retrieve all the customers in ascending name sequence
+Ans: SELECT * FROM customers ORDER BY name;
+
+3. Retrieve all the products whose name contains the word `socks`
+Ans: SELECT * FROM products WHERE product_name like '%socks%';
+
+4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+Ans:
+ SELECT prod_id,product_name, unit_price, supp_id FROM product_availability pavail INNER JOIN products ON pavail.prod_id=products.id WHERE unit_price >100;
+
+5. Retrieve the 5 most expensive products
+Ans:
+ SELECT prod_id,product_name, unit_price, supp_id FROM product_availability pavail INNER JOIN products ON pavail.prod_id=products.id ORDER BY pavail.unit_price desc limit 5;
+
+6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+Ans:
+ELECT product_name, unit_price, supplier_name FROM suppliers sup INNER JOIN product_availability ON sup.id=product_availability.supp_id INNER JOIN products ON product_availability.prod_id=products.id;
+
+7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+Ans:
+SELECT product_name, supplier_name FROM suppliers INNER JOIN product_availability ON suppliers.id=product_availability.supp_id INNER JOIN products ON products.id=product_availability.prod_id WHERE suppliers.country='United Kingdom';
+
+8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+Ans: 
+select o.id, o.order_reference, o.order_date, SUM(oi.quantity * product_availability.unit_price)
+AS total_cost
+FROM orders AS o
+INNER JOIN order_items AS oi ON o.id = oi.order_id
+INNER JOIN product_availability 
+ON product_availability.prod_id = oi.product_id 
+and  product_availability.supp_id = oi.supplier_id
+where customer_id =1 
+GROUP BY o.id;
+
+9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+Ans: 
+SELECT * FROM orders o INNER JOIN customers ON o.customer_id=customers.id WHERE customers.name = 'Hope Crosby';
+
+10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+ANS:
+SELECT product_name, unit_price, quantity FROM orders INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id INNER JOIN products ON product_availability.prod_id=products.id WHERE orders.order_reference='ORD006';
+
+11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+Ans:
+ SELECT name, order_reference, order_date, product_name, supplier_name, quantity
+  FROM customers
+   INNER JOIN orders ON customers.id=orders.customer_id
+   INNER JOIN order_items ON orders.id=order_itemsorder_id 
+    INNER JOIN suppliers ON order_items.supplier_id=suppliers.id                                                INNER JOIN product_availability ON suppliers.id=product_availability.supp_id                                           INNER JOIN products ON product_availability.prod_id=products.id;
+
+12. Retrieve the names of all customers who bought a product from a supplier based in China.
+Ans:
+SELECT name FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN suppliers ON order_items.supplier_id=suppliers.id WHERE suppliers.country='China';
+
+13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.  
+
+
+Ans:
+SELECT customers.name, o.id, o.order_reference, o.order_date, oi.quantity * product_availability.unit_price
+AS total_cost
+FROM customers 
+INNER JOIN orders AS o ON customers.id = o.customer_id
+INNER JOIN order_items AS oi ON o.id = oi.order_id
+INNER JOIN product_availability 
+ON product_availability.prod_id = oi.product_id 
+AND  product_availability.supp_id = oi.supplier_id
+ORDER BY total_cost DESC;
