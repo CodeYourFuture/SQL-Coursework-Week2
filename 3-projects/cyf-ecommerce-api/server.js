@@ -4,12 +4,17 @@ const app = express();
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "cyf_ecommerce",
-  password: "",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
+
+// user: "postgres",
+//   host: "localhost",
+//   database: "cyf_ecommerce",
+//   password: "",
+//   port: 5432,
 
 app.get("/customers", (req, res) => {
   pool
@@ -46,7 +51,7 @@ app.get("/products", (req, res) => {
     });
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => res.send("Hello World!"));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
