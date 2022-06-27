@@ -1,20 +1,21 @@
 const express = require("express");
 const app = express();
+//require("dotenv").config();
 
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  user: "postgres",
+  host: "localhost",
+  database: "cyf_ecommerce",
+  password: "",
+  port: 5432,
 });
 
-// user: "postgres",
-//   host: "localhost",
-//   database: "cyf_ecommerce",
-//   password: "",
-//   port: 5432,
+// connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false,
+//   },
 
 app.get("/customers", (req, res) => {
   pool
