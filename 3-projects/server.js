@@ -2,17 +2,11 @@ const express = require('express')
 const app = express();
 const {Pool} = require('pg');
 
+const dotenv = require('dotenv');
+dotenv.config();
 
-const pool = new Pool({ 
-   // give your username
-   user: 'mahri',
-   host: 'localhost', 
-   // change the database name accordingly
-   database: 'cyf_ecommerce',
-   password: 'Hatyja-09',
-   // Port number
-   port: 5432
- })
+
+const pool = new Pool(process.env.dbPG)
 
  app.get('/customers', (req, res)=>{
    pool.query('SELECT * FROM customers')
