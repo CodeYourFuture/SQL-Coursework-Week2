@@ -55,6 +55,12 @@ Once you understand the database that you are going to work with, solve the foll
    where pa.unit_price > 100;
 
 5. Retrieve the 5 most expensive products
+   -- select p.product_name as product, pa.unit_price as price
+   from products p
+   inner join product_availability pa
+   on p.id = pa.prod_id
+   order by price desc
+   limit 5;
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
