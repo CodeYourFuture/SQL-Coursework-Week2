@@ -80,6 +80,17 @@ Once you understand the database that you are going to work with, solve the foll
    where s.country = 'United Kingdom';
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
+   -- select o.id , o.order_reference, o.order_date, p.product_name, pa.unit_price \* oi.quantity as totalcost  
+    from orders o
+   inner join customers c
+   on c.id = o.customer_id
+   inner join order_items oi  
+    on oi.order_id = o.id  
+    inner join product_availability pa
+   on pa.prod_id = oi.product_id
+   inner join products p
+   on p.id = pa.prod_id
+   where c.id =1;
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
