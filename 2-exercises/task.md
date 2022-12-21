@@ -127,5 +127,19 @@ on pa.prod_id = p.id
 where o.order_reference = 'ORD006';
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
+-- select c.name, o.order_reference, o.order_date, p.product_name, s.supplier_name, oi.quantity
+from customers c
+inner join orders o ON
+c.id = o.customer_id
+inner join order_items oi on
+o.id = oi.order_id
+inner join product_availability pa on
+pa.prod_id = oi.product_id
+inner join products p on
+p.id = pa.prod_id
+inner join suppliers s on
+pa.supp_id = s.id;
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
