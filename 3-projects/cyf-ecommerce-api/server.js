@@ -22,6 +22,16 @@ app.get("/customers", (req, res) => {
     });
 });
 
+app.get("/suppliers", (req, res) => {
+  pool
+    .query("SELECT * from suppliers s")
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json(error);
+    });
+});
+
 app.listen(port, function () {
   console.log(
     `Server is listening on port ${port}. Ready to accept requests!`
