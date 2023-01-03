@@ -1,4 +1,5 @@
 require("dotenv").config();
+console.log(process.env);
 const { Pool } = require("pg");
 const express = require("express");
 const app = express();
@@ -12,7 +13,10 @@ const pool = new Pool({
     user: process.env.USER_DB,
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
-    port: process.env.PORT_DB
+    port: process.env.PORT_DB,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 app.get("/customers", (req, res) => {
