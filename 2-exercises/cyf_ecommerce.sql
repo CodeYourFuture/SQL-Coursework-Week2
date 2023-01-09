@@ -5,7 +5,7 @@ drop table if exists customers cascade;
 drop table if exists products cascade;
 drop table if exists suppliers cascade;
 
-CREATE TABLE customers (
+CREATE TABLE customer (
   id       SERIAL PRIMARY KEY,
   name     VARCHAR(50) NOT NULL,
   address  VARCHAR(120),
@@ -13,7 +13,7 @@ CREATE TABLE customers (
   country  VARCHAR(20)
 );
 
-CREATE TABLE suppliers (
+CREATE TABLE supplier (
     id              SERIAL PRIMARY KEY,
     supplier_name   VARCHAR(100) NOT NULL,
     country         VARCHAR(20) NOT NULL
@@ -48,17 +48,17 @@ CREATE TABLE order_items (
         REFERENCES product_availability (prod_id, supp_id)
 );
 
-INSERT INTO customers (name, address, city, country) VALUES ('Guy Crawford','770-2839 Ligula Road','Paris','France');
-INSERT INTO customers (name, address, city, country) VALUES ('Hope Crosby','P.O. Box 276, 4976 Sit Rd.','Steyr','United Kingdom');
-INSERT INTO customers (name, address, city, country) VALUES ('Britanney Kirkland','P.O. Box 577, 5601 Sem, St.','Little Rock','United Kingdom');
-INSERT INTO customers (name, address, city, country) VALUES ('Amber Tran','6967 Ac Road','Villafranca Asti','United States');
-INSERT INTO customers (name, address, city, country) VALUES ('Edan Higgins','Ap #840-3255 Tincidunt St.','Arles','United States');
-INSERT INTO customers (name, address, city, country) VALUES ('Quintessa Austin','597-2737 Nunc Rd.','Saint-Marc','United Kingdom');
+INSERT INTO customer (name, address, city, country) VALUES ('Guy Crawford','770-2839 Ligula Road','Paris','France');
+INSERT INTO customer (name, address, city, country) VALUES ('Hope Crosby','P.O. Box 276, 4976 Sit Rd.','Steyr','United Kingdom');
+INSERT INTO customer (name, address, city, country) VALUES ('Britanney Kirkland','P.O. Box 577, 5601 Sem, St.','Little Rock','United Kingdom');
+INSERT INTO customer (name, address, city, country) VALUES ('Amber Tran','6967 Ac Road','Villafranca Asti','United States');
+INSERT INTO customer (name, address, city, country) VALUES ('Edan Higgins','Ap #840-3255 Tincidunt St.','Arles','United States');
+INSERT INTO customer (name, address, city, country) VALUES ('Quintessa Austin','597-2737 Nunc Rd.','Saint-Marc','United Kingdom');
 
-INSERT INTO suppliers (supplier_name, country) VALUES ('Amazon', 'United States');
-INSERT INTO suppliers (supplier_name, country) VALUES ('Taobao', 'China');
-INSERT INTO suppliers (supplier_name, country) VALUES ('Argos', 'United Kingdom');
-INSERT INTO suppliers (supplier_name, country) VALUES ('Sainsburys', 'United Kingdom');
+INSERT INTO supplier (supplier_name, country) VALUES ('Amazon', 'United States');
+INSERT INTO supplier (supplier_name, country) VALUES ('Taobao', 'China');
+INSERT INTO supplier (supplier_name, country) VALUES ('Argos', 'United Kingdom');
+INSERT INTO supplier (supplier_name, country) VALUES ('Sainsburys', 'United Kingdom');
 
 
 INSERT INTO products (product_name) VALUES ('Mobile Phone X');
