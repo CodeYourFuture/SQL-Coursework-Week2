@@ -8,7 +8,8 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
-
+1. SELECT name, adresses FROM customers WHERE location = united states;
+2. SELECT * FROM customers 
 
 ```
 
