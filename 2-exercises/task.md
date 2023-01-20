@@ -8,14 +8,45 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
-1. SELECT name, adresses FROM customers WHERE location = united states;
+1. SELECT name, adresses FROM customers WHERE country = united states;
 2. SELECT * FROM customers BY ORDER ASC;
 3. SELECT product FROM customers WHERE name in (socks);
 4. SELECT product id, name, unit price, supplier id. FROM customers WHERE price > 100;
 5. SELECT product FROM customers WHERE product > 100;
 6. SELECT product_name, unit_price, supplier_name FROM customers WHERE suppliers referrences ('product_name', 'unit_price',' supplier_name');
-7. SELECT product_name, supplier_name FROM customer WHERE location = 'united kingdom';
-8. 
+
+7.SELECT p.product_name , s.supplier_name 
+	FROM products p 
+	INNER JOIN product_availability pa 
+	ON p.id = pa.prod_id 
+	INNER JOIN suppliers s 
+	ON pa.supp_id = s.id 
+	WHERE s.country = 'United Kingdom';
+8.SELECT o.id, o.order_reference , o.order_date, oi.quantity*pa.unit_price AS total_cost
+	FROM orders o 
+	INNER JOIN order_items oi 
+	ON o.id = oi.order_id 
+	INNER JOIN product_availability pa 
+	ON oi.product_id = pa.prod_id 
+	WHERE o.customer_id  = 1;
+
+9. SELECT o.*, oi.*
+	FROM orders o 
+	INNER JOIN order_items oi 
+	ON o.id = oi.order_id 
+	INNER JOIN customers c 
+	ON c.id = o.customer_id 
+	WHERE c.name = 'Hope Crosby';
+
+10. SELECT p.product_name, pa.unit_price, oi.quantity 
+	FROM products p 
+	INNER JOIN product_availability pa 
+	ON p.id  = pa.prod_id 
+	INNER JOIN order_items oi 
+	ON p.id = oi.product_id 
+	INNER JOIN orders o 
+	ON o.id = oi.order_id 
+	WHERE o.order_reference = 'ORD006';
 
 ```
 
