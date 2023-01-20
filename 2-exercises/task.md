@@ -9,7 +9,13 @@ Below you will find a set of tasks for you to complete to set up a database for 
 To submit this homework write the correct commands for each question here:
 ```sql
 1. SELECT name, adresses FROM customers WHERE location = united states;
-2. SELECT * FROM customers 
+2. SELECT * FROM customers BY ORDER ASC;
+3. SELECT product FROM customers WHERE name in (socks);
+4. SELECT product id, name, unit price, supplier id. FROM customers WHERE price > 100;
+5. SELECT product FROM customers WHERE product > 100;
+6. SELECT product_name, unit_price, supplier_name FROM customers WHERE suppliers referrences ('product_name', 'unit_price',' supplier_name');
+7. SELECT product_name, supplier_name FROM customer WHERE location = 'united kingdom';
+8. 
 
 ```
 
