@@ -56,9 +56,19 @@ SELECT * from customers ORDER BY name;
   6 | Quintessa Austin   | 597-2737 Nunc Rd.           | Saint-Marc       | United Kingdom
 
 
-
 3. Retrieve all the products whose name contains the word `socks`
+
+select * from products where product_name  like '%socks%';
+
+ id |   product_name   
+----+------------------
+  4 | Super warm socks
+
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+
+
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
