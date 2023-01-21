@@ -44,6 +44,18 @@ Once you understand the database that you are going to work with, solve the foll
 (2 rows)
 
 2. Retrieve all the customers in ascending name sequence
+
+select * from customers ORDER BY name;
+ id |        name        |           address           |       city       |    country     
+----+--------------------+-----------------------------+------------------+----------------
+  4 | Amber Tran         | 6967 Ac Road                | Villafranca Asti | United States
+  3 | Britanney Kirkland | P.O. Box 577, 5601 Sem, St. | Little Rock      | United Kingdom
+  5 | Edan Higgins       | Ap #840-3255 Tincidunt St.  | Arles            | United States
+  1 | Guy Crawford       | 770-2839 Ligula Road        | Paris            | France
+  2 | Hope Crosby        | P.O. Box 276, 4976 Sit Rd.  | Steyr            | United Kingdom
+  6 | Quintessa Austin   | 597-2737 Nunc Rd.           | Saint-Marc       | United Kingdom
+(6 rows)
+
 3. Retrieve all the products whose name contains the word `socks`
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 5. Retrieve the 5 most expensive products
