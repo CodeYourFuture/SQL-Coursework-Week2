@@ -54,7 +54,9 @@ Once you understand the database that you are going to work with, solve the foll
 --limit 5
 
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
-
+--SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name from product_availability 
+--inner join products on products.id = product_availability.prod_id  
+--inner join suppliers on suppliers.id = product_availability.supp_id;
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
