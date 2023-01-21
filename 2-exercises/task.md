@@ -66,7 +66,12 @@ select * from products where product_name  like '%socks%';
 
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+select p.product_name, p.id, a.unit_price, a.prod_id, a.supp_id, p. product_name from product_availability a join products p on a.prod_id= p.id where unit_price >100;
 
+ product_name  | id | unit_price | prod_id | supp_id |  product_name  
+----------------+----+------------+---------+---------+----------------
+ Mobile Phone X |  1 |        249 |       1 |       4 | Mobile Phone X
+ Mobile Phone X |  1 |        299 |       1 |       1 | Mobile Phone X
 
 
 5. Retrieve the 5 most expensive products
