@@ -75,6 +75,12 @@ select p.product_name, p.id, a.unit_price, a.prod_id, a.supp_id, p. product_name
 
 
 5. Retrieve the 5 most expensive products
+
+select max(unit_price) as highest from product_availability;
+
+---------
+     299
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
