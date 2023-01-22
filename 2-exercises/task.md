@@ -66,7 +66,7 @@ select * from products where product_name  like '%socks%';
 
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
-select p.product_name, p.id, a.unit_price, a.prod_id, a.supp_id, p. product_name from product_availability a join products p on a.prod_id= p.id where unit_price >100;
+select p.product_name, p.id, a.unit_price, a.prod_id, a.supp_id, p.product_name from product_availability a join products p on a.prod_id= p.id where unit_price >100;
 
  product_name  | id | unit_price | prod_id | supp_id |  product_name  
 ----------------+----+------------+---------+---------+----------------
@@ -82,9 +82,53 @@ select max(unit_price) as highest from product_availability;
      299
 
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+
+SELECT p.product_name, pa.unit_price, s.supplier_name FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN suppliers s ON pa.supp_id = s.id;
+
+
+      product_name       | unit_price | supplier_name 
+-------------------------+------------+---------------
+ Mobile Phone X          |        249 | Sainsburys
+ Mobile Phone X          |        299 | Amazon
+ Javascript Book         |         41 | Taobao
+ Javascript Book         |         39 | Argos
+ Javascript Book         |         40 | Amazon
+ Le Petit Prince         |         10 | Sainsburys
+ Le Petit Prince         |         10 | Amazon
+ Super warm socks        |         10 | Sainsburys
+ Super warm socks        |          8 | Argos
+ Super warm socks        |          5 | Taobao
+ Super warm socks        |         10 | Amazon
+
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+SELECT p.product_name, s.supplier_name FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN suppliers s ON pa.supp_id = s.id WHERE s.country = 'United Kingdom';
+
+
+      product_name       | supplier_name 
+-------------------------+---------------
+ Javascript Book         | Argos
+ Super warm socks        | Argos
+ Coffee Cup              | Argos
+ Tee Shirt Olympic Games | Argos
+ Mobile Phone X          | Sainsburys
+ Le Petit Prince         | Sainsburys
+ Super warm socks        | Sainsburys
+ Coffee Cup              | Sainsburys
+ Ball                    | Sainsburys
+
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+
+SELECT O.id, o.order_reference, o.order_date, oi.quantity*pa.unit_price AS total_cost FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN product_availability pa ON oi.product_id = pa.prod_id WHERE o.customer_id = 1;
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+
+
+
+
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
