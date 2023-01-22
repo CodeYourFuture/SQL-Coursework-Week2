@@ -126,10 +126,16 @@ SELECT O.id, o.order_reference, o.order_date, oi.quantity*pa.unit_price AS total
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
+SELECT o.*, oi.* FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id INNER JOIN customers c ON c.id = o.customer_id WHERE c.name = 'Hope Crosby';
 
-
+ id | order_date | order_reference | customer_id | id | order_id | product_id | supplier_id | quantity 
+----+------------+-----------------+-------------+----+----------+------------+-------------+----------
+  4 | 2019-05-24 | ORD004          |           2 |  7 |        4 |          1 |           1 |        1
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+
+
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
