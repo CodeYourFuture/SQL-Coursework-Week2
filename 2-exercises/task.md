@@ -135,8 +135,30 @@ SELECT o.*, oi.* FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id I
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
 
+SELECT p.product_name, pa.unit_price, oi.quantity FROM products p INNER JOIN product_availability pa ON p.id = pa.prod_id INNER JOIN order_items oi ON p.id = oi.product_id INNER JOIN orders o ON o.id = oi.order_id WHERE o.order_reference = 'ORD006';
+
+
+product_name   | unit_price | quantity 
+------------------+------------+----------
+ Coffee Cup       |          3 |        3
+ Coffee Cup       |          4 |        3
+ Coffee Cup       |          4 |        3
+ Coffee Cup       |          5 |        3
+ Javascript Book  |         40 |        1
+ Javascript Book  |         41 |        1
+ Javascript Book  |         39 |        1
+ Le Petit Prince  |         10 |        1
+ Le Petit Prince  |         10 |        1
+ Super warm socks |         10 |        3
+ Super warm socks |          5 |        3
+ Super warm socks |          8 |        3
+
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
+
+
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
