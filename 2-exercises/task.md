@@ -38,7 +38,7 @@ Once you understand the database that you are going to work with, solve the foll
 
   SELECT name, address
   FROM customers c
-  WHERE = 'United States'
+  WHERE country = 'United States'
  
 2. Retrieve all the customers in ascending name sequence
 
@@ -100,7 +100,7 @@ Once you understand the database that you are going to work with, solve the foll
   
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
  
-     SELECT o.*, oi.*
+        SELECT o.*, oi.*
 	FROM orders o 
 	INNER JOIN order_items oi 
 	ON o.id = oi.order_id 
