@@ -45,6 +45,18 @@ postgres=# select name, address from customers where country='United Kingdom';
 
 
 2. Retrieve all the customers in ascending name sequence
+select name from customers order by name ASC;
+        name        
+--------------------
+ Amber Tran
+ Britanney Kirkland
+ Edan Higgins
+ Guy Crawford
+ Hope Crosby
+ Quintessa Austin
+(6 rows)
+
+
 3. Retrieve all the products whose name contains the word `socks`
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 5. Retrieve the 5 most expensive products
