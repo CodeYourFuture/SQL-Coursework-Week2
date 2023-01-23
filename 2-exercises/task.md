@@ -74,6 +74,16 @@ select product_name from products where product_name like '%socks%';
 
 
 5. Retrieve the 5 most expensive products
+SELECT * FROM product_availability ORDER BY unit_price limit 5;
+ prod_id | supp_id | unit_price 
+---------+---------+------------
+       5 |       1 |          3
+       5 |       3 |          4
+       5 |       2 |          4
+       4 |       2 |          5
+       5 |       4 |          5
+
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
