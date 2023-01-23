@@ -64,9 +64,15 @@ select product_name from products where product_name like '%socks%';
  Super warm socks
 (1 row)
 
-
-
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+ select a.id, a.product_name, b.unit_price, b.supp_id from products as a join product_availability as b on a.id=b.prod_id where b.unit_price>100;
+ id |  product_name  | unit_price | supp_id 
+----+----------------+------------+---------
+  1 | Mobile Phone X |        249 |       4
+  1 | Mobile Phone X |        299 |       1
+(2 rows)
+
+
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
