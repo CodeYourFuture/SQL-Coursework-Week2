@@ -7,7 +7,6 @@ In this homework, you are going to work with an ecommerce database. In this data
 Below you will find a set of tasks for you to complete to set up a database for an e-commerce app.
 
 To submit this homework write the correct commands for each question here:
-
 ```sql
 
 
@@ -106,5 +105,21 @@ inner join products on products.id = order_items.product_id
 inner join suppliers on suppliers.id = order_items.supplier_id;
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+
+select distinct customers.name
+from customers
+inner join orders on orders.customer_id  = customers.id 
+inner join order_items on order_items.order_id = orders.id
+inner join products on products.id = order_items.product_id
+inner join suppliers on suppliers.id = order_items.supplier_id
+where suppliers.country = 'China';
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
+select customers.name, orders.order_reference, orders.order_date, sum(order_items.quantity * product_availability.unit_price) as order_total_amount 
+from orders
+inner join customers on customers.id = orders.customer_id
+inner join order_items on order_items.order_id = orders.id
+inner join product_availability  on product_availability.prod_id = order_items.product_id
+group by customers.name, order_reference, orders.order_date
+order by order_total_amount desc;
