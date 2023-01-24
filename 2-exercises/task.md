@@ -117,6 +117,27 @@ JOIN suppliers AS s ON s.id=pa.supp_id;
 
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+        ^
+postgres=# SELECT p.product_name,s.supplier_name 
+FROM products AS p 
+JOIN product_availability AS pa ON p.id=pa.prod_id 
+JOIN suppliers AS s ON s.id=pa.supp_id 
+WHERE s.country='United Kingdom';
+      product_name       | supplier_name 
+-------------------------+---------------
+ Javascript Book         | Argos
+ Super warm socks        | Argos
+ Coffee Cup              | Argos
+ Tee Shirt Olympic Games | Argos
+ Mobile Phone X          | Sainsburys
+ Le Petit Prince         | Sainsburys
+ Super warm socks        | Sainsburys
+ Coffee Cup              | Sainsburys
+ Ball                    | Sainsburys
+(9 rows)
+
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
