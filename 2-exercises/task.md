@@ -35,12 +35,109 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+postgres=# select name, address from customers where country='United Kingdom';
+        name        |           address           
+--------------------+-----------------------------
+ Hope Crosby        | P.O. Box 276, 4976 Sit Rd.
+ Britanney Kirkland | P.O. Box 577, 5601 Sem, St.
+ Quintessa Austin   | 597-2737 Nunc Rd.
+(3 rows)
+
+
 2. Retrieve all the customers in ascending name sequence
+select name from customers order by name ASC;
+        name        
+--------------------
+ Amber Tran
+ Britanney Kirkland
+ Edan Higgins
+ Guy Crawford
+ Hope Crosby
+ Quintessa Austin
+(6 rows)
+
+
 3. Retrieve all the products whose name contains the word `socks`
+select product_name from products where product_name like '%socks%';
+   product_name   
+------------------
+ Super warm socks
+(1 row)
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+ select a.id, a.product_name, b.unit_price, b.supp_id from products as a join product_availability as b on a.id=b.prod_id where b.unit_price>100;
+ id |  product_name  | unit_price | supp_id 
+----+----------------+------------+---------
+  1 | Mobile Phone X |        249 |       4
+  1 | Mobile Phone X |        299 |       1
+(2 rows)
+
+
 5. Retrieve the 5 most expensive products
+SELECT * FROM product_availability ORDER BY unit_price limit 5;
+ prod_id | supp_id | unit_price 
+---------+---------+------------
+       5 |       1 |          3
+       5 |       3 |          4
+       5 |       2 |          4
+       4 |       2 |          5
+       5 |       4 |          5
+
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+SELECT p.product_name,pa.unit_price,s.supplier_name 
+FROM products AS p 
+JOIN product_availability AS pa ON p.id=pa.prod_id 
+JOIN suppliers AS s ON s.id=pa.supp_id;
+```
+      product_name       | unit_price | supplier_name 
+-------------------------+------------+---------------
+ Mobile Phone X          |        249 | Sainsburys
+ Mobile Phone X          |        299 | Amazon
+ Javascript Book         |         41 | Taobao
+ Javascript Book         |         39 | Argos
+ Javascript Book         |         40 | Amazon
+ Le Petit Prince         |         10 | Sainsburys
+ Le Petit Prince         |         10 | Amazon
+ Super warm socks        |         10 | Sainsburys
+ Super warm socks        |          8 | Argos
+ Super warm socks        |          5 | Taobao
+ Super warm socks        |         10 | Amazon
+ Coffee Cup              |          5 | Sainsburys
+ Coffee Cup              |          4 | Argos
+ Coffee Cup              |          4 | Taobao
+ Coffee Cup              |          3 | Amazon
+ Ball                    |         20 | Taobao
+ Ball                    |         15 | Sainsburys
+ Ball                    |         14 | Amazon
+ Tee Shirt Olympic Games |         21 | Argos
+ Tee Shirt Olympic Games |         18 | Taobao
+:
+
+
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+        ^
+postgres=# SELECT p.product_name,s.supplier_name 
+FROM products AS p 
+JOIN product_availability AS pa ON p.id=pa.prod_id 
+JOIN suppliers AS s ON s.id=pa.supp_id 
+WHERE s.country='United Kingdom';
+      product_name       | supplier_name 
+-------------------------+---------------
+ Javascript Book         | Argos
+ Super warm socks        | Argos
+ Coffee Cup              | Argos
+ Tee Shirt Olympic Games | Argos
+ Mobile Phone X          | Sainsburys
+ Le Petit Prince         | Sainsburys
+ Super warm socks        | Sainsburys
+ Coffee Cup              | Sainsburys
+ Ball                    | Sainsburys
+(9 rows)
+
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
