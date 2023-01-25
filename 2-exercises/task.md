@@ -133,6 +133,32 @@ SELECT p.product_name,s.supplier_name FROM products AS p JOIN product_availabili
 (9 rows)
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+
+SELECT o.id,o.order_date,o.order_reference,(oi.quantity*pa.unit_price) AS total_cost FROM orders AS o JOIN order_items AS oi ON o.id=oi.order_id JOIN product_availability AS pa ON pa.prod_id=oi.product_id WHERE o.customer_id=1;
+
+id | order_date | order_reference | total_cost 
+----+------------+-----------------+------------
+  1 | 2019-06-01 | ORD001          |         20
+  1 | 2019-06-01 | ORD001          |         18
+  1 | 2019-06-01 | ORD001          |         21
+  1 | 2019-06-01 | ORD001          |         50
+  1 | 2019-06-01 | ORD001          |         25
+  1 | 2019-06-01 | ORD001          |         40
+  1 | 2019-06-01 | ORD001          |         50
+  2 | 2019-07-15 | ORD002          |         40
+  2 | 2019-07-15 | ORD002          |         20
+  2 | 2019-07-15 | ORD002          |         32
+  2 | 2019-07-15 | ORD002          |         40
+  2 | 2019-07-15 | ORD002          |         10
+  2 | 2019-07-15 | ORD002          |         10
+  3 | 2019-07-11 | ORD003          |         30
+  3 | 2019-07-11 | ORD003          |         40
+  3 | 2019-07-11 | ORD003          |         40
+  3 | 2019-07-11 | ORD003          |         50
+  3 | 2019-07-11 | ORD003          |         28
+  3 | 2019-07-11 | ORD003          |         40
+  3 | 2019-07-11 | ORD003          |         30
+(20 rows)
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
