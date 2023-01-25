@@ -179,6 +179,37 @@ SELECT p.product_name,pa.unit_price,oi.quantity FROM products AS p JOIN order_it
  Super warm socks |         10 |        3
 (4 rows)
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+SELECT c.name, o.order_reference, o.order_date, p.product_name, s.supplier_name, oi.quantity 
+ FROM customers AS c
+ JOIN orders AS o ON c.id = o.customer_id
+ JOIN order_items AS oi ON o.id = oi.order_id
+ JOIN products AS p ON oi.product_id = p.id
+ JOIN suppliers AS s ON oi.supplier_id = s.id
+ JOIN product_availability AS pa ON oi.product_id = pa.prod_id AND oi.supplier_id = pa.supp_id;
+
+     name        | order_reference | order_date |      product_name       | supplier_name | quantity 
+--------------------+-----------------+------------+-------------------------+---------------+----------
+ Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games | Taobao        |        1
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        | Taobao        |        5
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        | Argos         |        4
+ Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         | Sainsburys    |        1
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              | Argos         |       10
+ Guy Crawford       | ORD003          | 2019-07-11 | Ball                    | Taobao        |        2
+ Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          | Amazon        |        1
+ Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         | Argos         |        2
+ Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         | Amazon        |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              | Taobao        |        3
+ Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         | Taobao        |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         | Sainsburys    |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        | Sainsburys    |        3
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        | Argos         |       15
+ Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games | Amazon        |        1
+ Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          | Sainsburys    |        1
+ Edan Higgins       | ORD009          | 2019-07-24 | Ball                    | Sainsburys    |        2
+ Edan Higgins       | ORD010          | 2019-05-10 | Ball                    | Taobao        |        1
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        | Amazon        |        5
+(19 rows)
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
