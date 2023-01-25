@@ -227,3 +227,24 @@ WHERE s.country = 'China';
 (3 rows)
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
+SELECT c.name as customer_name, o.order_reference, o.order_date, sum(pa.unit_price * oi.quantity) AS total_amount 
+FROM customers AS c
+JOIN orders AS o ON c.id = o.customer_id
+JOIN order_items AS oi ON o.id = oi.order_id
+JOIN product_availability AS pa ON oi.product_id = pa.prod_id AND oi.supplier_id = pa.supp_id
+GROUP BY customer_name, o.order_reference, o.order_date ORDER BY total_amount DESC;
+
+customer_name    | order_reference | order_date | total_amount 
+--------------------+-----------------+------------+--------------
+ Hope Crosby        | ORD004          | 2019-05-24 |          299
+ Edan Higgins       | ORD008          | 2019-07-23 |          269
+ Amber Tran         | ORD007          | 2019-04-05 |          120
+ Amber Tran         | ORD006          | 2019-07-05 |           93
+ Britanney Kirkland | ORD005          | 2019-05-30 |           88
+ Guy Crawford       | ORD003          | 2019-07-11 |           80
+ Edan Higgins       | ORD010          | 2019-05-10 |           70
+ Guy Crawford       | ORD001          | 2019-06-01 |           43
+ Guy Crawford       | ORD002          | 2019-07-15 |           42
+ Edan Higgins       | ORD009          | 2019-07-24 |           30
+(10 rows)
+
