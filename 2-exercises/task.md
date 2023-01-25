@@ -8,7 +8,49 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+        
+        SELECT name, address FROM customers WHERE country = 'United States';
+        SELECT * FROM customers ORDER BY name ASC;
+        SELECT * FROM products WHERE name LIKE '%socks%';
+        SELECT prod_id, unit_price, supp_id FROM product_availability WHERE unit_price > 100;
+        SELECT unit_price ,prod_id FROM product_availability ORDER BY unit_price DESC LIMIT 5;
+        
+        
+        SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name FROM product_availability
+        INNER JOIN products ON products.id=product_availability.prod_id
+        INNER JOIN suppliers ON suppliers.id=product_availability.supp_id
+        
+        
+        SELECT p.product_name , s.supplier_name
+        FROM products p
+        INNER JOIN product_availability pa
+        ON p.id = pa.prod_id
+        INNER JOIN suppliers s
+        ON pa.supp_id = s.id
+        WHERE s.country = 'United Kingdom';
+        
+        
+        SELECT orders.id, orders.order_reference, orders.order_date, SUM(order_items.quantity) as total_cost
+        FROM orders
+        JOIN order_items ON orders.id = order_items.order_id
+        JOIN customers ON orders.customer_id = customers.id
+        WHERE orders.customer_id = 1
+        GROUP BY orders.id, orders.order_reference, orders.order_date;
 
+
+        SELECT orders.id, orders.order_reference, orders.order_date, SUM(order_items.quantity) as total_cost
+        FROM orders
+        JOIN order_items ON orders.id = order_items.order_id
+        JOIN customers ON orders.customer_id = customers.id
+        WHERE customers.name = 'Hope Crosby'
+        GROUP BY orders.id, orders.order_reference, orders.order_date;
+        
+        
+        SELECT products.product_name, order_items.quantity
+        FROM order_items
+        JOIN products ON order_items.product_id = products.id
+        JOIN orders ON order_items.order_id = orders.id
+        WHERE orders.order_reference = 'ORD006';
 
 ```
 
