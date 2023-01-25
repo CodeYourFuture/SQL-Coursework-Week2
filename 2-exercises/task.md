@@ -88,7 +88,35 @@ SELECT * from product_availability ORDER BY unit_price limit 5;
 (5 rows)
 
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+SELECT p.product_name,a.unit_price,s.supplier_name FROM products AS p JOIN product_availability AS a ON p.id=a.prod_id JOIN suppliers AS s ON s.id=a.supp_id;
+
+     product_name       | unit_price | supplier_name 
+-------------------------+------------+---------------
+ Mobile Phone X          |        249 | Sainsburys
+ Mobile Phone X          |        299 | Amazon
+ Javascript Book         |         41 | Taobao
+ Javascript Book         |         39 | Argos
+ Javascript Book         |         40 | Amazon
+ Le Petit Prince         |         10 | Sainsburys
+ Le Petit Prince         |         10 | Amazon
+ Super warm socks        |         10 | Sainsburys
+ Super warm socks        |          8 | Argos
+ Super warm socks        |          5 | Taobao
+ Super warm socks        |         10 | Amazon
+ Coffee Cup              |          5 | Sainsburys
+ Coffee Cup              |          4 | Argos
+ Coffee Cup              |          4 | Taobao
+ Coffee Cup              |          3 | Amazon
+ Ball                    |         20 | Taobao
+ Ball                    |         15 | Sainsburys
+ Ball                    |         14 | Amazon
+ Tee Shirt Olympic Games |         21 | Argos
+ Tee Shirt Olympic Games |         18 | Taobao
+ Tee Shirt Olympic Games |         20 | Amazon
+(21 rows)
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
