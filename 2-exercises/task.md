@@ -211,5 +211,19 @@ SELECT c.name, o.order_reference, o.order_date, p.product_name, s.supplier_name,
 (19 rows)
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+
+SELECT DISTINCT c.name
+FROM customers AS c 
+JOIN orders AS o ON c.id = o.customer_id
+JOIN order_items AS oi ON o.id = oi.order_id
+JOIN product_availability AS pa ON oi.product_id = pa.prod_id AND oi.supplier_id = pa.supp_id 
+JOIN suppliers AS s ON pa.supp_id = s.id 
+WHERE s.country = 'China';
+     name     
+--------------
+ Amber Tran
+ Edan Higgins
+ Guy Crawford
+(3 rows)
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
