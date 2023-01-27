@@ -1,4 +1,6 @@
 const express = require("express");
+require('dotenv').config();
+console.log(process.env)
 const app = express();
 const port = process.env.PORT || 4000;
 const { Pool } = require("pg");
@@ -7,7 +9,7 @@ const pool = new Pool({
   user: "dawit",
   host: "localhost",
   database: "cyf_ecommerce",
-  password: "CYF123",
+  password: process.env.PASS_WORD,
   port: 5432,
   ssl: {
     rejectUnauthorized: false,
