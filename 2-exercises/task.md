@@ -7,6 +7,7 @@ In this homework, you are going to work with an ecommerce database. In this data
 Below you will find a set of tasks for you to complete to set up a database for an e-commerce app.
 
 To submit this homework write the correct commands for each question here:
+
 ```sql
 
 
@@ -35,16 +36,67 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+
+SELECT name, address FROM customers WHERE country='United States';
+
+name | address
+--------------+----------------------------
+Amber Tran | 6967 Ac Road
+Edan Higgins | Ap #840-3255 Tincidunt St.
+
 2. Retrieve all the customers in ascending name sequence
+
+   SELECT \* FROM customers ORDER BY name ASC;
+
+id | name | address | city | country
+----+--------------------+-----------------------------+------------------+----------------
+4 | Amber Tran | 6967 Ac Road | Villafranca Asti | United States
+3 | Britanney Kirkland | P.O. Box 577, 5601 Sem, St. | Little Rock | United Kingdom
+5 | Edan Higgins | Ap #840-3255 Tincidunt St. | Arles | United States
+1 | Guy Crawford | 770-2839 Ligula Road | Paris | France
+2 | Hope Crosby | P.O. Box 276, 4976 Sit Rd. | Steyr | United Kingdom
+6 | Quintessa Austin | 597-2737 Nunc Rd. | Saint-Marc | United Kingdom
+
 3. Retrieve all the products whose name contains the word `socks`
+
+SELECT product_name FROM products WHERE product_name LIKE '%socks%';
+
+## product_name
+
+Super warm socks
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+SELECT prod_id, products.product_name, unit_price, supp_id
+FROM product_availability
+INNER JOIN products ON product_availability.prod_id=products.id AND product_availability.unit_price >100;
+
+prod_id | product_name | unit_price | supp_id
+---------+----------------+------------+---------
+1 | Mobile Phone X | 249 | 4
+1 | Mobile Phone X | 299 | 1
+
 5. Retrieve the 5 most expensive products
+
+SELECT prod_id, products.product_name, unit_price, supp_id
+FROM product_availability
+INNER JOIN products ON product_availability.prod_id=products.id
+ORDER BY unit_price DESC limit 5;
+
+prod_id | product_name | unit_price | supp_id
+---------+-----------------+------------+---------
+1 | Mobile Phone X | 299 | 1
+1 | Mobile Phone X | 249 | 4
+2 | Javascript Book | 41 | 2
+2 | Javascript Book | 40 | 1
+2 | Javascript Book | 39 | 3
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
-8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
-13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
-
+13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
