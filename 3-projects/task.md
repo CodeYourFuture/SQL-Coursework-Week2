@@ -1,4 +1,3 @@
-
 # E-Commerce API
 
 ## Submission
