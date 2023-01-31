@@ -93,7 +93,58 @@ prod_id | product_name | unit_price | supp_id
 
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 
+SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name
+FROM products
+INNER JOIN product_availability ON products.id=product_availability.prod_id
+INNER JOIN suppliers ON suppliers.id=product_availability.supp_id;
+
+      product_name       | unit_price | supplier_name
+
+-------------------------+------------+---------------
+Mobile Phone X | 249 | Sainsburys
+Mobile Phone X | 299 | Amazon
+Javascript Book | 41 | Taobao
+Javascript Book | 39 | Argos
+Javascript Book | 40 | Amazon
+Le Petit Prince | 10 | Sainsburys
+Le Petit Prince | 10 | Amazon
+Super warm socks | 10 | Sainsburys
+Super warm socks | 8 | Argos
+Super warm socks | 5 | Taobao
+Super warm socks | 10 | Amazon
+Coffee Cup | 5 | Sainsburys
+Coffee Cup | 4 | Argos
+Coffee Cup | 4 | Taobao
+Coffee Cup | 3 | Amazon
+Ball | 20 | Taobao
+Ball | 15 | Sainsburys
+Ball | 14 | Amazon
+Tee Shirt Olympic Games | 21 | Argos
+Tee Shirt Olympic Games | 18 | Taobao
+Tee Shirt Olympic Games | 20 | Amazon
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+SELECT DISTINCT products.product_name, suppliers.supplier_name
+FROM orders
+INNER JOIN order_items ON orders.id= order_items.order_id
+INNER JOIN suppliers ON suppliers.id= order_items.supplier_id AND suppliers.country='United Kingdom'
+INNER JOIN product_availability ON suppliers.id=product_availability.supp_id
+INNER JOIN products ON products.id=product_availability.prod_id;
+
+      product_name       | supplier_name
+
+-------------------------+---------------
+            Javascript Book | Argos
+            Super warm socks | Argos
+            Tee Shirt Olympic Games | Argos
+            Super warm socks | Sainsburys
+            Coffee Cup | Sainsburys
+            Coffee Cup | Argos
+            Mobile Phone X | Sainsburys
+            Le Petit Prince | Sainsburys
+            Ball | Sainsburys
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
