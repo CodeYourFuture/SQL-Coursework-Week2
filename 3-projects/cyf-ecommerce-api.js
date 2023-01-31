@@ -14,7 +14,7 @@ const connection = mysql.createConnection(
         host: 'localhost',
         database: 'cyf_ecommerce',
         user: 'root',
-        password: 'ArbeitsEmail123',
+        password: '',
         port: 3306
     });
 
