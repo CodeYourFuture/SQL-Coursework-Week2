@@ -42,8 +42,8 @@ app.get("/products", (req, res) => {
     .catch((error)=>{
         console.log(error); 
         res.status(500).json(error);
-    })
-})
+    });
+});
 
 const listener = app.listen(PORT, () => {
     console.log(`App listening on port:${PORT}`)
