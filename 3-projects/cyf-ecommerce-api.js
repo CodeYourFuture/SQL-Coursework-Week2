@@ -6,21 +6,33 @@ const app = express();
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "cyf-ecommerce-api",
+  database: "cyf_ecommerce",
   password: "Lidya2021",
   port: 5432,
 });
 
 app.get("/customers", (req, res) => {
-  connection.query("SELECT * FROM customers", (err, rows) => {
-    res.send(Object.values(rows));
-  });
+  const sql = "SELECT * FROM customers";
+  const params = [];
+  pool
+    .query(sql, params)
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json(error);
+    });
 });
 
 app.get("/suppliers", (req, res) => {
-  connection.query("SELECT * FROM suppliers", (err, rows) => {
-    res.send(Object.values(rows));
-  });
+  const sql = "SELECT * FROM customers";
+  const params = [];
+  pool
+    .query(sql, params)
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json(error);
+    });
 });
 
 app.listen(3000, function () {
