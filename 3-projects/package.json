@@ -15,7 +15,6 @@
     "mysql": "^2.18.1",
     "nodemon": "^2.0.12"
   },
-  "devDependencies": {},
   "keywords": [],
   "description": ""
 }
