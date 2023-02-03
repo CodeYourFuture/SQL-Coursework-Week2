@@ -169,3 +169,4 @@ select c.name, s.country, from customers c inner join orders o on c.id = o.custo
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
+select c.name, o.order_reference, o.order_date, pa.unit_price \* oi.quantity as total from customers c inner join orders o on c.id = o.customer_id inner join order_items oi on o.id = oi.order_id inner join product_availability pa on oi.product_id = pa.prod_id order by total desc;
