@@ -52,9 +52,15 @@ SELECT * FROM products WHERE product_name LIKE '%socks%';
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 ``SQL
+SELECT * FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id WHERE unit_price > 100;
 
 
 5. Retrieve the 5 most expensive products
+``SQL
+
+``
+
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
