@@ -35,9 +35,25 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+``SQL
+SELECT name,address FROM customers WHERE country='United States';
+``
+
 2. Retrieve all the customers in ascending name sequence
+``SQL
+SELECT name FROM customers ORDER BY name;
+``
+
 3. Retrieve all the products whose name contains the word `socks`
+``SQL
+SELECT * FROM products WHERE product_name LIKE '%socks%';
+
+``
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+``SQL
+
+
 5. Retrieve the 5 most expensive products
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
