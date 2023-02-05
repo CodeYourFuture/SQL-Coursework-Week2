@@ -68,8 +68,13 @@ SELECT product_name,supplier_name,unit_price FROM products INNER JOIN suppliers 
 ``
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+``SQL
+SELECT product_name, supplier_name FROM products INNER JOIN suppliers ON products.id=suppliers.id WHERE suppliers.country='United Kingdom';
+``
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
