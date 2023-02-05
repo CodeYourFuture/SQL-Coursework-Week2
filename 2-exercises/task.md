@@ -69,6 +69,39 @@ INNER JOIN product_availability
 ON order_items.product_id = product_availability.prod_id
 WHERE orders.order_reference = 'ORD006';
 
+11. SELECT customers.name, order_reference, order_date, products.product_name, suppliers.supplier_name,
+order_items.quantity
+FROM orders
+INNER JOIN customers
+ON orders.customer_id = customers.id
+INNER JOIN order_items
+ON orders.id = order_items.order_id
+INNER JOIN products
+ON order_items.product_id = products.id
+INNER JOIN suppliers
+ON order_items.supplier_id = suppliers.id
+
+12. SELECT customers.name
+FROM orders
+INNER JOIN customers
+ON orders.customer_id = customers.id
+INNER JOIN order_items
+ON orders.id = order_items.order_id
+INNER JOIN suppliers
+ON order_items.supplier_id = suppliers.id AND suppliers.country = 'China'
+GROUP by customers.name;
+
+13. SELECT customers.name, orders.order_reference, orders.order_date,
+order_items.quantity * product_availability.unit_price AS total
+FROM orders
+INNER JOIN customers
+ON orders.customer_id = customers.id
+INNER JOIN order_items
+ON orders.id = order_items.order_id
+INNER JOIN product_availability
+ON order_items.product_id = product_availability.prod_id
+ORDER BY total DESC;
+
 ```
 
 When you have finished all of the questions - open a pull request with your answers to the `Databases-Homework` repository.
