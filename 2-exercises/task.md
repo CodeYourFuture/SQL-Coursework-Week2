@@ -57,11 +57,15 @@ SELECT * FROM products INNER JOIN product_availability ON products.id=product_av
 
 5. Retrieve the 5 most expensive products
 ``SQL
+SELECT * FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id ORDER BY unit_price desc limit 5;
 
 ``
 
 
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+``SQL
+
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
