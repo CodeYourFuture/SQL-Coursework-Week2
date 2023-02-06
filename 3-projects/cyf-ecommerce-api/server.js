@@ -35,7 +35,7 @@ app.get("/suppliers", async (req, res) => {
 })
 
 app.get("/products", async (req, res) => {
-    const query = "";
+    const query = "SELECT p.product_name, pa.unit_price, s.supplier_name FROM products p JOIN product_availability pa ON (p.id=pa.prod_id) JOIN suppliers s ON (pa.supp_id=s.id) ORDER BY p.product_name ASC;";
     try {
         const result = await pool.query(query);
         res.json(result.rows)
