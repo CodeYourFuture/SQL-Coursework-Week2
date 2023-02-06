@@ -83,6 +83,10 @@ SELECT DISTINCT orders.id as "order id", orders.order_reference as "reference", 
 ``
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+``SQL
+SELECT products.product_name, product_availability.unit_price, order_items.quantity FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id INNER JOIN order_items ON order_items.product_id=product_availability.prod_id INNER JOIN orders ON orders.id=order_items.order_id WHERE orders.order_reference='ORD006';
+``
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
