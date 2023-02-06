@@ -96,4 +96,7 @@ SELECT customers.name from customers INNER JOIN orders ON customers.id=orders.cu
 ``
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+``SQL
+SELECT customers.name, orders.order_reference, orders.order_date, (order_items.quantity * product_availability.unit_price) as "total amount" FROM customers INNER JOIN orders ON customers.id=orders.customer_id INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON product_availability.prod_id=order_items.product_id ORDER BY "total amount" DESC;
+``
 
