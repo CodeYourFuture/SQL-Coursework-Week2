@@ -49,7 +49,7 @@ app.get("/products", (req, res) => {
   pool
     .query(productsQuery)
     .then(() => res.json())
-    .then((data) => res.send(data))
+    .then((data) => res.send(data.rows))
     .catch((err) => {
       console.log(err);
       res.status(500).send(err);

@@ -93,7 +93,7 @@ ANS: SELECT c.name, o.order_reference, o.order_date, p.product_name, s.supplier_
 	products p ON (p.id = a.prod_id) join
 	suppliers s ON (s.id = a.supp_id);
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
-ANS: SELECT c.name
+ANS: SELECT DISTINCT c.name
 	FROM customers c Join
 	orders o on (c.id = o.customer_id) join
 	order_items oi on (o.id = oi.order_id) join
@@ -105,5 +105,6 @@ ANS: SELECT c.name, o.order_reference, o.order_date, (a.unit_price * oi.quantity
 	FROM customers c Join
 	orders o on (c.id = o.customer_id) join
 	order_items oi on (o.id = oi.order_id) join
-	product_availability a ON (a.prod_id = oi.product_id);
+	product_availability a ON (a.prod_id = oi.product_id)
+	ORDER BY total_amount DESC;
 
