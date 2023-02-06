@@ -73,7 +73,9 @@ SELECT product_name, supplier_name FROM products INNER JOIN suppliers ON product
 ``
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
-
+``SQL
+SELECT DISTINCT orders.id as "order id", orders.order_reference as "reference", orders.order_date as "date", customer_id as "customer", (order_items.quantity * product_availability.unit_price) as "total cost" FROM orders INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id WHERE customer_id='1' ORDER BY orders.order_date;
+`` INCORRECT
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
