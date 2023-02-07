@@ -2,15 +2,16 @@ const express = require('express')
 const app = express()
 const { Pool } = require('pg')
 const port = process.env.PORT || 5000
+require('dotenv').config()
 
 app.use(express.json())
 
 const pool = new Pool({
-  user: 'michelle',
+  user: process.env.user,
   port: 5432,
-  password: 'michelle',
-  host: 'localhost',
-  database: 'cyf_ecommerce',
+  password: process.env.password,
+  host: process.env.host,
+  database: process.env.database,
 })
 
 app.get('/', (req, res) => res.send('Hello Express! Ask for customers...'))
