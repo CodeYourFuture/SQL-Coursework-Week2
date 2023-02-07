@@ -25,4 +25,29 @@ app.get('/customers', (req, res) => {
     })
 })
 
+app.get('/suppliers', (req, res) => {
+  pool
+    .query(`select * from suppliers`)
+    .then((result) => res.json(result.rows))
+    .catch((err) => {
+      console.log(err)
+      res.status(404).json({ msg: 'Not Found' })
+    })
+})
+
+app.get('/products', (req, res) => {
+  pool
+    .query(
+      `
+      select * from products
+      inner join suppliers on suppliers.id=products.id;
+      `
+    )
+    .then((result) => res.json(result.rows))
+    .catch((err) => {
+      console.log(err)
+      res.status(404).json({ msg: 'Not Found' })
+    })
+})
+
 app.listen(port, () => console.log(`Listening on port ${port}`))
