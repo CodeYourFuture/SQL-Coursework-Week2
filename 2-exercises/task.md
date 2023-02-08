@@ -93,7 +93,7 @@ FROM orders
 join order_items
 on orders.id = order_items.order_id
 join customers
-on orders.id = customers.id
+on orders.customer_id = customers.id
 where name = 'Hope Crosby'
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
@@ -113,7 +113,7 @@ where order_reference = 'ORD006'
 SELECT  name, order_reference, order_date, product_name,supplier_name, quantity
 FROM orders 
 join customers
-on orders.id = customers.id
+on orders.customer_id = customers.id
 join order_items
 on orders.id = order_items.order_id
 join products
@@ -126,7 +126,7 @@ on order_items.supplier_id = suppliers.id
 SELECT  name
 FROM orders 
 join customers
-on orders.id = customers.id
+on orders.customer_id = customers.id
 join order_items
 on orders.id = order_items.order_id
 join products
@@ -141,7 +141,7 @@ where suppliers.country = 'China'
 SELECT  name, order_reference, order_date, quantity * unit_price as "total amount"
 FROM orders 
 join customers
-on orders.id = customers.id
+on orders.customer_id = customers.id
 join order_items
 on orders.id = order_items.order_id
 join products
