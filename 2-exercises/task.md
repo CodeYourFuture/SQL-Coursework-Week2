@@ -8,6 +8,17 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+1.select name, address from customers WHERE country= 'United States';
+
+2. select * from customers order by name asc;
+
+3. select * from products WHERE product_name LIKE '% socks %' or product_name LIKE 'socks %' or product_name LIKE '% socks' or product_name = 'socks';
+
+4. select prod_id, product_name, unit_price, supp_id from products INNER JOIN product_availability ON products.id = product_availability.prod_id WHERE unit_price > 100;
+
+5. select prod_id, unit_price, product_name FROM product_availability INNER JOIN products ON product_availability.prod_id = products.id ORDER BY unit_price desc  limit 5;
+
+
 
 
 ```
