@@ -8,6 +8,61 @@ Below you will find a set of tasks for you to complete to set up a database for 
 
 To submit this homework write the correct commands for each question here:
 ```sql
+1.  SELECT name, address from customers WHERE country = 'United States';
+
+2. SELECT * FROM customers ORDER BY name;
+
+3.SELECT * FROM products WHERE product_name like '%socks%';
+
+4. SELECT product_availability.prod_id, products.product_name, product_availability.unit_price, product_availability.supp_id 
+FROM products 
+INNER JOIN product_availability on products.id = product_availability.prod_id 
+WHERE unit_price > 100;
+
+5. SELECT products.product_name, product_availability.unit_price 
+FROM products 
+INNER JOIN product_availability ON products.id = product_availability.prod_id 
+ORDER BY unit_price DESC LIMIT 5;
+
+6. SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name
+FROM products
+INNER JOIN product_availability
+ON products.id = product_availability.prod_id
+INNER JOIN suppliers on suppliers.id = product_availability.supp_id;
+
+7. SELECT products.product_name, suppliers.supplier_name FROM products
+INNER JOIN product_availability
+ON products.id = product_availability.prod_id
+INNER JOIN suppliers ON  suppliers.id = product_availability.supp_id
+WHERE suppliers.country = 'United Kingdom';
+
+8. SELECT order_items.order_id, orders.order_date, orders.order_reference, order_items.quantity * product_availability.unit_price 
+AS "total_cost" FROM orders 
+INNER JOIN order_items ON orders.id = order_items.order_id 
+INNER JOIN product_availability 
+ON product_availability.prod_id = order_items.product_id 
+    AND product_availability.supp_id = order_items.supplier_id 
+WHERE orders.customer_id = 1;
+
+9. SELECT orders.id, orders.order_date, orders.order_reference, orders.customer_id, order_items.product_id, order_items.supplier_id, order_items.quantity 
+FROM orders 
+INNER JOIN customers on  orders.customer_id = customers.id 
+INNER JOIN order_items on orders.id = order_items.order_id 
+WHERE customers.name = 'Hope Crosby';
+
+
+10. select products.product_name, product_availability.unit_price, order_items.quantity from products inner join product_availability on prod_id = id inn
+er join order_items on product_id = prod_id and supp_id = supplier_id inner join orders on orders.id = order_id where order_reference = 'ORD006';
+
+12. SELECT customers.name FROM customers 
+INNER JOIN orders on  customers.id = orders.customer_id 
+INNER JOIN order_items on order_items.order_id = orders.id 
+INNER JOIN suppliers on suppliers.id = order_items.supplier_id 
+WHERE suppliers.country = 'China'; 
+
+13.  select customers.name, orders.order_reference, orders.order_date, product_availability.unit_price * order_items.quantity as total from customers inner join orders on customers.id = customer_id inner join order_items on order_id = orders.id inner join product_availability on prod_id = product_id and supp_id = supp
+lier_id order by total desc;
+
 
 
 ```
