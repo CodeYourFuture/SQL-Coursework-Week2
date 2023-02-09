@@ -25,6 +25,14 @@ createdb cyf_ecommerce
 Import the file [`cyf_ecommerce.sql`](./cyf_ecommerce.sql) in your newly created database:
 
 ```sql
+1.select name,address from customers where country='United States';
+2.select name from customers order by name;
+3.select  product_name from products where  product_name like '%socks%';select unit_price from;
+4.
+5.product_availability order by unit_price desc limit 5;
+
+
+
 psql -d cyf_ecommerce -f cyf_ecommerce.sql
 ```
 
