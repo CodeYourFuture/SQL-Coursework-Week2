@@ -51,11 +51,21 @@ inner join order_items on order_items.order_id=orders.id where customers.name='H
 inner join product_availability on 
 product_availability.prod_id=order_items.product_id 
 inner join orders on orders.id= order_items.order_id where orders.order_reference='ORD006';
+11.
+select customers.name,orders.order_reference,orders.order_date,products.product_name,suppliers.supplier_name,order_items.quantity from customers
+inner join orders on orders.customer_id =customers.id
+inner join order_items on  orders.id = order_items.order_id
+inner join products on  products.id = order_items.product_id
+inner join suppliers on suppliers.id =order_items.supplier_id;
+12. select customers.name from customers inner join orders on orders.customer_id=customers.id
+inner join order_items on order_items.order_id=orders.id
+inner join product_availability on order_items.supplier_id= product_availability.supp_id
+inner join suppliers on suppliers.id=product_availability.supp_id;
+where suppliers.country='China';
+13. select customers.name, orders.order_reference, orders.order_date, (quantity * unit price) as total from customers inner join orders on orders.customer_id=customers.id
+inners join order_items on order_items.order_id=orders.id inner join product_availability on product_availability.prod_id=order_items.product_id;
 
-
-
-
-
+13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) 
 psql -d cyf_ecommerce -f cyf_ecommerce.sql
 ```
 
