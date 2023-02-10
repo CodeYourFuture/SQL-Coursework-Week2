@@ -40,6 +40,11 @@ inner join suppliers on suppliers.id=product_availability.supp_id;
 inner join products on products.id=product_availability.prod_id
 inner join suppliers on suppliers.id=product_availability.supp_id
 where suppliers.country='United Kingdom';
+8. select order_items.id, orders.order_reference,orders.order_date,(order_items.quantity * product_availability.unit_price )
+as cost from order_items 
+Inner join orders on orders.id=order_items.order_id
+Inner join product_availability on product_availability.prod_id=order_items.product_id
+where orders.custome_id=1;
 
 
 
