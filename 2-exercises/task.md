@@ -45,6 +45,12 @@ as cost from order_items
 Inner join orders on orders.id=order_items.order_id
 Inner join product_availability on product_availability.prod_id=order_items.product_id
 where orders.custome_id=1;
+9. select * from orders inner join customers on customers.id= orders.customer_id 
+inner join order_items on order_items.order_id=orders.id where customers.name='Hope Crosby';
+10.select product_name,unit_price,quantity from order_items inner join products on products.id=order_items.product_id
+inner join product_availability on 
+product_availability.prod_id=order_items.product_id 
+inner join orders on orders.id= order_items.order_id where orders.order_reference='ORD006';
 
 
 
