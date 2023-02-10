@@ -28,8 +28,20 @@ Import the file [`cyf_ecommerce.sql`](./cyf_ecommerce.sql) in your newly created
 1.select name,address from customers where country='United States';
 2.select name from customers order by name;
 3.select  product_name from products where  product_name like '%socks%';select unit_price from;
-4.
+4.select product_availability.prod_id, product_availability.unit_price, product_availability.supp_id
+from product_availability
+inner join products on products.id = product_availability.prod_id
+WHERE product_availability.unit_price >  100;
 5.product_availability order by unit_price desc limit 5;
+6.select product.product_name,product_availability.unit-price,supplier.supplier_name from product_availability 
+inner join products on products.id=product_availability.prod_id
+inner join suppliers on suppliers.id=product_availability.supp_id;
+7.select products.product_name, suppliers.supplier_name from products_availability
+inner join products on products.id=product_availability.prod_id
+inner join suppliers on suppliers.id=product_availability.supp_id
+where suppliers.country='United Kingdom';
+
+
 
 
 
