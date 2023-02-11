@@ -37,7 +37,7 @@ Once you understand the database that you are going to work with, solve the foll
 
 1. Retrieve all the customers' names and addresses who live in the United States
 
-SELECT * FROM customers WHERE country ='United States';
+SELECT \* FROM customers WHERE country ='United States';
 
 id | name | address | city | country
 ----+--------------+----------------------------+------------------+---------------
@@ -46,7 +46,7 @@ id | name | address | city | country
 
 2. Retrieve all the customers in ascending name sequence
 
-SELECT * FROM customers ORDER BY name;
+SELECT \* FROM customers ORDER BY name;
 id | name | address | city | country
 ----+--------------------+-----------------------------+------------------+----------------
 4 | Amber Tran | 6967 Ac Road | Villafranca Asti | United States
@@ -58,7 +58,7 @@ id | name | address | city | country
 
 3. Retrieve all the products whose name contains the word `socks`
 
-SELECT * FROM products WHERE product_name ILIKE '%socks%';
+SELECT \* FROM products WHERE product_name ILIKE '%socks%';
 id | product_name
 ----+------------------
 4 | Super warm socks
@@ -92,9 +92,9 @@ Javascript Book | 39
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 
 SELECT products.product_name,product_availability.unit_price, suppliers.supplier_name FROM products
-INNER JOIN product_availability ON product_availability.prod_id=products.id;
+INNER JOIN product_availability ON product_availability.prod_id=products.id
+INNER JOIN suppliers ON product_availability.supp_id=suppliers.id;
 
-INNER JOIN suppliers ON  product_availability.supp_id=suppliers.id;
       product_name       | unit_price | supplier_name
 -------------------------+------------+---------------
  Mobile Phone X          |        249 | Sainsburys
@@ -118,14 +118,72 @@ INNER JOIN suppliers ON  product_availability.supp_id=suppliers.id;
  Tee Shirt Olympic Games |         21 | Argos
  Tee Shirt Olympic Games |         18 | Taobao
  Tee Shirt Olympic Games |         20 | Amazon
-
-
-
-
+(21 rows)
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+
+SELECT products.product_name,product_availability.unit_price, suppliers.supplier_name, suppliers.country FROM products
+INNER JOIN product_availability ON product_availability.prod_id=products.id
+INNER JOIN suppliers ON product_availability.supp_id=suppliers.id WHERE suppliers.country='United Kingdom';
+
+      product_name       | unit_price | supplier_name |    country
+-------------------------+------------+---------------+----------------
+ Javascript Book         |         39 | Argos         | United Kingdom
+ Super warm socks        |          8 | Argos         | United Kingdom
+ Coffee Cup              |          4 | Argos         | United Kingdom
+ Tee Shirt Olympic Games |         21 | Argos         | United Kingdom
+ Mobile Phone X          |        249 | Sainsburys    | United Kingdom
+ Le Petit Prince         |         10 | Sainsburys    | United Kingdom
+ Super warm socks        |         10 | Sainsburys    | United Kingdom
+ Coffee Cup              |          5 | Sainsburys    | United Kingdom
+ Ball                    |         15 | Sainsburys    | United Kingdom
+(9 rows)
+
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
+
+
+SELECT orders.customer_id, order_items.order_id,  orders.order_reference, orders.order_date, order_items.quantity*product_availability.unit_price as "Total Cost" FROM order_items
+INNER JOIN orders ON order_items.order_id=orders.id
+INNER JOIN product_availability ON product_availability.prod_id=order_items.product_id WHERE orders.customer_id=1;
+
+ customer_id | order_id | order_reference | order_date | Total Cost
+-------------+----------+-----------------+------------+------------
+           1 |        1 | ORD001          | 2019-06-01 |         20
+           1 |        1 | ORD001          | 2019-06-01 |         18
+           1 |        1 | ORD001          | 2019-06-01 |         21
+           1 |        1 | ORD001          | 2019-06-01 |         50
+           1 |        1 | ORD001          | 2019-06-01 |         25
+           1 |        1 | ORD001          | 2019-06-01 |         40
+           1 |        1 | ORD001          | 2019-06-01 |         50
+           1 |        2 | ORD002          | 2019-07-15 |         40
+           1 |        2 | ORD002          | 2019-07-15 |         20
+           1 |        2 | ORD002          | 2019-07-15 |         32
+           1 |        2 | ORD002          | 2019-07-15 |         40
+           1 |        2 | ORD002          | 2019-07-15 |         10
+           1 |        2 | ORD002          | 2019-07-15 |         10
+           1 |        3 | ORD003          | 2019-07-11 |         30
+           1 |        3 | ORD003          | 2019-07-11 |         40
+           1 |        3 | ORD003          | 2019-07-11 |         40
+           1 |        3 | ORD003          | 2019-07-11 |         50
+           1 |        3 | ORD003          | 2019-07-11 |         28
+           1 |        3 | ORD003          | 2019-07-11 |         40
+           1 |        3 | ORD003          | 2019-07-11 |         30
+(20 rows)
+
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+
+SELECT * from orders
+INNER JOIN customers ON customers.id=orders.customer_id AND customers.name = 'Hope Crosby';
+
+
+ id | order_date | order_reference | customer_id | id |    name     |          address           | city  |    country
+----+------------+-----------------+-------------+----+-------------+----------------------------+-------+----------------
+  4 | 2019-05-24 | ORD004          |           2 |  2 | Hope Crosby | P.O. Box 276, 4976 Sit Rd. | Steyr | United Kingdom
+(1 row)
+
+
+
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
