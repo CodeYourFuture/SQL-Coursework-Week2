@@ -25,6 +25,47 @@ createdb cyf_ecommerce
 Import the file [`cyf_ecommerce.sql`](./cyf_ecommerce.sql) in your newly created database:
 
 ```sql
+1.select name,address from customers where country='United States';
+2.select name from customers order by name;
+3.select  product_name from products where  product_name like '%socks%';select unit_price from;
+4.select product_availability.prod_id, product_availability.unit_price, product_availability.supp_id
+from product_availability
+inner join products on products.id = product_availability.prod_id
+WHERE product_availability.unit_price >  100;
+5.product_availability order by unit_price desc limit 5;
+6.select product.product_name,product_availability.unit-price,supplier.supplier_name from product_availability 
+inner join products on products.id=product_availability.prod_id
+inner join suppliers on suppliers.id=product_availability.supp_id;
+7.select products.product_name, suppliers.supplier_name from products_availability
+inner join products on products.id=product_availability.prod_id
+inner join suppliers on suppliers.id=product_availability.supp_id
+where suppliers.country='United Kingdom';
+8. select order_items.id, orders.order_reference,orders.order_date,(order_items.quantity * product_availability.unit_price )
+as cost from order_items 
+Inner join orders on orders.id=order_items.order_id
+Inner join product_availability on product_availability.prod_id=order_items.product_id
+where orders.custome_id=1;
+9. select * from orders inner join customers on customers.id= orders.customer_id 
+inner join order_items on order_items.order_id=orders.id where customers.name='Hope Crosby';
+10.select product_name,unit_price,quantity from order_items inner join products on products.id=order_items.product_id
+inner join product_availability on 
+product_availability.prod_id=order_items.product_id 
+inner join orders on orders.id= order_items.order_id where orders.order_reference='ORD006';
+11.
+select customers.name,orders.order_reference,orders.order_date,products.product_name,suppliers.supplier_name,order_items.quantity from customers
+inner join orders on orders.customer_id =customers.id
+inner join order_items on  orders.id = order_items.order_id
+inner join products on  products.id = order_items.product_id
+inner join suppliers on suppliers.id =order_items.supplier_id;
+12. select customers.name from customers inner join orders on orders.customer_id=customers.id
+inner join order_items on order_items.order_id=orders.id
+inner join product_availability on order_items.supplier_id= product_availability.supp_id
+inner join suppliers on suppliers.id=product_availability.supp_id;
+where suppliers.country='China';
+13. select customers.name, orders.order_reference, orders.order_date, (quantity * unit price) as total from customers inner join orders on orders.customer_id=customers.id
+inners join order_items on order_items.order_id=orders.id inner join product_availability on product_availability.prod_id=order_items.product_id;
+
+13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) 
 psql -d cyf_ecommerce -f cyf_ecommerce.sql
 ```
 
