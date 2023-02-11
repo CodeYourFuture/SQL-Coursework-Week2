@@ -1,5 +1,6 @@
-drop table if exists order_items;
-drop table if exists orders cascade;
+ // import the data from the csv files
+drop table if exists order_items; 
+drop table if exists orders cascade; // 
 DROP TABLE IF EXISTS product_availability cascade;
 drop table if exists customers cascade;
 drop table if exists products cascade;
@@ -121,4 +122,5 @@ INSERT INTO order_items VALUES (16, 8, 1, 4, 1);
 INSERT INTO order_items VALUES (17, 9, 6, 4, 2);
 INSERT INTO order_items VALUES (18, 10, 6, 2, 1);
 INSERT INTO order_items VALUES (19, 10, 4, 1, 5);
+
 
