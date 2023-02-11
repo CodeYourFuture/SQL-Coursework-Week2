@@ -37,7 +37,7 @@ Once you understand the database that you are going to work with, solve the foll
 
 1. Retrieve all the customers' names and addresses who live in the United States
 
-SELECT \* FROM customers WHERE country ='United States';
+SELECT * FROM customers WHERE country ='United States';
 
 id | name | address | city | country
 ----+--------------+----------------------------+------------------+---------------
@@ -46,7 +46,7 @@ id | name | address | city | country
 
 2. Retrieve all the customers in ascending name sequence
 
-SELECT \* FROM customers ORDER BY name;
+SELECT * FROM customers ORDER BY name;
 id | name | address | city | country
 ----+--------------------+-----------------------------+------------------+----------------
 4 | Amber Tran | 6967 Ac Road | Villafranca Asti | United States
@@ -57,9 +57,72 @@ id | name | address | city | country
 6 | Quintessa Austin | 597-2737 Nunc Rd. | Saint-Marc | United Kingdom
 
 3. Retrieve all the products whose name contains the word `socks`
+
+SELECT * FROM products WHERE product_name ILIKE '%socks%';
+id | product_name
+----+------------------
+4 | Super warm socks
+(1 row)
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+SELECT products.id,products.product_name, product_availability.supp_id,product_availability.unit_price FROM products
+cyf_ecommerce-# INNER JOIN product_availability ON product_availability.prod_id=products.id WHERE product_availability.unit_price >100;
+id | product_name | supp_id | unit_price
+----+----------------+---------+------------
+1 | Mobile Phone X | 4 | 249
+1 | Mobile Phone X | 1 | 299
+(2 rows)
+
 5. Retrieve the 5 most expensive products
+
+SELECT products.product_name, product_availability.unit_price FROM products
+INNER JOIN product_availability ON product_availability.prod_id=products.id
+ORDER BY unit_price DESC LIMIT 5;
+
+product_name | unit_price
+-----------------+------------
+Mobile Phone X | 299
+Mobile Phone X | 249
+Javascript Book | 41
+Javascript Book | 40
+Javascript Book | 39
+(5 rows)
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
+SELECT products.product_name,product_availability.unit_price, suppliers.supplier_name FROM products
+INNER JOIN product_availability ON product_availability.prod_id=products.id;
+
+INNER JOIN suppliers ON  product_availability.supp_id=suppliers.id;
+      product_name       | unit_price | supplier_name
+-------------------------+------------+---------------
+ Mobile Phone X          |        249 | Sainsburys
+ Mobile Phone X          |        299 | Amazon
+ Javascript Book         |         41 | Taobao
+ Javascript Book         |         39 | Argos
+ Javascript Book         |         40 | Amazon
+ Le Petit Prince         |         10 | Sainsburys
+ Le Petit Prince         |         10 | Amazon
+ Super warm socks        |         10 | Sainsburys
+ Super warm socks        |          8 | Argos
+ Super warm socks        |          5 | Taobao
+ Super warm socks        |         10 | Amazon
+ Coffee Cup              |          5 | Sainsburys
+ Coffee Cup              |          4 | Argos
+ Coffee Cup              |          4 | Taobao
+ Coffee Cup              |          3 | Amazon
+ Ball                    |         20 | Taobao
+ Ball                    |         15 | Sainsburys
+ Ball                    |         14 | Amazon
+ Tee Shirt Olympic Games |         21 | Argos
+ Tee Shirt Olympic Games |         18 | Taobao
+ Tee Shirt Olympic Games |         20 | Amazon
+
+
+
+
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
