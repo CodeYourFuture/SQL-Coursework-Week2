@@ -185,6 +185,35 @@ INNER JOIN customers ON customers.id=orders.customer_id AND customers.name = 'Ho
 
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+
+-->>> I just liked to add total column , and order by the total price the bigger amount on top!
+
+SELECT products.product_name, orders.order_reference, product_availability.unit_price,order_items.quantity, order_items.quantity * product_availability.unit_price AS "Total" FROM products
+INNER JOIN product_availability On product_availability.prod_id=products.id
+INNER JOIN order_items ON product_availability.prod_id=order_items.product_id
+INNER JOIN orders ON order_items.order_id=orders.id WHERE orders.order_reference = 'ORD006' ORDER BY "Total" DESC;
+
+
+
+   product_name   | order_reference | unit_price | quantity | Total
+------------------+-----------------+------------+----------+-------
+ Javascript Book  | ORD006          |         41 |        1 |    41
+ Javascript Book  | ORD006          |         40 |        1 |    40
+ Javascript Book  | ORD006          |         39 |        1 |    39
+ Super warm socks | ORD006          |         10 |        3 |    30
+ Super warm socks | ORD006          |         10 |        3 |    30
+ Super warm socks | ORD006          |          8 |        3 |    24
+ Super warm socks | ORD006          |          5 |        3 |    15
+ Coffee Cup       | ORD006          |          5 |        3 |    15
+ Coffee Cup       | ORD006          |          4 |        3 |    12
+ Coffee Cup       | ORD006          |          4 |        3 |    12
+ Le Petit Prince  | ORD006          |         10 |        1 |    10
+ Le Petit Prince  | ORD006          |         10 |        1 |    10
+ Coffee Cup       | ORD006          |          3 |        3 |     9
+(13 rows)
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
