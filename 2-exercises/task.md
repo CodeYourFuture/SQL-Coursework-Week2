@@ -69,6 +69,29 @@ join order_items on (orders.id = order_items.order_id) join product_availability
 <!-- select orders.id, orders.order_reference, orders.order_date from orders join order_items on (orders.id = order_items.order_id) join customers on (customers.id = orders.customer_id) where customers.name='Hope Crosby'; -->
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+<!-- SELECT products.product_name, product_availability.unit_price, order_items.quantity
+FROM orders
+INNER JOIN order_items ON  orders.id = order_items.order_id
+INNER JOIN products ON  products.id = order_items.product_id
+INNER JOIN  product_availability ON product_availability.prod_id = order_items.product_id
+WHERE orders.order_reference ='ORD006'; -->
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+<!-- SELECT customers.name,orders.order_reference,orders.order_date,products.product_name,suppliers.supplier_name,order_items.quantity FROM customers
+INNER JOIN orders ON orders.customer_id =customers.id
+INNER JOIN order_items ON  orders.id = order_items.order_id
+INNER JOIN products ON  products.id = order_items.product_id
+INNER JOIN suppliers ON suppliers.id =order_items.supplier_id; -->
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+<!-- SELECT customers.name
+FROM suppliers
+INNER JOIN order_items ON  suppliers.id = order_items.supplier_id
+INNER JOIN orders ON order_items.order_id = orders.id
+INNER JOIN customers ON customers.id = orders.customer_id
+WHERE suppliers.country = 'China'; -->
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
+<!-- SELECT customers.name,orders.order_reference,orders.order_date,(quantity * unit_price) AS total_amount
+FROM customers
+INNER JOIN orders ON  orders.customer_id = customers.id
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN product_availability ON order_items.product_id  = product_availability.prod_id
+ORDER BY total_amount DESC; -->
