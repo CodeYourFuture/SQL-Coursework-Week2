@@ -52,7 +52,7 @@ SELECT * FROM products WHERE product_name LIKE '%socks%';
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 ``SQL
-SELECT * FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id WHERE unit_price > 100;
+SELECT products.id, products.product_name, product_availability.unit_price, product_availability.supp_id FROM products INNER JOIN product_availability ON products.id=product_availability.prod_id WHERE unit_price > 100;
 
 
 5. Retrieve the 5 most expensive products
@@ -65,17 +65,31 @@ SELECT * FROM products INNER JOIN product_availability ON products.id=product_av
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 ``SQL
 SELECT product_name,supplier_name,unit_price FROM products INNER JOIN suppliers ON products.id=suppliers.id INNER JOIN product_availability ON products.id=product_availability.prod_id;
+
+``CORRECTION --> JOINED ON product_availability in the centre as advised by Phil``
+SELECT product_name,supplier_name,unit_price FROM products INNER JOIN product_availability ON product_availability.prod_id=products.id INNER JOIN suppliers ON product_availability.supp_id=suppliers.id;
+
 ``
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 ``SQL
 SELECT product_name, supplier_name FROM products INNER JOIN suppliers ON products.id=suppliers.id WHERE suppliers.country='United Kingdom';
+
+``CORRECTION --> JOINED WITH product_availability in the centre again, same as above (advised by Phil)``
+SELECT product_name, supplier_name FROM products INNER JOIN product_availability ON product_availability.prod_id=products.id INNER JOIN suppliers ON product_availability.supp_id=suppliers.id WHERE suppliers.country='United Kingdom';
+
 ``
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
 ``SQL
+
 SELECT DISTINCT orders.id as "order id", orders.order_reference as "reference", orders.order_date as "date", customer_id as "customer", (order_items.quantity * product_availability.unit_price) as "total cost" FROM orders INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id WHERE customer_id='1' ORDER BY orders.order_date;
 `` INCORRECT
+
+``CORRECT --> removed DISTINCT and added AND statement in the second INNER JOIN statement (advised by Keith)``
+ SELECT orders.id as "order id", orders.order_reference as "reference", orders.order_date as "date", customer_id as "customer", (order_items.quantity * product_availability.unit_price) as "total cost" FROM orders INNER JOIN order_items ON orders.id=order_items.order_id INNER JOIN product_availability ON order_items.product_id=product_availability.prod_id AND order_items.supplier_id=product_availability.supp_id WHERE customer_id='1' ORDER BY orders.order_date;
+
+
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 ``SQL
