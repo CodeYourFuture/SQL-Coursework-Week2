@@ -193,8 +193,6 @@ INNER JOIN product_availability On product_availability.prod_id=products.id
 INNER JOIN order_items ON product_availability.prod_id=order_items.product_id
 INNER JOIN orders ON order_items.order_id=orders.id WHERE orders.order_reference = 'ORD006' ORDER BY "Total" DESC;
 
-
-
    product_name   | order_reference | unit_price | quantity | Total
 ------------------+-----------------+------------+----------+-------
  Javascript Book  | ORD006          |         41 |        1 |    41
@@ -212,8 +210,131 @@ INNER JOIN orders ON order_items.order_id=orders.id WHERE orders.order_reference
  Coffee Cup       | ORD006          |          3 |        3 |     9
 (13 rows)
 
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
+SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity 
+FROM customers
+JOIN orders ON orders.customer_id=customers.id
+JOIN order_items ON order_items.order_id=orders.id
+JOIN products ON order_items.product_id=products.id
+JOIN suppliers ON suppliers.id=order_items.supplier_id;
+
+
+        name        | order_reference | order_date |      product_name       | supplier_name | quantity
+--------------------+-----------------+------------+-------------------------+---------------+----------
+ Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games | Taobao        |        1
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        | Taobao        |        5
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        | Argos         |        4
+ Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         | Sainsburys    |        1
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              | Argos         |       10
+ Guy Crawford       | ORD003          | 2019-07-11 | Ball                    | Taobao        |        2
+ Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          | Amazon        |        1
+ Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         | Argos         |        2
+ Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         | Amazon        |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              | Taobao        |        3
+ Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         | Taobao        |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         | Sainsburys    |        1
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        | Sainsburys    |        3
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        | Argos         |       15
+ Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games | Amazon        |        1
+ Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          | Sainsburys    |        1
+ Edan Higgins       | ORD009          | 2019-07-24 | Ball                    | Sainsburys    |        2
+ Edan Higgins       | ORD010          | 2019-05-10 | Ball                    | Taobao        |        1
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        | Amazon        |        5
+(19 rows)
+
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
+SELECT customers.name, suppliers.supplier_name,suppliers.country FROM customers
+JOIN orders ON orders.customer_id=customers.id
+JOIN order_items ON order_items.order_id=orders.id
+JOIN suppliers ON order_items.supplier_id=suppliers.id 
+WHERE suppliers.country='China';
+
+     name     | supplier_name | country
+--------------+---------------+---------
+ Guy Crawford | Taobao        | China
+ Guy Crawford | Taobao        | China
+ Guy Crawford | Taobao        | China
+ Amber Tran   | Taobao        | China
+ Amber Tran   | Taobao        | China
+ Edan Higgins | Taobao        | China
+(6 rows)
+
+
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
+
+SELECT customers.name, orders.order_reference, orders.order_date, products.product_name,
+order_items.quantity, product_availability.unit_price,
+(order_items.quantity * product_availability.unit_price) AS "Total Amount"
+FROM customers
+JOIN orders ON orders.customer_id=customers.id
+JOIN order_items ON order_items.order_id=orders.id
+JOIN products ON order_items.product_id=products.id
+JOIN product_availability ON products.id=product_availability.prod_id;
+
+
+        name        | order_reference | order_date |      product_name       | quantity | unit_price | Total Amount
+--------------------+-----------------+------------+-------------------------+----------+------------+--------------
+ Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games |        1 |         20 |           20
+ Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games |        1 |         18 |           18
+ Guy Crawford       | ORD001          | 2019-06-01 | Tee Shirt Olympic Games |        1 |         21 |           21
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        |        5 |         10 |           50
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        |        5 |          5 |           25
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        |        5 |          8 |           40
+ Guy Crawford       | ORD001          | 2019-06-01 | Super warm socks        |        5 |         10 |           50
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        |        4 |         10 |           40
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        |        4 |          5 |           20
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        |        4 |          8 |           32
+ Guy Crawford       | ORD002          | 2019-07-15 | Super warm socks        |        4 |         10 |           40
+ Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         |        1 |         10 |           10
+ Guy Crawford       | ORD002          | 2019-07-15 | Le Petit Prince         |        1 |         10 |           10
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              |       10 |          3 |           30
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              |       10 |          4 |           40
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              |       10 |          4 |           40
+ Guy Crawford       | ORD003          | 2019-07-11 | Coffee Cup              |       10 |          5 |           50
+ Guy Crawford       | ORD003          | 2019-07-11 | Ball                    |        2 |         14 |           28
+ Guy Crawford       | ORD003          | 2019-07-11 | Ball                    |        2 |         15 |           30
+ Guy Crawford       | ORD003          | 2019-07-11 | Ball                    |        2 |         20 |           40
+ Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          |        1 |        299 |          299
+ Hope Crosby        | ORD004          | 2019-05-24 | Mobile Phone X          |        1 |        249 |          249
+ Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         |        2 |         40 |           80
+ Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         |        2 |         39 |           78
+ Britanney Kirkland | ORD005          | 2019-05-30 | Javascript Book         |        2 |         41 |           82
+ Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         |        1 |         10 |           10
+ Britanney Kirkland | ORD005          | 2019-05-30 | Le Petit Prince         |        1 |         10 |           10
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              |        3 |          3 |            9
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              |        3 |          4 |           12
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              |        3 |          4 |           12
+ Amber Tran         | ORD006          | 2019-07-05 | Coffee Cup              |        3 |          5 |           15
+ Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         |        1 |         40 |           40
+ Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         |        1 |         39 |           39
+ Amber Tran         | ORD006          | 2019-07-05 | Javascript Book         |        1 |         41 |           41
+ Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         |        1 |         10 |           10
+ Amber Tran         | ORD006          | 2019-07-05 | Le Petit Prince         |        1 |         10 |           10
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        |        3 |         10 |           30
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        |        3 |          5 |           15
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        |        3 |          8 |           24
+ Amber Tran         | ORD006          | 2019-07-05 | Super warm socks        |        3 |         10 |           30
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        |       15 |         10 |          150
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        |       15 |          5 |           75
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        |       15 |          8 |          120
+ Amber Tran         | ORD007          | 2019-04-05 | Super warm socks        |       15 |         10 |          150
+ Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games |        1 |         20 |           20
+ Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games |        1 |         18 |           18
+ Edan Higgins       | ORD008          | 2019-07-23 | Tee Shirt Olympic Games |        1 |         21 |           21
+ Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          |        1 |        299 |          299
+ Edan Higgins       | ORD008          | 2019-07-23 | Mobile Phone X          |        1 |        249 |          249
+ Edan Higgins       | ORD009          | 2019-07-24 | Ball                    |        2 |         14 |           28
+ Edan Higgins       | ORD009          | 2019-07-24 | Ball                    |        2 |         15 |           30
+ Edan Higgins       | ORD009          | 2019-07-24 | Ball                    |        2 |         20 |           40
+ Edan Higgins       | ORD010          | 2019-05-10 | Ball                    |        1 |         14 |           14
+ Edan Higgins       | ORD010          | 2019-05-10 | Ball                    |        1 |         15 |           15
+ Edan Higgins       | ORD010          | 2019-05-10 | Ball                    |        1 |         20 |           20
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        |        5 |         10 |           50
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        |        5 |          5 |           25
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        |        5 |          8 |           40
+ Edan Higgins       | ORD010          | 2019-05-10 | Super warm socks        |        5 |         10 |           50
+(59 rows)
