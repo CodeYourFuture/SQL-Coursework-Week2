@@ -24,13 +24,14 @@ app.get("cyf-ecommerce-api", (req, res) => {
 });
 
 app.get("cyf-ecommerce-api/customers", (req, res) => {
-  pool
-    .query("SELECT * FROM customers")
-    .then((data) => res.json(data.rows))
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json(err);
-    });
+  // pool
+  //   .query("SELECT * FROM customers")
+  //   .then((data) => res.json(data.rows))
+  //   .catch((err) => {
+  //     console.error(err);
+  //     res.status(500).json(err);
+  //   });
+  res.send('hello')
 });
 
 app.get("cyf-ecommerce-api/suppliers", (req, res) => {
