@@ -14,6 +14,10 @@ const pool = new Pool({
   port: 5432,
 });
 
+const productsBySuppliers = `SELECT products.product_name, suppliers.supplier_name, product_availability.unit_price FROM products
+JOIN product_availability on product_availability.prod_id=products.id
+JOIN suppliers on product_availability.supp_id=suppliers.id
+ORDER BY supplier_name`;
 
 app.get("/cyf-ecommerce-api", (req, res) => {
   res.status(200).send(`Wellcom cyf-ecommerce-api
@@ -54,7 +58,15 @@ app.get("/cyf-ecommerce-api/products", (req, res) => {
     });
 });
 
+app.get("/cyf-ecommerce-api/productsBySuppliers", (req, res) => {
+  pool
+    .query(`${productsBySuppliers}`)
+    .then((data) => res.json(data))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json(err);
+    });
+});
 app.listen(port, () => {
   console.log(`server is running ${port}`);
 });
- 
