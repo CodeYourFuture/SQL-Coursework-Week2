@@ -7,6 +7,7 @@ In this homework, you are going to work with an ecommerce database. In this data
 Below you will find a set of tasks for you to complete to set up a database for an e-commerce app.
 
 To submit this homework write the correct commands for each question here:
+
 ```sql
 
 
@@ -35,16 +36,31 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+
+select \* from customers where country = 'United States';
+
 2. Retrieve all the customers in ascending name sequence
+
+select \* from customers order by name asc;
+
 3. Retrieve all the products whose name contains the word `socks`
+
+select \* from products where product_name like '%socks%';
+
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+
+select p.id,p.product_name,p_a.unit_price,p_a.supp_id from products p join product_availability p_a on (p.id = p_a.prod_id) where p_a.unit_price > 100;
+
 5. Retrieve the 5 most expensive products
+
+select \* from products join product_availability on products.id = product_availability.prod_id order by unit_price desc limit 5;
+
 6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
-8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
-13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
-
+13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
