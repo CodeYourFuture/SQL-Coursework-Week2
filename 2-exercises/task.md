@@ -66,6 +66,10 @@ from products p join product_availability p_a on (p_a.prod_id = p.id) join suppl
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 
+select o.id , o.order_reference , o.order_date , (o_i.quantity \* p_a.unit_price) as total_cost
+from orders o join order_items o_i on (o.id = o_i.order_id)
+join product_availability p_a on (p_a.prod_id = o_i.product_id) where o.customer_id = 1;
+
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
