@@ -45,7 +45,7 @@ Once you understand the database that you are going to work with, solve the foll
 4. Retrieve all the products which cost more than 100 showing
 product id, name, unit price and supplier id.
 <!-- select product_availability.prod_id,product_availability.unit_price,produ
-cts.product_name,suppliers.supplier_name from product_availability join products on(produ
+cts.product_name,suppliers.supplier_name from product_availability join products on(produ,
 cts.id=product_availability.prod_id)join  suppliers on(suppliers.id=product_availability.
 supp_id)where product_availability.unit_price >100; -->
 
@@ -74,7 +74,7 @@ WHERE name ='Hope Crosby'; -->
 <!-- SELECT products.product_name, product_availability.unit_price, order_items.quantity FROM order_items INNER JOIN products ON order_items.product_id = products.id INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id INNER JOIN orders ON order_items.order_id = orders.id WHERE orders.order_reference = 'ORD006'; -->
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
-<!-- SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity FROM order_items  INNER JOIN orders ON order_items.order_id = orders.id INNER JOIN products ON order_items.product_id = products.id INNER JOIN customers ON customers.id = orders.customer_id INNER JOIN suppliers ON order_items.supplier_id = suppliers.id; -->
+<!-- SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity FROM order_items  INNER JOIN orders ON order_items.order_id = orders.id INNER JOIN products ON order_items.product_id = products.id INNER JOIN customers ON customers.id = orders.customer_id INNER JOIN suppliers ON order_items.supplier_id = suppliers.id;-->
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 <!-- SELECT customers.name FROM order_items INNER JOIN orders ON order_items.order_id = orders.id INNER JOIN customers ON orders.customer_id = customers.id INNER JOIN suppliers ON order_items.supplier_id = suppliers.id WHERE suppliers.country = 'China'; -->
