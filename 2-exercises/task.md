@@ -25,7 +25,7 @@ createdb cyf_ecommerce
 Import the file [`cyf_ecommerce.sql`](./cyf_ecommerce.sql) in your newly created database:
 
 ```sql
-psql -d cyf_ecommerce -f cyf_ecommerce.sql
+\include cyf_ecommerce.sql
 ```
 
 Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a piece of paper and draw the database with the different relationships between tables (as defined by the REFERENCES keyword in the CREATE TABLE commands). Identify the foreign keys and make sure you understand the full database schema.
