@@ -122,19 +122,27 @@ app.post("/products",  function (req, res) {
 });
 
 app.post("/availability", function (req, res) {
+  const body = req.body;
   db.query(
-    "SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id",
+    `INSERT INTO product_availability (prod_id, supp_id, unit_price) VALUES (${body.prod_id},${body.supp_id},${body.price} )`,
     (error, result) => {
-      res.json(result.rows);
+      if (error) {
+        console.log(error);
+        res.json({ error });
+      } else {
+        res.send("RECORD INSERTED INTO PRODUCT_AVAILABILITY TABLE");
+      }
     }
   );
 });
 
 app.post(`/customers/:customerId/orders`, function (req, res) {
+  const body = req.body;
+
   db.query(
-    "SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id",
+    `INSERT INTO orders (order_date, order_reference, customer_id) VALUES ('${body.date}', '${body.reference}', '${req.params.customerId}')`,
     (error, result) => {
-      res.json(result.rows);
+      res.send("RECORD INSERTED INTO ORDERS TABLE");
     }
   );
 });
