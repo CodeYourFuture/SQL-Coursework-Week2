@@ -46,7 +46,7 @@ app.get("/customers", function (req, res) {
 
 app.get("/suppliers", function (req, res) {
   if (req.query.name) {
-    db.query("SELECT * FROM suppliers WHERE supplier_name='Sainsburys'", (error, result) => {
+    db.query(`SELECT * FROM suppliers WHERE supplier_name='${req.query.name}'`, (error, result) => {
       res.json(result.rows);
     });
   } else {
@@ -79,17 +79,16 @@ app.get("/products", async function (req, res) {
 
 
 
-// SQL W3 BELOW!
-// 
+
 app.get("/customers/:customerId", function (req, res) {
-  db.query(`SELECT * FROM customers WHERE id = ${req.params.customerId} `, (error, result) => {
+  db.query(`SELECT * FROM customers WHERE id = '${req.params.customerId}' `, (error, result) => {
     res.json(result.rows);
   });
 });
 
 app.get(`/customers/:customerId/orders`, function (req, res) {
   db.query(
-  `SELECT orders.order_reference, orders.order_date, product_availability.unit_price, products.product_name, suppliers.supplier_name, order_items.quantity FROM products INNER JOIN product_availability on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id INNER JOIN order_items ON order_items.supplier_id=product_availability.supp_id INNER JOIN orders ON order_items.order_id=orders.id WHERE customer_id=${req.params.id}`,
+  `SELECT orders.order_reference, orders.order_date, product_availability.unit_price, products.product_name, suppliers.supplier_name, order_items.quantity FROM products INNER JOIN product_availability on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id INNER JOIN order_items ON order_items.supplier_id=product_availability.supp_id INNER JOIN orders ON order_items.order_id=orders.id WHERE customer_id='${req.params.customerId}'`,
     (error, result) => {
       res.json(result.rows);
     }
