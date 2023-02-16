@@ -56,7 +56,7 @@ app.get("/suppliers", function (req, res) {
   }
 });
 
-
+// SQL W3
 app.get("/products", async function (req, res) {
   
   if (req.query.name) {
