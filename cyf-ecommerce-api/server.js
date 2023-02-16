@@ -112,10 +112,11 @@ app.post("/customers", function (req, res) {
 });
 
 app.post("/products",  function (req, res) {
+  const body = req.body;
   db.query(
-    `SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id`,
+    `INSERT INTO products (product_name) VALUES ('${body.product_name}')`,
     (error, result) => {
-      res.json(result.rows);
+      res.send({ body });
     }
   );
 });
