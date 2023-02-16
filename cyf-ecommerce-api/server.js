@@ -147,11 +147,19 @@ app.post(`/customers/:customerId/orders`, function (req, res) {
   );
 });
 
-app.put(`/customers/:customerId/orders`, function (req, res) {
+app.put(`/customers/:customerId`, function (req, res) {
+    const body = req.body;
+
   db.query(
-    "SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id",
+    `UPDATE customers SET name = '${body.name}', address = '${body.address}', city = '${body.city}', country = '${body.country}' WHERE id = '${req.params.customerId}' `,
     (error, result) => {
-      res.json(result.rows);
+      if (error) {
+        console.log(error);
+        res.json(error);
+
+      } else {
+        res.json(result.rows);
+      }
     }
   );
 });
