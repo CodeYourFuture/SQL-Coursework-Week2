@@ -24,6 +24,10 @@ const randomRecords = [
   },
 ];
 
+
+app.use(express.json()); 
+
+
 const db = new Pool({
   user: "codeyourfuture", // replace with you username
   host: "localhost",
@@ -57,17 +61,17 @@ app.get("/suppliers", function (req, res) {
 });
 
 // SQL W3
-app.get("/products", async function (req, res) {
+app.get("/products", function (req, res) {
   
   if (req.query.name) {
-    await db.query(
+     db.query(
       `SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id WHERE products.product_name= '${req.query.name}'`,
       (error, result) => {
         res.json(result.rows);
       }
     );
   } else { 
-    await db.query(
+     db.query(
       `SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id`,
       (error, result) => {
         res.json(result.rows);
@@ -97,12 +101,14 @@ app.get(`/customers/:customerId/orders`, function (req, res) {
 
 
 app.post("/customers", function (req, res) {
+  const body = req.body;
   db.query(
-    "SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id",
+    `INSERT INTO customers (name,address,city,country) VALUES ('${body.name}', '${body.address}', '${body.city}','${body.country}')`,
     (error, result) => {
-      res.json(result.rows);
+      res.send({body});
     }
   );
+
 });
 
 app.post("/products",  function (req, res) {
