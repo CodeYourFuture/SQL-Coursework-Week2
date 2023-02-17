@@ -20,11 +20,12 @@ FROM products
 INNER JOIN product_availability
 ON products.id = product_availability.prod_id;
 
-5. SELECT products.id, products.product_name, product_availability.unit_price
+5. SELECT products.product_name, MAX(product_availability.unit_price) as unit_price
 FROM products
 INNER JOIN product_availability
 ON products.id = product_availability.prod_id
-ORDER BY product_availability.unit_price DESC
+GROUP BY products.id, products.product_name
+ORDER BY unit_price DESC
 LIMIT 5;
 
 6. SELECT products.product_name, product_availability.unit_price, suppliers.supplier_name
@@ -46,7 +47,7 @@ FROM orders
 INNER JOIN order_items
 ON orders.id = order_items.order_id
 INNER JOIN product_availability
-ON order_items.product_id = product_availability.prod_id
+ON order_items.product_id = product_availability.prod_id AND order_items.supplier_id = product_availability.supp_id
 WHERE orders.customer_id = 1;
 
 9. SELECT orders.id, orders.order_reference, orders.order_date, order_items.quantity * product_availability.unit_price AS total_cost
@@ -56,7 +57,7 @@ ON customers.id = orders.customer_id
 INNER JOIN order_items
 ON orders.id = order_items.order_id
 INNER JOIN product_availability
-ON order_items.product_id = product_availability.prod_id
+ON order_items.product_id = product_availability.prod_id AND order_items.supplier_id = product_availability.supp_id
 WHERE customers.name = 'Hope Crosby';
 
 10. SELECT products.product_name, product_availability.unit_price, order_items.quantity
