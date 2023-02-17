@@ -37,9 +37,11 @@ Once you understand the database that you are going to work with, solve the foll
 
 1. Retrieve all the customers' names and addresses who live in the United States
 
-select name, address from customers where country = 'United States'; 2. Retrieve all the customers in ascending name sequence
+select name, address from customers where country = 'United States';
 
-select \* from customers order by name asc;
+2. Retrieve all the customers in ascending name sequence
+
+SELECT \* from customers order by name asc;
 
 3. Retrieve all the products whose name contains the word `socks`
 
@@ -47,7 +49,7 @@ select \* from products where product_name like '%socks%';
 
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
 
-select product_id, product_name, unit_price, supplier_id from products where unit_price > 100;
+select p.id,p.product_name,p_a.unit_price,p_a.supp_id from products p join product_availability p_a on (p.id = p_a.prod_id) where p_a.unit_price > 100;
 
 5. Retrieve the 5 most expensive products
    select \* from products order by unit_price desc limit 5;
