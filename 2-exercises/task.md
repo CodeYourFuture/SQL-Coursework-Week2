@@ -73,7 +73,10 @@ join product_availability p_a on (p_a.prod_id = o_i.product_id) where o.customer
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
-select orders.order_id, orders.order_reference, orders.order_date, orders.customer_id, order_items.quantity, order_items.unit_price, order_items.product_id from orders inner join order_items on orders.order_id = order_items.order_id inner join customers on orders.customer_id = customers.customer_id where customers.name = 'Hope Crosby';
+select o.id, o.order_reference , o_i.product_id, p.product_name , o_i.quantity from orders o
+join order_items o_i on (o.id = o_i.order_id) join products p on (o_i.product_id = p.id)
+join customers on (customers.id = o.customer_id)
+where customers.name='Hope Crosby';
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
