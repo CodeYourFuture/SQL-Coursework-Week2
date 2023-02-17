@@ -52,7 +52,8 @@ select \* from products where product_name like '%socks%';
 select p.id,p.product_name,p_a.unit_price,p_a.supp_id from products p join product_availability p_a on (p.id = p_a.prod_id) where p_a.unit_price > 100;
 
 5. Retrieve the 5 most expensive products
-   select \* from products order by unit_price desc limit 5;
+
+select \* from products join product_availability on products.id = product_availability.prod_id order by unit_price desc limit 5;
 
 6. Retrieve all the products with their corresponding
    suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
