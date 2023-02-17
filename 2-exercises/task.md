@@ -67,7 +67,9 @@ from products p join product_availability p_a on (p_a.prod_id = p.id) join suppl
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 
-select orders.order_id, orders.order_reference, orders.order_date, orders.customer_id, order_items.quantity, order_items.unit_price, order_items.product_id from orders inner join order_items on orders.order_id = order_items.order_id where orders.customer_id = 1;
+select o.id , o.order_reference , o.order_date , (o_i.quantity \* p_a.unit_price) as total_cost
+from orders o join order_items o_i on (o.id = o_i.order_id)
+join product_availability p_a on (p_a.prod_id = o_i.product_id) where o.customer_id = 1;
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
