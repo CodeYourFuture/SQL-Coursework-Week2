@@ -53,12 +53,12 @@ select p.id,p.product_name,p_a.unit_price,p_a.supp_id from products p join produ
 
 5. Retrieve the 5 most expensive products
 
-select \* from products join product_availability on products.id = product_availability.prod_id order by unit_price desc limit 5;
+SELECT \* from products join product_availability on products.id = product_availability.prod_id order by unit_price desc limit 5;
 
 6. Retrieve all the products with their corresponding
    suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
 
-select product_name, unit_price, supplier_name from products inner join suppliers on products.supplier_id = suppliers.supplier_id;
+select p.product_name, p_a.unit_price,s.supplier_name from products p join product_availability p_a on (p.id = p_a.prod_id) join suppliers s on (s.id = p_a.supp_id);
 
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
