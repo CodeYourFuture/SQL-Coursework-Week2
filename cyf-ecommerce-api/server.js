@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const { Pool } = require("pg");
 
-
 const randomRecords = [
   {
     name: "Anosh",
@@ -24,9 +23,7 @@ const randomRecords = [
   },
 ];
 
-
-app.use(express.json()); 
-
+app.use(express.json());
 
 const db = new Pool({
   user: "codeyourfuture", // replace with you username
@@ -46,13 +43,14 @@ app.get("/customers", function (req, res) {
   });
 });
 
-
-
 app.get("/suppliers", function (req, res) {
   if (req.query.name) {
-    db.query(`SELECT * FROM suppliers WHERE supplier_name='${req.query.name}'`, (error, result) => {
-      res.json(result.rows);
-    });
+    db.query(
+      `SELECT * FROM suppliers WHERE supplier_name='${req.query.name}'`,
+      (error, result) => {
+        res.json(result.rows);
+      }
+    );
   } else {
     db.query("SELECT * FROM suppliers", (error, result) => {
       res.json(result.rows);
@@ -62,56 +60,52 @@ app.get("/suppliers", function (req, res) {
 
 // SQL W3
 app.get("/products", function (req, res) {
-  
   if (req.query.name) {
-     db.query(
+    db.query(
       `SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id WHERE products.product_name= '${req.query.name}'`,
       (error, result) => {
         res.json(result.rows);
       }
     );
-  } else { 
-     db.query(
+  } else {
+    db.query(
       `SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id`,
       (error, result) => {
         res.json(result.rows);
       }
     );
   }
- 
 });
-
-
-
 
 app.get("/customers/:customerId", function (req, res) {
-  db.query(`SELECT * FROM customers WHERE id = '${req.params.customerId}' `, (error, result) => {
-    res.json(result.rows);
-  });
-});
-
-app.get(`/customers/:customerId/orders`, function (req, res) {
   db.query(
-  `SELECT orders.order_reference, orders.order_date, product_availability.unit_price, products.product_name, suppliers.supplier_name, order_items.quantity FROM products INNER JOIN product_availability on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id INNER JOIN order_items ON order_items.supplier_id=product_availability.supp_id INNER JOIN orders ON order_items.order_id=orders.id WHERE customer_id='${req.params.customerId}'`,
+    `SELECT * FROM customers WHERE id = '${req.params.customerId}' `,
     (error, result) => {
       res.json(result.rows);
     }
   );
 });
 
+app.get(`/customers/:customerId/orders`, function (req, res) {
+  db.query(
+    `SELECT orders.order_reference, orders.order_date, product_availability.unit_price, products.product_name, suppliers.supplier_name, order_items.quantity FROM products INNER JOIN product_availability on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id INNER JOIN order_items ON order_items.supplier_id=product_availability.supp_id INNER JOIN orders ON order_items.order_id=orders.id WHERE customer_id='${req.params.customerId}'`,
+    (error, result) => {
+      res.json(result.rows);
+    }
+  );
+});
 
 app.post("/customers", function (req, res) {
   const body = req.body;
   db.query(
     `INSERT INTO customers (name,address,city,country) VALUES ('${body.name}', '${body.address}', '${body.city}','${body.country}')`,
     (error, result) => {
-      res.send({body});
+      res.send({ body });
     }
   );
-
 });
 
-app.post("/products",  function (req, res) {
+app.post("/products", function (req, res) {
   const body = req.body;
   db.query(
     `INSERT INTO products (product_name) VALUES ('${body.product_name}')`,
@@ -121,6 +115,7 @@ app.post("/products",  function (req, res) {
   );
 });
 
+// #5 NEEDS REVIEW
 app.post("/availability", function (req, res) {
   const body = req.body;
   db.query(
@@ -148,7 +143,7 @@ app.post(`/customers/:customerId/orders`, function (req, res) {
 });
 
 app.put(`/customers/:customerId`, function (req, res) {
-    const body = req.body;
+  const body = req.body;
 
   db.query(
     `UPDATE customers SET name = '${body.name}', address = '${body.address}', city = '${body.city}', country = '${body.country}' WHERE id = '${req.params.customerId}' `,
@@ -156,7 +151,6 @@ app.put(`/customers/:customerId`, function (req, res) {
       if (error) {
         console.log(error);
         res.json(error);
-
       } else {
         res.json(result.rows);
       }
@@ -164,20 +158,25 @@ app.put(`/customers/:customerId`, function (req, res) {
   );
 });
 
-app.delete(`/customers/:customerId/orders`, function (req, res) {
+
+// #9 NEEDS REVIEW
+app.delete(`/customers/:customerId`, function (req, res) {
+  const body = req.body;
+
   db.query(
-    "SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id",
+    "DELETE FROM customers USING orders WHERE  = producers.id AND producers.name = 'foo'",
     (error, result) => {
       res.json(result.rows);
     }
   );
 });
 
-
-
+// #8 NEEDS REVIEW
 app.delete(`/orders/:orderId`, function (req, res) {
+  const body = req.body;
+
   db.query(
-    "SELECT product_availability.unit_price, products.product_name, suppliers.supplier_name FROM product_availability INNER JOIN products on products.id=product_availability.prod_id INNER JOIN suppliers ON suppliers.id=product_availability.supp_id",
+    "DELETE FROM films USING producers WHERE producer_id = producers.id AND producers.name = 'foo';",
     (error, result) => {
       res.json(result.rows);
     }
