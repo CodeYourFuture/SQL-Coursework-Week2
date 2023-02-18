@@ -95,7 +95,11 @@ join suppliers s on (o_i.supplier_id = s.id);
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
-select customers.name from customers inner join orders on customers.customer_id = orders.customer_id inner join order_items on orders.order_id = order_items.order_id inner join products on order_items.product_id = products.product_id inner join suppliers on products.supplier_id = suppliers.supplier_id where suppliers.country = 'China';
+select distinct c.name from customers c
+join orders on (orders.customer_id = c.id)
+join order_items on (order_items.order_id = orders.id)
+join suppliers on (suppliers.id = order_items.supplier_id)
+where suppliers.country = 'China';
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
 
