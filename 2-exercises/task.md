@@ -93,14 +93,15 @@ ON order_items.supplier_id = suppliers.id AND suppliers.country = 'China'
 GROUP by customers.name;
 
 13. SELECT customers.name, orders.order_reference, orders.order_date,
-order_items.quantity * product_availability.unit_price AS total
+SUM(order_items.quantity * product_availability.unit_price) AS total
 FROM orders
 INNER JOIN customers
 ON orders.customer_id = customers.id
 INNER JOIN order_items
 ON orders.id = order_items.order_id
 INNER JOIN product_availability
-ON order_items.product_id = product_availability.prod_id
+ON order_items.product_id = product_availability.prod_id AND order_items.supplier_id = product_availability.supp_id
+GROUP BY orders.order_reference, customers.name, orders.order_date
 ORDER BY total DESC;
 
 ```
