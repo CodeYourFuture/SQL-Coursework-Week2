@@ -87,7 +87,11 @@ join product_availability p_a on (p_a.prod_id = o_i.product_id) where o.order_re
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
-select customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity from customers inner join orders on customers.customer_id = orders.customer_id inner join order_items on orders.order_id = order_items.order_id inner join products on order_items.product_id = products.product_id inner join suppliers on products.supplier_id = suppliers.supplier_id;
+select c.name , o.order_reference, o.order_date, p.product_name, s.supplier_name, o_i.quantity from customers c
+join orders o on (c.id = o.customer_id)
+join order_items o_i on (o.id = o_i.order_id)
+join products p on (p.id = o_i.product_id)
+join suppliers s on (o_i.supplier_id = s.id);
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
