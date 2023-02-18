@@ -103,8 +103,9 @@ where suppliers.country = 'China';
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
 
-select c.name , o.order_reference, o.order_date, (o_i.quantity \* p_a.unit_price) as order_total_amount from customers c
-join orders o on (c.id = o.customer_id)
-join order_items o_i on (o_i.order_id = o.id)
-join product_availability p_a on (o_i.product_id = p_a.prod_id)
-order by order_total_amount desc;
+SELECT customers.name,orders.order_reference,orders.order_date,(quantity \* unit_price) AS total_amount
+FROM customers
+INNER JOIN orders ON orders.customer_id = customers.id
+INNER JOIN order_items ON order_items.order_id = orders.id
+INNER JOIN product_availability ON order_items.product_id = product_availability.prod_id
+ORDER BY total_amount DESC;

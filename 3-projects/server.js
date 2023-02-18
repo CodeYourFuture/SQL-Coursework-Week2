@@ -3,9 +3,9 @@ const app = express();
 const { Pool } = require("pg");
 
 const db = new Pool({
-  user: " ",
+  user: " rebwar",
   host: "localhost",
-  database: "",
+  database: "cyf_project",
   password: "",
   port: 5432,
 });
