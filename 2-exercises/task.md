@@ -59,8 +59,13 @@ SELECT product_name, unit_price, supplier_name FROM product_availability INNER J
 
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+SELECT * FROM ((orders INNER JOIN customers ON customer_id=customer_id) INNER JOIN order_items ON order_id=order_id) WHERE name LIKE '%Hope Crosby%';
+
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+SELECT product_name, unit_price, quantity FROM (((order_items INNER JOIN products ON product_id=prod_id) INNER JOIN product_availability ON product_id=prod_id) INNER JOIN orders ON order_id=order_id) WHERE order_reference LIKE '%ORD006'
+
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
 
