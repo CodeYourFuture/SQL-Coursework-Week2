@@ -5,7 +5,7 @@ const { Pool } = require("pg");
 const db = new Pool({
   user: "rebwar",
   host: "localhost",
-  database: "cyf_project",
+  database: "ecommerce;",
   password: "",
   port: 5432,
 });
