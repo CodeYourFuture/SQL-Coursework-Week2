@@ -35,16 +35,31 @@ Open the file `cyf_ecommerce.sql` in VSCode and examine the SQL code. Take a pie
 Once you understand the database that you are going to work with, solve the following challenge by writing SQL queries using everything you learned about SQL:
 
 1. Retrieve all the customers' names and addresses who live in the United States
+SELECT name, address FROM customers WHERE country = 'United States';
+
 2. Retrieve all the customers in ascending name sequence
+SELECT * FROM customers ORDER BY name ASC;
 3. Retrieve all the products whose name contains the word `socks`
+SELECT * FROM products WHERE product_name LIKE '%socks%';
 4. Retrieve all the products which cost more than 100 showing product id, name, unit price and supplier id.
+SELECT product_id, product_name, unit_price, supplier_id FROM products WHERE unit_price > 100;
 5. Retrieve the 5 most expensive products
-6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns `product_name`, `unit_price` and `supplier_name`
+SELECT * FROM products ORDER BY unit_price DESC LIMIT 5;
+6. Retrieve all the products with their corresponding suppliers. The result should only contain the columns 
+`product_name`, `unit_price` and `supplier_name`
+SELECT products.product_name, products.unit_price, suppliers.supplier_name FROM products INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id;
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
+SELECT products.product_name, suppliers.supplier_name FROM products INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id WHERE suppliers.country = 'United Kingdom';
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity * unit price).
+SELECT orders.order_id, orders.order_reference, orders.order_date, orders.customer_id, order_items.quantity, order_items.unit_price, order_items.product_id FROM orders INNER JOIN order_items ON orders.order_id = order_items.order_id WHERE orders.customer_id = 1;
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
+SELECT orders.order_id, orders.order_reference, orders.order_date, orders.customer_id, order_items.quantity, order_items.unit_price, order_items.product_id FROM orders INNER JOIN order_items ON orders.order_id = order_items.order_id INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE customers.name = 'Hope Crosby';
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
+SELECT products.product_name, products.unit_price, order_items.quantity FROM products INNER JOIN order_items ON products.product_id = order_items.product_id INNER JOIN orders ON order_items.order_id = orders.order_id WHERE orders.order_reference = 'ORD006';
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
+SELECT customers.name, orders.order_reference, orders.order_date, products.product_name, suppliers.supplier_name, order_items.quantity FROM customers INNER JOIN orders ON customers.customer_id = orders.customer_id INNER JOIN order_items ON orders.order_id = order_items.order_id INNER JOIN products ON order_items.product_id = products.product_id INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id;
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
+SELECT customers.name FROM customers INNER JOIN orders ON customers.customer_id = orders.customer_id INNER JOIN order_items ON orders.order_id = order_items.order_id INNER JOIN products ON order_items.product_id = products.product_id INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id WHERE suppliers.country = 'China';
 13. List all orders giving customer name, order reference, order date and order total amount (quantity * unit price) in descending order of total.
+SELECT customers.name, orders.order_reference, orders.order_date, order_items.quantity, order_items.unit_price FROM customers INNER JOIN orders ON customers.customer_id = orders.customer_id INNER JOIN order_items ON orders.order_id = order_items.order_id ORDER BY (order_items.quantity * order_items.unit_price) DESC;
 
