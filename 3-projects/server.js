@@ -11,12 +11,22 @@ const db = new Pool({
 	port: 5432,
 });
 
-app.get('/customers', (req, res) => {
-	db.query('SELECT * FROM customers', (error, result) => {
-		res.json(result.rows);
-	});
+app.get('/', function (req, res) {
+    res.send('Welcome!!!');
 });
 
-app.listen(8080, () => {
-	console.log('Server is listening on port 8080. Ready to accept requests!');
+app.get('/customers', function (req, res) {
+    db.query('SELECT * FROM customers', (error, result) => {
+        res.json(result.rows);
+    });
+})
+
+app.get('/suppliers', function (req, res) {
+    db.query('SELECT * FROM suppliers', (error, result) => {
+        res.json(result.rows);
+    });
+})
+
+app.listen(5000, () => {
+	console.log('Server is listening on port 5000. Ready to accept requests!');
 });
