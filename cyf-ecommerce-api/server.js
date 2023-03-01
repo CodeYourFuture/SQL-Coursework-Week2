@@ -81,6 +81,7 @@ app.get("/customers/:customerId", function (req, res) {
   db.query(
     `SELECT * FROM customers WHERE id = '${req.params.customerId}' `,
     (error, result) => {
+      console.log("REQUEST CAME IN");
       res.json(result.rows);
     }
   );
@@ -163,24 +164,71 @@ app.put(`/customers/:customerId`, function (req, res) {
 app.delete(`/customers/:customerId`, function (req, res) {
   const body = req.body;
 
-  db.query(
-    "DELETE FROM customers USING orders WHERE  = producers.id AND producers.name = 'foo'",
-    (error, result) => {
-      res.json(result.rows);
-    }
+  // db.query(
+  //   "DELETE FROM customers USING orders WHERE  = producers.id AND producers.name = 'foo'",
+  //   (error, result) => {
+  //     res.json(result.rows);
+  //   }
+  // );
+
+  const customerCheck = db.query("SELECT * FROM customers WHERE id = $1", [req.params.customerId ]);
+  const customerOrderCheck = db.query(
+    "SELECT * FROM orders WHERE customer_id = $1",
+    [req.params.customerId]
   );
+  if (customerCheck && customerOrderCheck) {
+    db.query(
+      "DELETE FROM order_items WHERE order_id = $1",
+      [req.params.customerId],
+      (error, results) => {
+        if (error) {
+          throw error;
+        } else {
+          res.json("ITEM DELETED");
+        }
+      }
+    );
+  } else {
+    res.json("NOT DELETED. CUSTOMER HAS ORDERS");
+  }
 });
 
 // #8 NEEDS REVIEW
 app.delete(`/orders/:orderId`, function (req, res) {
   const body = req.body;
 
-  db.query(
-    "DELETE FROM films USING producers WHERE producer_id = producers.id AND producers.name = 'foo';",
-    (error, result) => {
-      res.json(result.rows);
-    }
+  // db.query(
+  //   "DELETE FROM films USING producers WHERE producer_id = producers.id AND producers.name = 'foo';",
+  //   (error, result) => {
+  //     res.json(result.rows);
+  //   }
+  // );
+
+
+  const orderCheck = db.query("SELECT * FROM orders WHERE id = $1", [
+    req.params.orderId,
+  ]);
+  const orderItemsCheck = db.query(
+    "SELECT * FROM order_items WHERE customer_id = $1",
+    [req.params.orderId]
   );
+  if (orderCheck && orderItemIdCheck) {
+    db.query(
+      "DELETE FROM order_items WHERE order_id = $1",
+      [req.params.customerId],
+      (error, results) => {
+        if (error) {
+          throw error;
+        } else {
+          res.json("ITEM DELETED");
+        }
+      }
+    );
+  } else {
+    res.json("NOT DELETED. CUSTOMER HAS ORDERS");
+  }
+
+
 });
 
 // SQL W3 ABOVE!
