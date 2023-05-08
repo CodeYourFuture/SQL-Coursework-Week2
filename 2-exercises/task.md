@@ -80,48 +80,48 @@ ANSWER: SELECT p.product_name, pa.unit_price, s.supplier_name FROM products p IN
 7. Retrieve all the products sold by suppliers based in the United Kingdom. The result should only contain the columns `product_name` and `supplier_name`.
 
 ```sql
-
+ANSWER: SELECT p.product_name, s.supplier_name FROM products p JOIN product_availability pa ON (pa.prod_id = p.id) JOIN suppliers s ON (s.id = pa.supp_id) WHERE s.country = 'United Kingdom';
 
 ```
 
 8. Retrieve all orders, including order items, from customer ID `1`. Include order id, reference, date and total cost (calculated as quantity \* unit price).
 
 ```sql
-
+ANSWER: SELECT oi.order_id, o.order_reference, o.order_date, oi.quantity * pa.unit_price AS total_cost FROM orders o JOIN order_items oi ON (o.id = oi.order_id) JOIN product_availability pa ON (oi.id = pa.prod_id) WHERE o.customer_id = 1;
 
 ```
 
 9. Retrieve all orders, including order items, from customer named `Hope Crosby`
 
 ```sql
-
+ANSWER: SELECT o.*, oi.* FROM orders o JOIN order_items oi ON (o.id = oi.order_id) JOIN customers c ON (o.customer_id = c.id) WHERE c.name = 'Hope Crosby';
 
 ```
 
 10. Retrieve all the products in the order `ORD006`. The result should only contain the columns `product_name`, `unit_price` and `quantity`.
 
 ```sql
-
+ANSWER: SELECT p.product_name, pa.unit_price, oi.quantity FROM products p JOIN product_availability pa ON (pa.prod_id = p.id) JOIN order_items oi ON (pa.prod_id = oi.product_id) JOIN orders o ON (o.id = oi.order_id) WHERE o.order_reference = 'ORD006';
 
 ```
 
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
 ```sql
-
+ANSWER:
 
 ```
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
 ```sql
-
+ANSWER:
 
 ```
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
 
 ```sql
-
+ANSWER:
 
 ```
