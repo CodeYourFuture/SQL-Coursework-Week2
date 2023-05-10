@@ -108,20 +108,20 @@ ANSWER: SELECT p.product_name, pa.unit_price, oi.quantity FROM products p JOIN p
 11. Retrieve all the products with their supplier for all orders of all customers. The result should only contain the columns `name` (from customer), `order_reference`, `order_date`, `product_name`, `supplier_name` and `quantity`.
 
 ```sql
-ANSWER:
+ANSWER: SELECT c.name, o.order_reference, o.order_date, p.product_name, s.supplier_name, oi.quantity FROM customers c JOIN orders o ON (c.id = o.customer_id) JOIN order_items oi ON (o.id = oi.order_id) JOIN suppliers s ON (oi.supplier_id = s.id) JOIN products p ON (p.id = oi.product_id);
 
 ```
 
 12. Retrieve the names of all customers who bought a product from a supplier based in China.
 
 ```sql
-ANSWER:
+ANSWER: SELECT DISTINCT c.name FROM customers c JOIN orders o ON (c.id = o.customer_id) JOIN order_items oi ON (oi.order_id = o.id) JOIN products p ON (oi.product_id = p.id) JOIN suppliers s ON (oi.supplier_id = s.id) WHERE s.country = 'China';
 
 ```
 
 13. List all orders giving customer name, order reference, order date and order total amount (quantity \* unit price) in descending order of total.
 
 ```sql
-ANSWER:
+ANSWER: SELECT c.name, o.order_reference, o.order_date, oi.quantity * pa.unit_price AS total_amount FROM customers c JOIN orders o ON (c.id = o.customer_id) JOIN order_items oi ON (oi.order_id = o.id) JOIN product_availability pa ON (oi.product_id = pa.prod_id) ORDER BY total_amount DESC;
 
 ```
