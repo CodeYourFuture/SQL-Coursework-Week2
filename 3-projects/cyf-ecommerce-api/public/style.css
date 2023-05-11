@@ -1,0 +1,70 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+body {
+  display: grid;
+  background-color: hsl(0, 0%, 92%);
+  max-width: 500px;
+  margin: 0 auto;
+  row-gap: 10px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid hsl(207, 47%, 39%);
+  padding: 5px;
+}
+
+header > img {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+header > h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 5px;
+}
+
+button {
+  background-color: hsl(207, 47%, 39%);
+  color: hsl(0, 0%, 90%);
+  border: none;
+  border-radius: 2px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: hsl(207, 47%, 49%);
+}
+
+#output-container {
+  background-color: hsl(0, 0%, 95%);
+  border: 1px solid darkgray;
+  padding: 0 10px;
+}
+
+#output-json {
+  font-family: monospace;
+}
